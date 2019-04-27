@@ -8,7 +8,7 @@
 ### *~The Management*
 
 
-[![Build Status](https://travis-ci.org/UMM-CSci-3601-S19/iteration-3-toon-squad.svg?branch=droplet-state)](https://travis-ci.org/UMM-CSci-3601-S19/iteration-3-toon-squad)
+[![Build Status](https://travis-ci.org/UMM-CSci-3601-S19/panic.svg?branch=master)](https://travis-ci.org/UMM-CSci-3601-S19/panic)
 ## Setup
 
 As in the previous labs, you'll be using IntelliJ. Once you've all joined your
