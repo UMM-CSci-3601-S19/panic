@@ -32,6 +32,7 @@ import {ProfileComponent} from "./users/profile.component";
 
 import {RouterLinkDirectiveStub} from "./rides/router-link-directive-stub";
 import {PhoneMaskDirective} from "./users/phone-mask.directive";
+import {ProfileService} from "./users/profile.service";
 
 @NgModule({
   imports: [
@@ -57,7 +58,7 @@ import {PhoneMaskDirective} from "./users/phone-mask.directive";
     PhoneMaskDirective
   ],
   providers: [
-    RideListService, AppService, AppAuthGuard, UserService, ValidatorService,
+    RideListService, AppService, AppAuthGuard, UserService, ValidatorService, ProfileService,
     {provide: APP_BASE_HREF, useValue: '/'},
   ],
   entryComponents: [
