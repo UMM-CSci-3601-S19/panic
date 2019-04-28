@@ -97,13 +97,15 @@ public class Server {
 
       try {
 
-        String CLIENT_SECRET_FILE = "./src/main/java/umm3601/server_files/credentials.json";
+        String CLIENT_SECRET_FILE = "../credentials.json";
+        System.out.println("I am in the login");
+        System.out.println("This is the CSF:" + CLIENT_SECRET_FILE);
 
 
         GoogleClientSecrets clientSecrets =
           GoogleClientSecrets.load(
             JacksonFactory.getDefaultInstance(), new FileReader(CLIENT_SECRET_FILE));
-
+          System.out.println("Printed CSF" + clientSecrets);
 
         GoogleTokenResponse tokenResponse =
           new GoogleAuthorizationCodeTokenRequest(
@@ -111,7 +113,6 @@ public class Server {
             JacksonFactory.getDefaultInstance(),
             "https://oauth2.googleapis.com/token",
             clientSecrets.getDetails().getClientId(),
-
             // Replace clientSecret with the localhost one if testing
             clientSecrets.getDetails().getClientSecret(),
             authCode,
@@ -123,7 +124,7 @@ public class Server {
             // specify an empty string.
             .execute();
 
-
+        System.out.println("Server Part 2");
         // Get profile info from ID token
         GoogleIdToken idToken = tokenResponse.parseIdToken();
         GoogleIdToken.Payload payload = idToken.getPayload();
