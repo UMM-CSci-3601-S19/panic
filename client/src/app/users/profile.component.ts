@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {User} from "./user";
 import {UserService} from "./user.service";
@@ -6,6 +6,7 @@ import {ActivatedRoute} from "@angular/router";
 import {Ride} from "../rides/ride";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {profileInfoObject} from "./profileInfoObject";
+import {ProfileService} from "./profile.service";
 
 @Component({
   selector: 'profile-component',
@@ -21,8 +22,14 @@ export class ProfileComponent implements OnInit{
   userForm: FormGroup;
   public showPhoneForm: boolean;
 
-  constructor(private userService: UserService, private route: ActivatedRoute, private fb:FormBuilder) {
+  constructor(private userService: UserService,
+              private route: ActivatedRoute,
+              private fb:FormBuilder,
+              private changeDetector: ChangeDetectorRef,
+              private profileService: ProfileService
+  ) {
     this.createForm();
+    profileService.addListener(this);
   }
 
   public checkImpossibleDate(ride: Ride) {
@@ -79,16 +86,24 @@ export class ProfileComponent implements OnInit{
     }
   }
 
-
-
   public getLocalUserId() {
     return localStorage.getItem("userId");
   }
 
+  setId(id){
+    this.profileId = id;
+    console.log(id);
+    this.getProfile();
+  }
+
   getProfile(): void{
     const id = this.route.snapshot.paramMap.get('id');
-    this.profileId= id;
-    this.userService.getUserById(id).subscribe(user => this.profile = user);
+    this.profileId = id;
+    this.userService.getUserById(this.profileId).subscribe(
+      user => {
+        this.profile = user;
+        this.getUserRideFromService();
+      });
   }
 
   getUserRideFromService(): Observable<Ride[]> {
@@ -125,11 +140,13 @@ export class ProfileComponent implements OnInit{
         console.log('There was an error adding the ride.');
         console.log('The error was ' + JSON.stringify(err));
       });
-    window.location.reload();
   };
 
   ngOnInit(): void {
     this.getProfile();
-    this.getUserRideFromService();
+  }
+
+  ngOnDestroy(): void {
+    this.profileService.removeListener();
   }
 }
