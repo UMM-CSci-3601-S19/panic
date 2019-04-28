@@ -12,6 +12,14 @@ export class ProfileService{
     this.profileComponent = profileComponent;
   }
 
+  hasListener(){
+    return this.profileComponent;
+  }
+
+  removeListener(){
+    this.profileComponent = null;
+  }
+
   updateProfile(id){
     this.profileComponent.setId(id);
   }
