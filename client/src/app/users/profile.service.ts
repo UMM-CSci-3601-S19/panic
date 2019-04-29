@@ -20,8 +20,8 @@ export class ProfileService{
     this.profileComponent = null;
   }
 
-  updateProfile(id){
-    this.profileComponent.setId(id);
+  updateProfile(){
+    this.profileComponent.getProfile();
   }
 
 }

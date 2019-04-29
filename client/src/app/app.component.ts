@@ -18,7 +18,7 @@ export class AppComponent {
 
   route() {
     if(this.profileService.hasListener()){
-      this.profileService.updateProfile(this.profileId);
+      this.profileService.updateProfile();
     }
   }
 }

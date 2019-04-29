@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {User} from "./user";
 import {UserService} from "./user.service";
@@ -25,7 +25,6 @@ export class ProfileComponent implements OnInit{
   constructor(private userService: UserService,
               private route: ActivatedRoute,
               private fb:FormBuilder,
-              private changeDetector: ChangeDetectorRef,
               private profileService: ProfileService
   ) {
     this.createForm();
@@ -90,27 +89,24 @@ export class ProfileComponent implements OnInit{
     return localStorage.getItem("userId");
   }
 
-  setId(id){
-    this.profileId = id;
-    console.log(id);
-    this.getProfile();
+  getProfile(n = 2): void{
+    if(n >= 0) {
+      const id = this.route.snapshot.paramMap.get('id');
+      this.profileId = id;
+      this.userService.getUserById(this.profileId).subscribe(
+        user => {
+          this.profile = user;
+          this.getUserRideFromService(n);
+        });
+    }
   }
 
-  getProfile(): void{
-    const id = this.route.snapshot.paramMap.get('id');
-    this.profileId = id;
-    this.userService.getUserById(this.profileId).subscribe(
-      user => {
-        this.profile = user;
-        this.getUserRideFromService();
-      });
-  }
-
-  getUserRideFromService(): Observable<Ride[]> {
+  getUserRideFromService(n?): Observable<Ride[]> {
     const userRides: Observable<Ride[]> = this.userService.getMyRides(this.profileId);
     userRides.subscribe(
       rides => {
         this.userRides = rides;
+        this.getProfile(n-1);
       },
       err => {
         console.log(err);
