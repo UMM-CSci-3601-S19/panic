@@ -1,14 +1,36 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RideComponent } from './ride.component';
+import {CustomModule} from "../custom.module";
+import {RouterTestingModule} from "@angular/router/testing";
+import {RideListService} from "./ride-list.service";
+import {Ride} from "./ride";
 
 describe('RideComponent', () => {
   let component: RideComponent;
   let fixture: ComponentFixture<RideComponent>;
 
+  let rideListServiceStub: {
+  };
+  let rideStub: Ride = {
+    _id: '',
+    user: '',
+    userId: '',
+    notes: '',
+    seatsAvailable: 0,
+    origin: '',
+    destination: '',
+    departureDate: '',
+    departureTime: '',
+    isDriving: false,
+    nonSmoking: false
+  };
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RideComponent ]
+      imports: [ CustomModule, RouterTestingModule ],
+      declarations: [ RideComponent ],
+      providers: [{ provide: RideListService, useValue: rideListServiceStub }]
     })
     .compileComponents();
   }));
@@ -16,6 +38,7 @@ describe('RideComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(RideComponent);
     component = fixture.componentInstance;
+    component.ride = rideStub;
     fixture.detectChanges();
   });
 
