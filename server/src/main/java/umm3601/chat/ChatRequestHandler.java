@@ -1,18 +1,18 @@
 package umm3601.chat;
 
-import com.auth0.jwt.algorithms.Algorithm;
-import io.getstream.core.http.Token;
 import org.bson.Document;
 import spark.Request;
 import spark.Response;
 
 import io.getstream.client.Client;
+import io.getstream.core.http.Token;
 
 import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.auth0.jwt.*;
+import com.auth0.jwt.algorithms.Algorithm;
 
 public class ChatRequestHandler {
 
