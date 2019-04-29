@@ -89,24 +89,25 @@ export class ProfileComponent implements OnInit{
     return localStorage.getItem("userId");
   }
 
-  getProfile(n = 2): void{
-    if(n >= 0) {
+  getProfile(id?): void{
+    if(id) {
+      this.profileId = id;
+    }else {
       const id = this.route.snapshot.paramMap.get('id');
       this.profileId = id;
+    }
       this.userService.getUserById(this.profileId).subscribe(
         user => {
           this.profile = user;
-          this.getUserRideFromService(n);
+          this.getUserRideFromService();
         });
-    }
   }
 
-  getUserRideFromService(n?): Observable<Ride[]> {
+  getUserRideFromService(): Observable<Ride[]> {
     const userRides: Observable<Ride[]> = this.userService.getMyRides(this.profileId);
     userRides.subscribe(
       rides => {
         this.userRides = rides;
-        this.getProfile(n-1);
       },
       err => {
         console.log(err);
