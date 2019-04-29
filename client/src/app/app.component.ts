@@ -1,6 +1,5 @@
 import {Component} from '@angular/core';
 import {AppService} from "./app.service";
-import {Router} from "@angular/router";
 import {ProfileService} from "./users/profile.service";
 
 @Component({
