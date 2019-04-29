@@ -20,7 +20,7 @@ export class UserService {
   }
 
   getMyRides(userId: string): Observable<Ride[]> {
-    return this.http.get<Ride[]>(environment.API_URL + 'myRides?userId=' + userId);
+    return this.http.get<Ride[]>(environment.API_URL + 'myRides/' + userId);
   }
 
   saveProfileInfo(profileInfo: profileInfoObject){
