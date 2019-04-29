@@ -1,0 +1,56 @@
+.msg-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.rhs-msg {
+  flex-direction: row-reverse;
+}
+
+.msg-profile-pic {
+  border: solid 1px #ddd;
+  border-radius: 3px;
+  margin: 0 4px;
+}
+
+.lhs-msg .msg-content-block { align-items: flex-start; }
+.rhs-msg .msg-content-block { align-items: flex-end; }
+
+.msg-bubble {
+  border-radius: 5px;
+  padding: 6px 8px 7px 8px;
+  max-width: 300px;
+  width: fit-content;
+}
+
+.msg-text {
+  font-size: 0.8rem;
+}
+
+.lhs-msg .msg-bubble {
+  background: #ddd;
+  color: #000;
+}
+
+.rhs-msg .msg-bubble {
+  text-align: right;
+  background: #3498db;
+  color: #fff;
+}
+
+.msg-sent {
+  margin: 0;
+  padding: 0 0 1px 0;
+  color: #333;
+  font-size: 0.6rem;
+}
+
+.msg-from {
+  margin: 0;
+  padding: 0;
+  font-weight: bold;
+  font-size: 0.8rem;
+  color: #000;
+}
