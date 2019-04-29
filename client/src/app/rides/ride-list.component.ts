@@ -2,9 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {RideListService} from './ride-list.service';
 import {Ride} from './ride';
 import {Observable} from 'rxjs/Observable';
-import {MatDialog} from "@angular/material";
-import {DeleteRideComponent} from "./delete-ride.component";
-import {joinRideObject} from "./joinRideObject";
 
 @Component({
   selector: 'ride-list-component',
@@ -22,18 +19,11 @@ export class RideListComponent implements OnInit {
   public rideDestination: string;
   public rideOrigin: string;
   public rideDriving: boolean;
-
   public rideNonSmoking: boolean = false; // this defaults the box to be unchecked
   public rideRoundTrip: boolean = false;
 
-  private highlightedDestination: string = '';
-  private highlightedID: string = '';
-
-  public currUserId = localStorage.getItem("userId");
-  public currUserFullName = localStorage.getItem("userFullName");
-
   // Inject the RideListService into this component.
-  constructor(public rideListService: RideListService, public dialog: MatDialog) {
+  constructor(public rideListService: RideListService) {
  //   rideListService.addListener(this);
   }
 
@@ -45,50 +35,6 @@ export class RideListComponent implements OnInit {
     // this.refreshRides();
     this.loadService();
   }
-
-  // These methods are used in ngIf statements that deal with displaying dates and times. The thing is that
-  // rides with unspecified dates and times are stored with values that are unlikely to be real, since the sorting
-  // mechanism has trouble dealing with null values for time and date. By add year 3000 to unsepcified dates, and 99:99
-  // to 24-hour time, those entries effectively get sorted to the bottom of list (which is exactly how we want to
-  // sort unspecified dates and times.
-
-  public checkImpossibleDate(ride: Ride) {
-    return (ride.departureDate.includes("3000"))
-  }
-
-  public checkImpossibleTime(ride: Ride) {
-    return (ride.departureTime.includes("99") || ride.departureTime === "")
-  }
-
-
-  // These three methods are mainly used for checking if a user is allowed to join a ride, but some are also used in
-  // ngIf statements for displaying certain elements on the ride cards.
-  public userCanJoinRide(ride: Ride): boolean {
-    return (
-      (ride.seatsAvailable > 0)
-      && !this.userOwnsThisRide(ride)
-      && !this.userIsAPassenger(ride)
-    )
-  }
-
-  public userOwnsThisRide(ride: Ride): boolean {
-    return (ride.userId === this.currUserId);
-  }
-
-  public userIsAPassenger(ride: Ride): boolean {
-    return (ride.passengerIds.indexOf(this.currUserId) !== -1);
-  }
-
-  // These two methods are used in the HTML instead of ngModel, since it solves a problem where
-  // clicking on the checkbox didn't always 'uncheck' the box. Implementing this method with
-  // (click)=toggleNonSmoking, and checked="rideNonSmoking", fixes that bothersome problem.
-  public toggleNonSmoking() {
-    this.rideNonSmoking = !this.rideNonSmoking;
-  }
-  public toggleRoundTrip() {
-    this.rideRoundTrip = !this.rideRoundTrip;
-  }
-
 
   public filterRides(searchDestination: string, searchOrigin: string,
                      searchIsDriving: boolean, searchNonSmoking: boolean,
@@ -220,81 +166,18 @@ export class RideListComponent implements OnInit {
     }
   }
 
-  giveRideToService(ride: Ride){
-
-    // Since unspecified times are still being given an 'impossible' date, we need to change that back
-    // before we send the ride to edit-ride component. NOTE: This is not necessary with impossible times,
-    // since the form handles those appropriately by leaving the time field empty.
-    if (ride.departureDate === "3000-01-01T05:00:00.000Z") {
-      ride.departureDate = null;
-    }
-
-    this.rideListService.grabRide(ride);
-  }
-
-  openDeleteDialog(currentId: object): void {
-    console.log("openDeleteDialog");
-    const dialogRef = this.dialog.open(DeleteRideComponent, {
-      width: '500px',
-      data: {id: currentId}
-    })
-
-    dialogRef.afterClosed().subscribe(deletedRideId => {
-      if (deletedRideId != null) {
-        this.rideListService.deleteRide(deletedRideId).subscribe(
-
-          result => {
-            console.log('openDeleteDialog has gotten a result!');
-            this.highlightedDestination = result;
-            console.log('The result is ' + result);
-            this.refreshRides();
-          },
-
-          err => {
-            console.log('There was an error deleting the ride.');
-            console.log('The id we attempted to delete was  ' + deletedRideId);
-            console.log('The error was ' + JSON.stringify(err));
-          });
-      }
-    });
-  }
-
-  joinRide(rideId: string, passengerId: string, passengerName: string): void {
-
-    const joinedRide: joinRideObject = {
-      rideId: rideId,
-      passengerId: passengerId,
-      passengerName: passengerName,
-    };
-
-    this.rideListService.joinRide(joinedRide).subscribe(
-
-        result => {
-          console.log("here it is:" + result);
-          this.highlightedID = result;
-        },
-        err => {
-          // This should probably be turned into some sort of meaningful response.
-          console.log('There was an error adding the ride.');
-          console.log('The newRide or dialogResult was ' );
-          console.log('The error was ' + JSON.stringify(err));
-        });
-
-      this.refreshRides();
-  };
-
   printCurrRide(ride: Ride): void {
     console.log((ride));
   }
 
-  listRidePassengers(passengerNames: string[]): string {
-    if (passengerNames.length <= 0) {
-      return ("There are currently no passengers on this ride.");
-    }
-    else if (passengerNames.length > 0) {
-      var passenger = passengerNames[0];
-      return "Passengers: " + passengerNames;
-    }
+  // These two methods are used in the HTML instead of ngModel, since it solves a problem where
+  // clicking on the checkbox didn't always 'uncheck' the box. Implementing this method with
+  // (click)=toggleNonSmoking, and checked="rideNonSmoking", fixes that bothersome problem.
+  public toggleNonSmoking() {
+    this.rideNonSmoking = !this.rideNonSmoking;
+  }
+  public toggleRoundTrip() {
+    this.rideRoundTrip = !this.rideRoundTrip;
   }
 
 }
