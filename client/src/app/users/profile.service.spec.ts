@@ -32,7 +32,7 @@ describe('Profile Service',() => {
     expect(profileService.hasListener()).toBeTruthy();
   });
 
-  it('remove listener removes a listener', () => {
+  it('removes listener', () => {
     profileService.addListener(profileComponentStub);
     expect(profileService.hasListener()).toBeTruthy();
     profileService.removeListener();
