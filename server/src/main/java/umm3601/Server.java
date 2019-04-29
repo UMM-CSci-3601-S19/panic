@@ -74,7 +74,7 @@ public class Server {
 
     // RIDE ENDPOINTS'
     get("api/rides", rideRequestHandler::getRides);
-    get("api/myRides", rideRequestHandler::getMyRides);
+    get("api/myRides/:userId", rideRequestHandler::getMyRides);
     post("api/rides/new", rideRequestHandler::addNewRide);
     post("api/rides/remove", rideRequestHandler::deleteRide);
     post("api/rides/update", rideRequestHandler::editRide);
