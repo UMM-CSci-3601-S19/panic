@@ -31,7 +31,22 @@ public class RideRequestHandler {
 
   public String getMyRides(Request req, Response res) {
     res.type("application/json");
-    return rideController.getMyRides(req.queryMap().toMap());
+    String userId = req.params("userId");
+    String myRides;
+    try {
+      myRides = rideController.getMyRides(userId);
+    } catch (IllegalArgumentException e) {
+      res.status(400);
+      res.body("Could not find the userId " + userId);
+      return "";
+    }
+    if (myRides != null) {
+      return myRides;
+    } else {
+      res.status(404);
+      res.body("The requested user with userId " + userId + " was not found");
+      return "";
+    }
   }
 
   /**
