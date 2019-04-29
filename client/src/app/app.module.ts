@@ -34,6 +34,9 @@ import {RouterLinkDirectiveStub} from "./rides/router-link-directive-stub";
 import {PhoneMaskDirective} from "./users/phone-mask.directive";
 import {ProfileService} from "./users/profile.service";
 
+import { RideComponent } from "./rides/ride.component";
+
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -55,7 +58,8 @@ import {ProfileService} from "./users/profile.service";
     DeleteRideComponent,
     ProfileComponent,
     RouterLinkDirectiveStub,
-    PhoneMaskDirective
+    PhoneMaskDirective,
+    RideComponent
   ],
   providers: [
     RideListService, AppService, AppAuthGuard, UserService, ValidatorService, ProfileService,
