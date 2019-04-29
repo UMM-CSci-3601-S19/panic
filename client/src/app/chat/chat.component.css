@@ -1,0 +1,32 @@
+@media (max-width: 600px) {
+  .cdk-overlay-pane {
+    width: 100vw !important;
+    height: 100vh !important;
+  }
+}
+
+#new-message-form {
+  flex: 1 1 auto;
+}
+
+#new-message-box {
+  width: 100%;
+}
+
+#chat-footer {
+  display: flex;
+}
+
+button {
+  margin: 0 4px;
+}
+
+#send-message-btn {
+  background: #2ecc71;
+  color: #fff;
+}
+
+#close-chat-btn {
+  background: #e74c3c;
+  color: #fff;
+}
