@@ -32,7 +32,7 @@
 
     <mat-card-title>
 
-      <div>
+      <div *ngIf="!this.userOwnsThisRide(ride)">
         <button mat-raised-button
                 class="join-ride-button"
                 id="join-ride-button"
@@ -46,10 +46,6 @@
         </button>
 
         <br>
-
-        <div *ngIf="userOwnsThisRide(ride)" style="font-weight: bold; color: rgba(255,0,0,0.75)">
-          This is your ride posting.
-        </div>
 
         <div *ngIf="userIsAPassenger(ride)" style="font-weight: bold; color: rgba(255,0,0,0.75)">
           You are already part of this ride.
