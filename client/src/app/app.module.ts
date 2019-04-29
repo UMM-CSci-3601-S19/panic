@@ -24,11 +24,14 @@ import {CustomModule} from './custom.module';
 import {AddRideComponent} from './rides/add-ride.component';
 import {EditRideComponent} from './rides/edit-ride.component';
 import {DeleteRideComponent} from "./rides/delete-ride.component";
+import {ProfileComponent} from "./users/profile.component";
+import {ChatComponent} from "./chat/chat.component";
+import {MessageComponent} from "./message/message.component";
+import {ChatService} from "./chat/chat-service";
 
 import {MatCardModule} from '@angular/material/card';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatCheckboxModule}  from "@angular/material/checkbox";
-import {ProfileComponent} from "./users/profile.component";
 
 import {RouterLinkDirectiveStub} from "./rides/router-link-directive-stub";
 import {PhoneMaskDirective} from "./users/phone-mask.directive";
@@ -53,11 +56,18 @@ import {PhoneMaskDirective} from "./users/phone-mask.directive";
     EditRideComponent,
     DeleteRideComponent,
     ProfileComponent,
+    ChatComponent,
+    MessageComponent,
     RouterLinkDirectiveStub,
     PhoneMaskDirective
   ],
   providers: [
-    RideListService, AppService, AppAuthGuard, UserService, ValidatorService,
+    RideListService,
+    AppService,
+    AppAuthGuard,
+    UserService,
+    ValidatorService,
+    ChatService,
     {provide: APP_BASE_HREF, useValue: '/'},
   ],
   entryComponents: [
