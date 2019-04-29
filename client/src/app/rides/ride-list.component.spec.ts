@@ -11,6 +11,7 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/do';
 import {By} from "@angular/platform-browser";
 import {Subject} from "rxjs/Subject";
+import {RideComponent} from "./ride.component";
 
 describe('Ride list', () => {
 
@@ -83,7 +84,7 @@ describe('Ride list', () => {
 
     TestBed.configureTestingModule({
       imports: [CustomModule],
-      declarations: [RideListComponent,RouterLinkDirectiveStub],
+      declarations: [RideListComponent,RouterLinkDirectiveStub,RideComponent],
       providers: [{provide: RideListService, useValue: rideListServiceStub}]
     });
   });
@@ -438,7 +439,7 @@ describe('Misbehaving Ride List', () => {
 
     TestBed.configureTestingModule({
       imports: [FormsModule, CustomModule],
-      declarations: [RideListComponent,RouterLinkDirectiveStub],
+      declarations: [RideListComponent,RouterLinkDirectiveStub, RideComponent],
       providers: [{provide: RideListService, useValue: rideListServiceStub}]
     });
   });
