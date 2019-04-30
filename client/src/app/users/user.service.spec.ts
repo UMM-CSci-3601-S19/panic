@@ -83,7 +83,7 @@ describe ('User Service: ',() =>{
        userRides => expect(userRides).toBe(testRides)
      );
 
-     const req = httpTestingController.expectOne('http://localhost:4567/api/myRides?userId=342389477594424000000');
+     const req = httpTestingController.expectOne('http://localhost:4567/api/myRides/342389477594424000000');
      expect(req.request.method).toEqual('GET');
      req.flush(testRides);
   });
