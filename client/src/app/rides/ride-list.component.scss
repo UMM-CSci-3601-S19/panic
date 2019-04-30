@@ -1,46 +1,141 @@
+///* Aligns title with contents horizontally */
+//.mat-card-title, .mat-card-subtitle {
+//  padding-left: 8px;
+//}
+//
+///* Mat card for filtering rides */
+//.filterBox {
+//  background: white;
+//  padding-left: 12px;
+//}
+//
+//.radioGroup {
+//  margin-right: 20px;
+//}
+//
+///* Ride card */
+//.rides {  margin-bottom: 15px;  }
+//
+///* Menu Button */
+//.card-top-right-button {
+//  //float: right;
+//  //margin-top: 10px !important;
+//  //margin-right: 10px !important;
+//}
+//
+///* Title */
+//#ride-list-title {  text-align: center;  }
+//
+//.morideFulllogo {
+//  display: block;
+//  margin-left:auto;
+//  margin-right:auto;
+//  resize: horizontal;
+//  box-shadow: 0 0px 0px rgba(0,0,0,0.15);
+//
+//}
+//
+//
+//.morideFulllogo:hover{
+//  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+//  transition: box-shadow 0.3s ease-out;
+//}
+//
+//.morideFulllogo:hover:after{
+//  opacity: 1;
+//}
+
+
+
+//------------------------------------------
+
+/* body */
+body {
+  height: auto;
+  overflow-x: hidden;
+}
 /* Aligns title with contents horizontally */
 .mat-card-title, .mat-card-subtitle {
   padding-left: 8px;
 }
 
-/* Mat card for filtering rides */
-.filterBox {
-  background: white;
-  padding-left: 12px;
+/* Date Picker */
+
+.mat-datepicker-popup {
+  position: relative;
+  top: 50% !important;
 }
 
-.radioGroup {
-  margin-right: 20px;
+@media only screen and (min-width: 956px) {
+  #filterButton, #add-ride-button {
+    transform: scale(1.5);
+  }
+
+  #filterButton{
+    position: fixed;
+    left: 5%;
+
+    top: 15%;
+
+    z-index: 100;
+  }
+
+  #add-ride-button{
+    position: fixed;
+    left: 5%;
+    top: 25%;
+    z-index: 100;
+  }
 }
 
-/* Ride card */
-.rides {  margin-bottom: 15px;  }
 
-/* Menu Button */
-.card-top-right-button {
-  //float: right;
-  //margin-top: 10px !important;
-  //margin-right: 10px !important;
+.plus-icon {
+  transform: scale(1.1);
+}
+
+/* Datepicker */
+#datePickerField{
+  left: 50%;
+}
+
+/* Don't display time stamp when small screen */
+@media only screen and (max-width: 955px) {
+  .time {
+    display: none;
+    background: none;
+  }
+
+  #add-ride-button {
+    position: fixed;
+    left: 4%;
+
+    bottom: 13%;
+
+
+    z-index: 100;
+  }
+
+  #filterButton {
+    position: fixed;
+    bottom: 13%;
+    right: 4%;
+    z-index: 100;
+  }
+
+  #ridesWrapper {
+    margin: 20% 5% 40% 5%;
+  }
+}
+/* Time div */
+.time {
+  position: absolute;
+  top: 5%;
+  left: 2%;
+  max-width: 15%;
 }
 
 /* Title */
-#ride-list-title {  text-align: center;  }
-
-.morideFulllogo {
-  display: block;
-  margin-left:auto;
-  margin-right:auto;
-  resize: horizontal;
-  box-shadow: 0 0px 0px rgba(0,0,0,0.15);
-
-}
-
-
-.morideFulllogo:hover{
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-  transition: box-shadow 0.3s ease-out;
-}
-
-.morideFulllogo:hover:after{
-  opacity: 1;
+h1,h2 {
+  position: relative;
+  text-align: center;
 }

@@ -8,7 +8,7 @@ import {MatDialog} from "@angular/material";
 @Component({
   selector: 'app-ride',
   templateUrl: './ride.component.html',
-  styleUrls: ['./ride.component.css']
+  styleUrls: ['./ride.component.scss']
 })
 export class RideComponent implements OnInit {
 

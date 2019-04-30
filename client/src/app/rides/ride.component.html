@@ -1,179 +1,240 @@
-<mat-card>
+<!--<mat-expansion-panel #elem class="rides" [id]="ride.driver" hideToggle="true">-->
 
-  <!--======================================================================================================-->
-
-
-  <mat-card-header *ngIf="ride.isDriving" class="ride-title-isDriving" [id]="ride._id.$oid">
-
-    <div class="menu_spacer"> </div>
-
-    <button mat-icon-button [matMenuTriggerFor]="menu" id="settingsDriving" class="card-top-right-button">
-      <mat-icon class="dots">more_vert</mat-icon>
-    </button>
-
-    <!--=========================================-->
-
-    <mat-menu #menu="matMenu">
-      <div *ngIf="userOwnsThisRide(ride)">
-
-        <button mat-menu-item (click) = "giveRideToService(ride)" id="editDialogOpen"
-                routerLink="/editride">
-          <span>Edit Ride</span>
-        </button>
-
-        <button mat-menu-item (click)="openDeleteDialog(ride._id)" id="deleteDialogOpen" >
-          <span>Delete Ride</span>
-        </button>
-
-      </div>
-    </mat-menu>
-
-    <!--==============================================-->
-
-    <mat-card-title>
-
-      <div>
-        <button mat-raised-button
-                class="join-ride-button"
-                id="join-ride-button"
-                color="primary"
-                type="button"
-                style="width: 100%"
-                [disabled]="!this.userCanJoinRide(ride)"
-                (click) = "joinRide(ride._id, this.currUserId, this.currUserFullName)">
-          <mat-icon>add_circle_outline</mat-icon>
-          Join This Ride
-        </button>
-
-        <br>
-
-        <div *ngIf="userOwnsThisRide(ride)" style="font-weight: bold; color: rgba(255,0,0,0.75)">
-          This is your ride posting.
-        </div>
-
-        <div *ngIf="userIsAPassenger(ride)" style="font-weight: bold; color: rgba(255,0,0,0.75)">
-          You are already part of this ride.
-        </div>
-
-        <div *ngIf="!userIsAPassenger(ride) && ride.seatsAvailable < 1"
-             style="font-weight: bold; color: rgba(255,0,0,0.75)">
-          This ride is full.
-        </div>
-      </div>
-
-      <div class="departure-time">
-
-        <mat-icon style="color:green"> drive_eta</mat-icon>
-
-        <div *ngIf="!checkImpossibleDate(ride); then possible_date else impossible_date"> </div>
-        <ng-template #possible_date > {{this.dateParse(ride.departureDate)}} </ng-template>
-        <ng-template #impossible_date> Unspecified date </ng-template>
-
-        at
-
-        <div *ngIf="!checkImpossibleTime(ride); then possible_time else impossible_time"> </div>
-        <ng-template #possible_time > {{this.hourParse(ride.departureTime)}} </ng-template>
-        <ng-template #impossible_time> unspecified time </ng-template>
-
-      </div>
-
-      <div class="seats-left">
-        <small *ngIf="ride.seatsAvailable === 1"> {{ride.seatsAvailable}} SEAT LEFT </small>
-        <small *ngIf="ride.seatsAvailable !== 1"> {{ride.seatsAvailable}} SEATS LEFT </small>
-      </div>
-
-    </mat-card-title>
-  </mat-card-header>
-
-  <!--============================================================================================-->
-
-  <mat-card-header *ngIf="!ride.isDriving" class="ride-title-isNotDriving" [id]="ride._id.$oid">
-
-    <div class = "menu_spacer"> </div>
-
-    <button mat-icon-button [matMenuTriggerFor]="menu" id="settingsNotDriving" class="card-top-right-button">
-      <mat-icon class="dots">more_vert</mat-icon>
-    </button>
-
-    <!--=========================================-->
-
-    <mat-menu #menu="matMenu">
-      <div *ngIf="this.userOwnsThisRide(ride)">
-
-        <button mat-menu-item (click) = "giveRideToService(ride)"
-                routerLink="/editride">
-          <span>Edit Ride</span>
-        </button>
+  <!--&lt;!&ndash;======================================================================================================&ndash;&gt;-->
 
 
-        <button mat-menu-item (click)="openDeleteDialog(ride._id)" id="deleteDialogOpen">
-          <span>Delete Ride</span>
-        </button>
+  <!--<mat-expansion-panel-header *ngIf="ride.isDriving" class="ride-title-isDriving" [id]="ride._id.$oid">-->
 
-      </div>
-    </mat-menu>
+    <!--<div class="menu_spacer"> </div>-->
 
-    <!--=============================================-->
+    <!--<button mat-icon-button [matMenuTriggerFor]="menu" id="settingsDriving" class="card-top-right-button">-->
+      <!--<mat-icon class="dots">more_vert</mat-icon>-->
+    <!--</button>-->
 
-    <mat-card-title>
-      <div class="departure-time">
+    <!--&lt;!&ndash;=========================================&ndash;&gt;-->
 
-        <mat-icon style="color: blue"> transfer_within_a_station </mat-icon>
+    <!--<mat-menu #menu="matMenu">-->
+      <!--<div *ngIf="userOwnsThisRide(ride)">-->
 
-        <div *ngIf="!checkImpossibleDate(ride); then possible_date else impossible_date"> </div>
-        <ng-template #possible_date > {{this.dateParse(ride.departureDate)}} </ng-template>
-        <ng-template #impossible_date> Unspecified date </ng-template>
+        <!--<button mat-menu-item (click) = "giveRideToService(ride)" id="editDialogOpen"-->
+                <!--routerLink="/editride">-->
+          <!--<span>Edit Ride</span>-->
+        <!--</button>-->
 
-        at
+        <!--<button mat-menu-item (click)="openDeleteDialog(ride._id)" id="deleteDialogOpen" >-->
+          <!--<span>Delete Ride</span>-->
+        <!--</button>-->
 
-        <div *ngIf="!checkImpossibleTime(ride); then possible_time else impossible_time"> </div>
-        <ng-template #possible_time > {{this.hourParse(ride.departureTime)}} </ng-template>
-        <ng-template #impossible_time> unspecified time </ng-template>
+      <!--</div>-->
+    <!--</mat-menu>-->
 
-      </div>
-    </mat-card-title>
-  </mat-card-header>
+    <!--&lt;!&ndash;==============================================&ndash;&gt;-->
 
-  <!--=========================================================================================-->
+    <!--<mat-card-title>-->
 
-  <mat-card-content>
+      <!--<div>-->
+        <!--<button mat-raised-button-->
+                <!--class="join-ride-button"-->
+                <!--id="join-ride-button"-->
+                <!--color="primary"-->
+                <!--type="button"-->
+                <!--style="width: 100%"-->
+                <!--[disabled]="!this.userCanJoinRide(ride)"-->
+                <!--(click) = "joinRide(ride._id, this.currUserId, this.currUserFullName)">-->
+          <!--<mat-icon>add_circle_outline</mat-icon>-->
+          <!--Join This Ride-->
+        <!--</button>-->
+
+        <!--<br>-->
+
+        <!--<div *ngIf="userOwnsThisRide(ride)" style="font-weight: bold; color: rgba(255,0,0,0.75)">-->
+          <!--This is your ride posting.-->
+        <!--</div>-->
+
+        <!--<div *ngIf="userIsAPassenger(ride)" style="font-weight: bold; color: rgba(255,0,0,0.75)">-->
+          <!--You are already part of this ride.-->
+        <!--</div>-->
+
+        <!--<div *ngIf="!userIsAPassenger(ride) && ride.seatsAvailable < 1"-->
+             <!--style="font-weight: bold; color: rgba(255,0,0,0.75)">-->
+          <!--This ride is full.-->
+        <!--</div>-->
+      <!--</div>-->
+
+      <!--<div class="departure-time">-->
+
+        <!--<mat-icon style="color:green"> drive_eta</mat-icon>-->
+
+        <!--<div *ngIf="!checkImpossibleDate(ride); then possible_date else impossible_date"> </div>-->
+        <!--<ng-template #possible_date > {{this.dateParse(ride.departureDate)}} </ng-template>-->
+        <!--<ng-template #impossible_date> Unspecified date </ng-template>-->
+
+        <!--at-->
+
+        <!--<div *ngIf="!checkImpossibleTime(ride); then possible_time else impossible_time"> </div>-->
+        <!--<ng-template #possible_time > {{this.hourParse(ride.departureTime)}} </ng-template>-->
+        <!--<ng-template #impossible_time> unspecified time </ng-template>-->
+
+      <!--</div>-->
+
+      <!--<div class="seats-left">-->
+        <!--<small *ngIf="ride.seatsAvailable === 1"> {{ride.seatsAvailable}} SEAT LEFT </small>-->
+        <!--<small *ngIf="ride.seatsAvailable !== 1"> {{ride.seatsAvailable}} SEATS LEFT </small>-->
+      <!--</div>-->
+
+    <!--</mat-card-title>-->
+  <!--</mat-expansion-panel>-->
+
+  <!--&lt;!&ndash;============================================================================================&ndash;&gt;-->
+
+  <!--<mat-expansion-panel-header *ngIf="!ride.isDriving" class="ride-title-isNotDriving" [id]="ride._id.$oid">-->
+
+    <!--<div class = "menu_spacer"> </div>-->
+
+    <!--<button mat-icon-button [matMenuTriggerFor]="menu" id="settingsNotDriving" class="card-top-right-button">-->
+      <!--<mat-icon class="dots">more_vert</mat-icon>-->
+    <!--</button>-->
+
+    <!--&lt;!&ndash;=========================================&ndash;&gt;-->
+
+    <!--<mat-menu #menu="matMenu">-->
+      <!--<div *ngIf="this.userOwnsThisRide(ride)">-->
+
+        <!--<button mat-menu-item (click) = "giveRideToService(ride)"-->
+                <!--routerLink="/editride">-->
+          <!--<span>Edit Ride</span>-->
+        <!--</button>-->
+
+
+        <!--<button mat-menu-item (click)="openDeleteDialog(ride._id)" id="deleteDialogOpen">-->
+          <!--<span>Delete Ride</span>-->
+        <!--</button>-->
+
+      <!--</div>-->
+    <!--</mat-menu>-->
+
+    <!--&lt;!&ndash;=============================================&ndash;&gt;-->
+
+    <!--<mat-card-title>-->
+      <!--<div class="departure-time">-->
+
+        <!--<mat-icon style="color: blue"> transfer_within_a_station </mat-icon>-->
+
+        <!--<div *ngIf="!checkImpossibleDate(ride); then possible_date else impossible_date"> </div>-->
+        <!--<ng-template #possible_date > {{this.dateParse(ride.departureDate)}} </ng-template>-->
+        <!--<ng-template #impossible_date> Unspecified date </ng-template>-->
+
+        <!--at-->
+
+        <!--<div *ngIf="!checkImpossibleTime(ride); then possible_time else impossible_time"> </div>-->
+        <!--<ng-template #possible_time > {{this.hourParse(ride.departureTime)}} </ng-template>-->
+        <!--<ng-template #impossible_time> unspecified time </ng-template>-->
+
+      <!--</div>-->
+    <!--</mat-card-title>-->
+  <!--</mat-expansion-header>-->
+
+  <!--&lt;!&ndash;=========================================================================================&ndash;&gt;-->
+
+  <!--<mat-card-content>-->
+
+    <!--<div class="route">-->
+      <!--<div class="ride-info origin">{{ride.origin}}</div>-->
+      <!--<mat-icon>play_arrow</mat-icon>-->
+      <!--<div class="ride-info destination">{{ride.destination}}</div>-->
+    <!--</div>-->
+
+    <!--<div id="ride-info-driver-id-isDriving" class="ride-info driver" *ngIf="ride.isDriving">-->
+      <!--<a routerLink="/profile/{{ride.userId}}">{{ride.user}}</a> is offering this ride-->
+    <!--</div>-->
+
+    <!--<div id="ride-info-driver-id" class="ride-info driver" *ngIf="!ride.isDriving">-->
+      <!--<a routerLink="/profile/{{ride.userId}}">{{ride.user}}</a> is requesting this ride-->
+    <!--</div>-->
+
+    <!--<div id="ride-info-tags" class="ride-info driver" >-->
+      <!--<mat-icon aria-hidden="false" *ngIf="ride.nonSmoking">smoke_free</mat-icon>-->
+      <!--<b *ngIf="ride.nonSmoking">Non-Smoking &nbsp; &nbsp;</b>-->
+      <!--<mat-icon  aria-hidden="false" *ngIf="ride.roundTrip">repeat</mat-icon>-->
+      <!--<b *ngIf="ride.roundTrip">Round Trip</b>-->
+    <!--</div>-->
+
+    <!--<mat-divider [inset]="true" *ngIf="ride.notes"></mat-divider>-->
+
+    <!--<div class = "passengers_div "*ngIf="ride.isDriving">-->
+      <!--{{this.listRidePassengers(ride.passengerNames)}}-->
+    <!--</div>-->
+
+    <!--<mat-divider [inset]="true" *ngIf="ride.notes"></mat-divider>-->
+
+    <!--<div  *ngIf="ride.notes" class="ride-info notes">-->
+      <!--<small>NOTES:</small>-->
+      <!--<div>{{ride.notes}}</div>-->
+    <!--</div>-->
+
+  <!--</mat-card-content>-->
+
+  <!--&lt;!&ndash;======================================================================================&ndash;&gt;-->
+
+<!--</mat-expansion-panel-header>-->
+
+<!--<mat-form-field style="display: none">-->
+  <!--<input id="datePickerField" matInput [matDatepicker]="picker" (ngModelChange)="refreshRides()"-->
+         <!--placeholder="Filter by Departure Date" [(ngModel)]="rideDateObject">-->
+  <!--<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>-->
+  <!--<mat-datepicker #picker ></mat-datepicker>-->
+<!--</mat-form-field>-->
+
+<mat-expansion-panel #elem class="rides" [id]="ride.driver" hideToggle="true">
+  <mat-expansion-panel-header class="ride-title" [collapsedHeight]="'auto'" [expandedHeight]="'auto'">
+
+    <div></div>
+
+
+    <div class="time-date" *ngIf="ride.isDriving" style="background-color: #3b823a">
+      <span>May</span>
+      <span>25th</span>
+      <span class="departuretime">{{ride.departureTime}}</span>
+    </div>
+
+    <div class="time-date" *ngIf="!ride.isDriving" style="background-color: #af496b">
+      <span>May</span>
+      <span>25th</span>
+      <span class="departuretime">{{ride.departureTime}}</span>
+    </div>
 
     <div class="route">
-      <div class="ride-info origin">{{ride.origin}}</div>
-      <mat-icon>play_arrow</mat-icon>
-      <div class="ride-info destination">{{ride.destination}}</div>
+      <div class="origin">
+        <mat-icon class="origin_icon">panorama_fish_eye</mat-icon>
+        <div class="origin_text">
+          <div id="origin">{{ride.origin}}</div>
+        </div>
+      </div>
+      <mat-divider id="divider"></mat-divider>
+      <div class="destination">
+        <mat-icon class="destination_icon">navigate_next</mat-icon>
+        <div class="destination_text">
+          <div id="destination">{{ride.destination}}</div>
+        </div>
+      </div>
     </div>
+    <!--<button mat-button id="open-chat-button" (click)="openChat(ride._id)"><mat-icon>chat</mat-icon></button>-->
+  </mat-expansion-panel-header>
 
-    <div id="ride-info-driver-id-isDriving" class="ride-info driver" *ngIf="ride.isDriving">
-      <a routerLink="/profile/{{ride.userId}}">{{ride.user}}</a> is offering this ride
+  <div id="body-wrapper">
+    <div id="ride-info-driver-id" class="ride-info-driver">
+      {{ride.driver}} is offering this ride
     </div>
-
-    <div id="ride-info-driver-id" class="ride-info driver" *ngIf="!ride.isDriving">
-      <a routerLink="/profile/{{ride.userId}}">{{ride.user}}</a> is requesting this ride
-    </div>
-
-    <div id="ride-info-tags" class="ride-info driver" >
-      <mat-icon aria-hidden="false" *ngIf="ride.nonSmoking">smoke_free</mat-icon>
-      <b *ngIf="ride.nonSmoking">Non-Smoking &nbsp; &nbsp;</b>
-      <mat-icon  aria-hidden="false" *ngIf="ride.roundTrip">repeat</mat-icon>
-      <b *ngIf="ride.roundTrip">Round Trip</b>
-    </div>
-
-    <mat-divider [inset]="true" *ngIf="ride.notes"></mat-divider>
-
-    <div class = "passengers_div "*ngIf="ride.isDriving">
-      {{this.listRidePassengers(ride.passengerNames)}}
-    </div>
-
-    <mat-divider [inset]="true" *ngIf="ride.notes"></mat-divider>
-
-    <div  *ngIf="ride.notes" class="ride-info notes">
-      <small>NOTES:</small>
+    <mat-divider></mat-divider>
+    <div *ngIf="ride.notes" class="ride-info notes">
+      <small>DRIVER NOTES:</small>
       <div>{{ride.notes}}</div>
     </div>
+    <mat-action-row class="action-row">
+      <button mat-button id="open-chat-button" (click)="openChat(ride._id)">
+        <mat-icon>chat</mat-icon>
+      </button>
+    </mat-action-row>
+  </div>
 
-  </mat-card-content>
-
-  <!--======================================================================================-->
-
-</mat-card>
+</mat-expansion-panel>
