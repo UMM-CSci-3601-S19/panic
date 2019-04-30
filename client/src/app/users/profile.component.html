@@ -48,34 +48,11 @@
 
         <mat-card-title id="upcomingRidesTitle">Upcoming Rides</mat-card-title>
         <mat-divider></mat-divider>
-        <mat-card-content id="upcomingRides"> You can see all your current Rides Below
+        <mat-card-content *ngIf="userRides; else userError" id="upcomingRides"> You can see all your current Rides Below
           <br><br>
-          <mat-accordion *ngIf="userRides; else userError">
-          <mat-expansion-panel #elem *ngFor="let ride of this.userRides">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                {{ride.origin}} &nbsp; <mat-icon class="arrow">label_important</mat-icon> &nbsp; {{ride.destination}}
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <mat-panel-description> Seats Available: {{ride.seatsAvailable}}</mat-panel-description>
-            <mat-panel-description>
-              Leaving On:
-
-              <div *ngIf="!checkImpossibleDate(ride); then possible_date else impossible_date"> </div>
-              <ng-template #possible_date > {{this.dateParse(ride.departureDate)}} </ng-template>
-              <ng-template #impossible_date> Unspecified date </ng-template>
-
-              at
-
-              <div *ngIf="!checkImpossibleTime(ride); then possible_time else impossible_time"> </div>
-              <ng-template #possible_time > {{this.hourParse(ride.departureTime)}} </ng-template>
-              <ng-template #impossible_time> unspecified time </ng-template>
-
-            </mat-panel-description>
-            <mat-panel-description> Round Trip: {{ride.roundTrip}}</mat-panel-description>
-            <mat-panel-description> Smoking Allowed?: {{ride.nonSmoking}}</mat-panel-description>
-          </mat-expansion-panel>
-        </mat-accordion>
+          <app-ride #elem
+                    *ngFor="let ride of userRides"
+                    [id]="ride.user" [ride]="ride"></app-ride>
         </mat-card-content>
       </mat-card>
     </div>

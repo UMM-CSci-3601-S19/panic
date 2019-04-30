@@ -7,6 +7,8 @@ import {Ride} from "../rides/ride";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {profileInfoObject} from "./profileInfoObject";
 import {ProfileService} from "./profile.service";
+import {RideListComponent} from "../rides/ride-list.component";
+import {RideListService} from "../rides/ride-list.service";
 
 @Component({
   selector: 'profile-component',
@@ -25,7 +27,8 @@ export class ProfileComponent implements OnInit{
   constructor(private userService: UserService,
               private route: ActivatedRoute,
               private fb:FormBuilder,
-              private profileService: ProfileService
+              private profileService: ProfileService,
+              private rideListService: RideListService
   ) {
     this.createForm();
     profileService.addListener(this);
