@@ -23,7 +23,6 @@ import static umm3601.DatabaseHelper.serializeIterable;
 public class RideController {
 
   private final MongoCollection<Document> rideCollection;
-  private final MongoCollection<Document> userCollection;
 
   /**
    * Construct a controller for rides.
@@ -33,7 +32,6 @@ public class RideController {
   public RideController(MongoDatabase database) {
 
     rideCollection = database.getCollection("rides");
-    userCollection = database.getCollection("users");
   }
 
   String getRide(String id) {
