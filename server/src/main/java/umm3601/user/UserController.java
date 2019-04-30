@@ -110,7 +110,7 @@ public class UserController {
     return JSON.serialize(matchingUser);
   }
 
-  boolean saveProfile(String userId, String phone) {
+  public boolean saveProfile(String userId, String phone) {
 
 
     Document filter = new Document("userId", userId);
