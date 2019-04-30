@@ -275,7 +275,7 @@ public class RideControllerSpec {
   public void testJoinRide() {
 
     // When joinRide is called, a successful update will return true. We check for this first.
-    assertTrue( rideController.joinRide(ellisRideIdToString, "nkf", "Nate Foss") );
+    assertTrue( rideController.approveJoinRide(ellisRideIdToString, "nkf", "Nate Foss") );
 
     // In the entry above, we've joined the ride belonging to Ellis. In theory, the only fields that should
     // be change are seatsAvailable, passengerIds, and passengerNames. Let's convert it to a string and check
