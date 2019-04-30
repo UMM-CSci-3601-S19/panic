@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import {Message} from "./message";
 import {User} from "../users/user";
-import moment from 'moment';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-message',
