@@ -10,7 +10,6 @@ import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
-import umm3601.DatabaseHelper;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -19,6 +18,7 @@ import java.util.*;
 import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Sorts.ascending;
 import static com.mongodb.client.model.Sorts.orderBy;
+import static umm3601.DatabaseHelper.serializeIterable;
 
 public class RideController {
 
@@ -30,10 +30,11 @@ public class RideController {
    * @param database the database containing ride data
    */
   public RideController(MongoDatabase database) {
+
     rideCollection = database.getCollection("rides");
   }
 
-  public String getRide(String id) {
+  String getRide(String id) {
     FindIterable<Document> jsonRides
       = rideCollection
       .find(eq("_id", new ObjectId(id)));
@@ -49,21 +50,21 @@ public class RideController {
   }
 
 
-  public String getMyRides(Map<String, String[]> queryParams) {
+  String getMyRides(String userId) {
 
-    Document filterDoc = new Document();
+    System.out.println("We are attempting to gather results");
 
-    if (queryParams.containsKey("userId")) {
-      String targetContent = (queryParams.get("userId")[0]);
-      Document contentRegQuery = new Document();
-      contentRegQuery.append("$regex", targetContent);
-      contentRegQuery.append("$options", "i");
-      filterDoc = filterDoc.append("userId", contentRegQuery);
-    }
+    BasicDBObject orQuery = new BasicDBObject();
+    List<BasicDBObject> params = new ArrayList<BasicDBObject>();
+    params.add(new BasicDBObject("userId", userId));
+    params.add(new BasicDBObject("passengerIds", userId));
+    orQuery.put("$or", params);
 
-    FindIterable<Document> matchingRides = rideCollection.find(filterDoc);
+    System.out.println(orQuery);
 
-    return DatabaseHelper.serializeIterable(matchingRides);
+    FindIterable<Document> matchingRides = rideCollection.find(orQuery);
+
+    return serializeIterable(matchingRides);
   }
 
   /**
@@ -71,7 +72,7 @@ public class RideController {
    *
    * @return an array of Rides in a JSON formatted string
    */
-  public String getRides(Map<String, String[]> queryParams) {
+  String getRides(Map<String, String[]> queryParams) {
 
     // server-side filtering will happen here if we sell that in future stories.
     // Right now, this method simply returns all existing rides.
@@ -104,10 +105,10 @@ public class RideController {
 
     FindIterable<Document> matchingRides = rideCollection.find(oldRides).filter(oldRides).sort(order);
 
-    return DatabaseHelper.serializeIterable(matchingRides);
+    return serializeIterable(matchingRides);
   }
 
-  public String addNewRide(String user, String userId, String notes, int seatsAvailable, String origin, String destination,
+  String addNewRide(String user, String userId, String notes, int seatsAvailable, String origin, String destination,
                            String departureDate, String departureTime, boolean isDriving, boolean roundTrip, boolean nonSmoking) {
 
     // See methods at bottom of RideController
@@ -242,7 +243,7 @@ public class RideController {
     return tryUpdateOne(filter, fullUpdate);
   }
 
-  boolean tryUpdateOne(Document filter, Document updateDoc) {
+  private boolean tryUpdateOne(Document filter, Document updateDoc) {
     try {
       // Call updateOne(the document to match against, and the $set + updated fields document
       UpdateResult output = rideCollection.updateOne(filter, updateDoc);
@@ -258,8 +259,8 @@ public class RideController {
   // We check for unspecified times, and set them way ahead into the future. This is necessary for how the date
   // sorting works. Null dates get excluded from sorting, so we can't have that. Choosing a date far in the future
   // puts this ride entry at the bottom of the sorted ride list.
-  String checkUnspecifiedDate(String departureDate) {
-    if (departureDate == null || departureDate == "") {
+  private String checkUnspecifiedDate(String departureDate) {
+    if (departureDate == null || departureDate.equals("")) {
       departureDate = "3000-01-01T05:00:00.000Z";
     }
     return departureDate;
@@ -267,8 +268,8 @@ public class RideController {
 
   // Same idea for time. Unspecified times get excluded from sorting, and a time like "99:99" puts it at the bottom of
   // the ride list (after sorting for date).
-  String checkUnspecifiedTime(String departureTime) {
-    if (departureTime == null || departureTime == "") {
+  private String checkUnspecifiedTime(String departureTime) {
+    if (departureTime == null || departureTime.equals("")) {
       departureTime = "99:99";
     }
     return departureTime;
@@ -276,7 +277,7 @@ public class RideController {
 
   // We should set seatsAvailable to 0 for rides requested (this is to make it less confusing for people
   // browsing the database directly.)
-  int setSeatsForRequestedRide(boolean isDriving, int seatsAvailable) {
+  private int setSeatsForRequestedRide(boolean isDriving, int seatsAvailable) {
     if (!isDriving) {
       seatsAvailable = 0;
     }
