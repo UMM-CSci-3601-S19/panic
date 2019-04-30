@@ -50,7 +50,7 @@ export class RidePage {
   }
 
   getRides() {
-    return element.all(by.className('rides'));
+    return element.all(by.className('rideCard'));
   }
 
   elementExistsWithId(idOfElement: string): promise.Promise<boolean> {
