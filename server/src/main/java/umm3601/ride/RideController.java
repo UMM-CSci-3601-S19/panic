@@ -197,7 +197,7 @@ public class RideController {
     return tryUpdateOne(filter, updateDoc);
   }
 
-  boolean joinRide(String rideId, String passengerId, String passengerName) {
+  boolean approveJoinRide(String rideId, String passengerId, String passengerName) {
 
     ObjectId objId = new ObjectId(rideId); // _id must be formatted like this for the match to work
     Document filter = new Document("_id", objId); // Here is the actual document we match against
@@ -220,6 +220,26 @@ public class RideController {
     // Now pass the full update in with the filter and update the record it matches.
     return tryUpdateOne(filter, fullUpdate);
 
+  }
+
+  boolean requestJoinRide(String rideId, String passengerId, String passengerName){
+
+    ObjectId objId = new ObjectId(rideId); // _id must be formatted like this for the match to work
+    Document filter = new Document("_id", objId); // Here is the actual document we match against
+
+    // Create an empty document that will contain our full update
+    Document fullUpdate = new Document();
+
+    // These two lines create: {"passengerIds": passengerId, "passengerNames": passengerName}
+    Document pushFields = new Document("passengerIds", passengerId);
+    pushFields.append("passengerNames", passengerName);
+
+    // Appending the previous document gives us
+    // {$push: {"passengerIds":passengerId, "passengerNames":passengerName}}
+    fullUpdate.append("$push", pushFields);
+
+    // Now pass the full update in with the filter and update the record it matches.
+    return tryUpdateOne(filter, fullUpdate);
   }
 
   boolean tryUpdateOne(Document filter, Document updateDoc) {

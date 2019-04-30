@@ -102,7 +102,7 @@ public class RideRequestHandler {
       departureDate, departureTime, isDriving, roundTrip, nonSmoking);
   }
 
-  public boolean joinRide(Request req, Response res) {
+  public boolean approveJoinRide(Request req, Response res) {
 
     res.type("application/json");
 
@@ -118,7 +118,26 @@ public class RideRequestHandler {
     String passengerName = joinRide.getString("passengerName");
     System.out.println(passengerName);
 
-    return rideController.joinRide(rideId, passengerId, passengerName);
+    return rideController.approveJoinRide(rideId, passengerId, passengerName);
+  }
+
+  public boolean requestJoinRide(Request req, Response res) {
+
+    res.type("application/json");
+
+    // Turn the request into a Document
+    Document joinRide = Document.parse(req.body());
+
+    System.out.println(joinRide);
+
+    String rideId = joinRide.getObjectId("rideId").toHexString();
+    System.out.println(rideId);
+    String passengerId = joinRide.getString("passengerId");
+    System.out.println(passengerId);
+    String passengerName = joinRide.getString("passengerName");
+    System.out.println(passengerName);
+
+    return rideController.requestJoinRide(rideId, passengerId, passengerName);
   }
 
 

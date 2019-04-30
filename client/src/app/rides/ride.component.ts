@@ -3,7 +3,7 @@ import {Ride} from "./ride";
 import {RideListService} from "./ride-list.service";
 import {joinRideObject} from "./joinRideObject";
 import {DeleteRideComponent} from "./delete-ride.component";
-import {MatDialog} from "@angular/material";
+import {MatDialog, MatDialogConfig} from "@angular/material";
 
 @Component({
   selector: 'app-ride',
@@ -25,23 +25,45 @@ export class RideComponent implements OnInit {
 
   ngOnInit() {}
 
-  joinRide(rideId: string, passengerId: string, passengerName: string): void {
+  approveJoinRide(rideId: string, passengerId: string, passengerName: string): void {
 
     const joinedRide: joinRideObject = {
       rideId: rideId,
-      passengerId: passengerId,
-      passengerName: passengerName,
+      pendingPassengerId: passengerId,
+      pendingPassengerName: passengerName,
     };
 
-    this.rideListService.joinRide(joinedRide).subscribe(
+    this.rideListService.approveJoinRide(joinedRide).subscribe(
 
       result => {
-        console.log("here it is:" + result);
+        console.log("Successfully approve ride:" + result);
         this.highlightedID = result;
       },
       err => {
         // This should probably be turned into some sort of meaningful response.
-        console.log('There was an error adding the ride.');
+        console.log('There was an error approving the ride.');
+        console.log('The newRide or dialogResult was ' );
+        console.log('The error was ' + JSON.stringify(err));
+      });
+  };
+
+  requestJoinRide(rideId: string, passengerId: string, passengerName: string): void {
+
+    const joinedRide: joinRideObject = {
+      rideId: rideId,
+      pendingPassengerId: passengerId,
+      pendingPassengerName: passengerName,
+    };
+
+    this.rideListService.requestJoinRide(joinedRide).subscribe(
+
+      result => {
+        console.log("Successfully requested ride:" + result);
+        this.highlightedID = result;
+      },
+      err => {
+        // This should probably be turned into some sort of meaningful response.
+        console.log('There was an error requesting the ride.');
         console.log('The newRide or dialogResult was ' );
         console.log('The error was ' + JSON.stringify(err));
       });
@@ -49,7 +71,7 @@ export class RideComponent implements OnInit {
 
   openDeleteDialog(currentId: object): void {
     console.log("openDeleteDialog");
-    const dialogRef = this.dialog.open(DeleteRideComponent, {
+    const dialogRef = this.dialog.open(DeleteRideComponent, <MatDialogConfig>{
       width: '500px',
       data: {id: currentId}
     });

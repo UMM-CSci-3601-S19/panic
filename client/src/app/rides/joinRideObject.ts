@@ -1,5 +1,5 @@
 export interface joinRideObject {
   rideId: string;
-  passengerId: string;
-  passengerName: string;
+  pendingPassengerId: string;
+  pendingPassengerName: string;
 }
