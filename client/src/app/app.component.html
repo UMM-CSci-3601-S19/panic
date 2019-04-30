@@ -1,30 +1,30 @@
-<td-layout #layout>
-  <td-navigation-drawer flex sidenavTitle="MoRide">
+<mat-sidenav-container>
+  <mat-sidenav #sidenav>
     <mat-nav-list>
-      <a mat-list-item [routerLink]="['']" (click)="layout.close()" routerLinkActive="nav-active"
+      <a mat-list-item [routerLink]="['']" (click)="sidenav.toggle()" routerLinkActive="nav-active"
          [routerLinkActiveOptions]="{exact: true}">
         <mat-icon>home</mat-icon>
         Home
         </a>
-    </mat-nav-list>
-
-    <mat-nav-list>
-      <a mat-list-item [routerLink]="['/rides']" (click)="layout.close()" routerLinkActive="nav-active"
+      <a mat-list-item [routerLink]="['/rides']" (click)="sidenav.toggle()" routerLinkActive="nav-active"
          [routerLinkActiveOptions]="{exact: true}">
         <mat-icon>directions_car</mat-icon>
         Rides
         </a>
-      <a mat-list-item routerLink="/profile/{{profileId}}" (click)="layout.close();route();"
+      <a mat-list-item routerLink="/profile/{{profileId}}" (click)="sidenav.toggle();route();"
          routerLinkActive="nav-active" [routerLinkActiveOptions]="{exact: true}">
         <mat-icon>account_box</mat-icon>
         Profile
       </a>
     </mat-nav-list>
-  </td-navigation-drawer>
-  <td-layout-nav toolbarTitle="MoRide" navigationRoute="/">
-    <button mat-icon-button td-menu-button tdLayoutToggle *ngIf="appService.isSignedIn()">
+
+  </mat-sidenav>
+  <mat-sidenav-content>
+  <div id="lean-menu" (click)="sidenav.toggle()">
+    <button mat-icon-button id="hamburger-button">
       <mat-icon>menu</mat-icon>
     </button>
+  </div>
     <router-outlet></router-outlet>
-  </td-layout-nav>
-</td-layout>
+  </mat-sidenav-content>
+</mat-sidenav-container>
