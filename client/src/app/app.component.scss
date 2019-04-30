@@ -1,0 +1,17 @@
+#lean-menu {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  position: fixed;
+  left: 10px;
+  z-index: 100;
+}
+
+mat-sidenav {
+  max-width: 80vw;
+}
+
+mat-sidenav-content {
+  height: 100vh;
+}
