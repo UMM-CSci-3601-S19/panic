@@ -520,7 +520,7 @@ describe('Can delete a ride', () => {
     page.click('confirmDeleteRideButton');
 
     // Now we make sure our ride no longer exists, and that ride list length has be decremented to 6
-    expect(page.elementDoesNotExistWithId('Patton Vang')).toBeFalsy();
+    expect(page.elementExistsWithId('Patton Vang')).toBeFalsy();
     page.getRides().then((rides) => {
       expect(rides.length).toBe(6);
     });
