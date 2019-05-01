@@ -612,3 +612,21 @@ describe('Add Ride', () => {
     });
   });
 });
+
+
+describe('go to a profile from rides page', () => {
+  let page: RidePage;
+
+  beforeEach(() => {
+    page = new RidePage();
+    browser.executeScript("window.localStorage.setItem('isSignedIn','true')");
+    browser.executeScript("window.localStorage.setItem('userId','655477182929676100000')");
+  });
+
+  it('loads a user\'s profile when clicking on their name', () => {
+    page.navigateTo();
+    page.clickOnLink("/profile/832471086850197399999");
+    expect(page.elementExistsWithId("profileEmail")).toBeTruthy();
+    expect(page.elementExistsWithId("https://picsum.photos/94/94/?random")).toBeTruthy();
+  });
+});
