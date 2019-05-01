@@ -78,6 +78,10 @@ export class RidePage {
     return ride;
   }
 
+  clickOnLink(className: string) {
+    return element(by.className(className)).click();
+  }
+
 
   getElementById(id: string) {
     return element(by.id(id));
