@@ -71,7 +71,7 @@ import {PhoneMaskDirective} from "./users/phone-mask.directive";
     {provide: APP_BASE_HREF, useValue: '/'},
   ],
   entryComponents: [
-    AddRideComponent, EditRideComponent, DeleteRideComponent
+    AddRideComponent, EditRideComponent, DeleteRideComponent, ChatComponent
   ],
   bootstrap: [AppComponent]
 })
