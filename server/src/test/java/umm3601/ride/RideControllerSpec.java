@@ -46,8 +46,8 @@ public class RideControllerSpec {
     rideDocuments.drop();
     List<Document> testRides = new ArrayList<>();
     testRides.add(Document.parse("{\n" +
-      "                    user: \"Colt\",\n" +
-      "                    userId: \"001\",\n" +
+      "                    owner: \"Colt\",\n" +
+      "                    ownerID: \"001\",\n" +
       "                    seatsAvailable: 0,\n" +
       "                    origin: \"Morris Campus, Gay Hall\",\n" +
       "                    destination: \"Twin Cities\"\n" +
@@ -60,8 +60,8 @@ public class RideControllerSpec {
       "                    passengerNames: [],\n" +
       "                }"));
     testRides.add(Document.parse("{\n" +
-      "                    user: \"Avery\",\n" +
-      "                    userId: \"002\",\n" +
+      "                    owner: \"Avery\",\n" +
+      "                    ownerID: \"002\",\n" +
       "                    seatsAvailable: 10,\n" +
       "                    origin: \"534 e 5th St, Morris MN 56261\",\n" +
       "                    destination: \"Culver's, Alexandria\"\n" +
@@ -74,8 +74,8 @@ public class RideControllerSpec {
       "                    passengerNames: [],\n" +
       "                }"));
     testRides.add(Document.parse("{\n" +
-      "                    user: \"Michael\",\n" +
-      "                    userId: \"003\",\n" +
+      "                    owner: \"Michael\",\n" +
+      "                    ownerID: \"003\",\n" +
       "                    seatsAvailable: 0,\n" +
       "                    origin: \"On campus\",\n" +
       "                    destination: \"Willies\"\n" +
@@ -92,8 +92,8 @@ public class RideControllerSpec {
     BasicDBObject ellisRide = new BasicDBObject("_id", ellisRideId);
     ellisRideIdToString = ellisRide.getString("_id");
 
-    ellisRide = ellisRide.append("user", "Ellis")
-      .append("userId", "004")
+    ellisRide = ellisRide.append("owner", "Ellis")
+      .append("ownerID", "004")
       .append("seatsAvailable", 1)
       .append("origin", "Casey's General Store")
       .append("destination", "Perkin's")
@@ -114,7 +114,7 @@ public class RideControllerSpec {
 
   private static String getUser(BsonValue val) {
     BsonDocument ride = val.asDocument();
-    return ((BsonString) ride.get("user")).getValue();
+    return ((BsonString) ride.get("owner")).getValue();
   }
 
   private static String getDestination(BsonValue val) {
@@ -166,7 +166,7 @@ public class RideControllerSpec {
 
     assertNotNull("Add new ride should return true when ride is added,", newId);
     Map<String, String[]> argMap = new HashMap<>();
-    argMap.put("user", new String[]{"Dave Roberts"});
+    argMap.put("owner", new String[]{"Dave Roberts"});
     String jsonResult = rideController.getRides(argMap);
     BsonArray docs = parseJsonArray(jsonResult);
 
@@ -175,7 +175,7 @@ public class RideControllerSpec {
       .map(RideControllerSpec::getUser)
       .sorted()
       .collect(Collectors.toList());
-    assertEquals("Should return name of new user", "Dave Roberts", userName.get(2));
+    assertEquals("Should return name of new owner", "Dave Roberts", userName.get(2));
 
 
     System.out.println();
@@ -221,7 +221,7 @@ public class RideControllerSpec {
   public void getUsersByRideId() {
     String jsonResult = rideController.getRide(ellisRideId.toHexString());
     Document ellis = Document.parse(jsonResult);
-    assertEquals("Name should match", "Ellis", ellis.get("user"));
+    assertEquals("Name should match", "Ellis", ellis.get("owner"));
     String noJsonResult = rideController.getRide(new ObjectId().toString());
     assertNull("No user name should match", noJsonResult);
   }

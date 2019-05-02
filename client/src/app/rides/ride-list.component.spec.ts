@@ -32,8 +32,8 @@ describe('Ride list', () => {
       getRides: () => Observable.of([
         {
           _id: 'chris_id',
-          user: 'Chris',
-          userId: "001",
+          owner: 'Chris',
+          ownerID: "001",
           notes: 'These are Chris\'s ride notes',
           seatsAvailable: 3,
           origin: 'UMM',
@@ -48,8 +48,8 @@ describe('Ride list', () => {
         },
         {
           _id: 'dennis_id',
-          user: 'Dennis',
-          userId: "002",
+          owner: 'Dennis',
+          ownerID: "002",
           notes: 'These are Dennis\'s ride notes',
           seatsAvailable: -1,
           origin: 'Caribou Coffee',
@@ -64,8 +64,8 @@ describe('Ride list', () => {
         },
         {
           _id: 'agatha_id',
-          user: 'Agatha',
-          userId: "003",
+          owner: 'Agatha',
+          ownerID: "003",
           notes: 'These are Agatha\'s ride notes',
           seatsAvailable: 3,
           origin: 'UMM',
@@ -187,12 +187,12 @@ describe('Ride list', () => {
     expect(rideList.rides.length).toBe(3);
   });
 
-  it('contains a ride with user \'Chris\' and his UserId', () => {
+  it('contains a ride with owner \'Chris\' and his UserId', () => {
     expect(rideList.rides.some((ride: Ride) => ride.owner === 'Chris')).toBe(true);
     expect(rideList.rides.some((ride: Ride) => ride.ownerID === '001')).toBe(true);
   });
 
-  it('contain a ride with user \'Dennis\' and his UserId', () => {
+  it('contain a ride with owner \'Dennis\' and his UserId', () => {
     expect(rideList.rides.some((ride: Ride) => ride.owner === 'Dennis')).toBe(true);
     expect(rideList.rides.some((ride: Ride) => ride.ownerID === '002')).toBe(true);
   });
@@ -255,7 +255,7 @@ describe('Ride list', () => {
   //////////////////////////////////////////
 
 
-  it('doesn\'t contain a ride with user \'Dilbert\'', () => {
+  it('doesn\'t contain a ride with owner \'Dilbert\'', () => {
     expect(rideList.rides.some((ride: Ride) => ride.owner === 'Dilbert')).toBe(false);
   });
 

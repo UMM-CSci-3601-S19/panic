@@ -60,7 +60,7 @@ public class RideController {
 
     BasicDBObject orQuery = new BasicDBObject();
     List<BasicDBObject> params = new ArrayList<BasicDBObject>();
-    params.add(new BasicDBObject("userId", userId));
+    params.add(new BasicDBObject("ownerID", userId));
     params.add(new BasicDBObject("passengerIds", userId));
     orQuery.put("$or", params);
 
