@@ -6,6 +6,7 @@ import {MatDialog, MatDialogConfig} from "@angular/material";
 import {DeleteRideComponent} from "./delete-ride.component";
 import {joinRideObject} from "./joinRideObject";
 import {ChatComponent} from "../chat/chat.component";
+import {ChatService} from "../chat/chat-service";
 
 @Component({
   selector: 'ride-list-component',
@@ -34,8 +35,8 @@ export class RideListComponent implements OnInit {
   public currUserFullName = localStorage.getItem("userFullName");
 
   // Inject the RideListService into this component.
-  constructor(public rideListService: RideListService, public dialog: MatDialog) {
- //   rideListService.addListener(this);
+  constructor(public rideListService: RideListService, public dialog: MatDialog, public chatService: ChatService) {
+    this.chatService.connectStream();
   }
 
   ngOnInit(): void {
