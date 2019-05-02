@@ -146,7 +146,7 @@ public class RideRequestHandler {
     System.out.println("leave-ride document" + leaveRide);
 
     String userID = leaveRide.getString("userID");
-    System.out.println(userID);
+    System.out.println("userID " + userID);
     String rideID = leaveRide.getString("rideID");
     System.out.println(rideID);
 

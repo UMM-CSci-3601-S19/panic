@@ -169,9 +169,11 @@
 
 
 <!-- -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
-    <button id="leave-ride-button"
-            mat-raised-button
-            (click)="leaveRide(this.currUserId, ride._id.$oid)">Leave Ride
+    <button *ngIf="userIsAPassenger(ride)"
+
+      id="leave-ride-button"
+      mat-raised-button
+      (click)="leaveRide(this.currUserId, ride._id.$oid)">Leave Ride
 
 
     </button>

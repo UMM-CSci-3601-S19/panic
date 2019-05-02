@@ -247,6 +247,7 @@ public class RideController {
     // {$inc: {seatsAvailable=-1}, $push: {"passengerIds":passengerId, "passengerNames":passengerName}}}
     fullUpdate.append("$inc", incrementFields);
     fullUpdate.append("$pull", pullFields);
+    System.out.println(fullName);
 
     // Now pass the full update in with the filter and update the record it matches.
     return tryUpdateOne(filter, fullUpdate);
