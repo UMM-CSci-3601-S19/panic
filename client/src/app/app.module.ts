@@ -26,7 +26,6 @@ import {EditRideComponent} from './rides/edit-ride.component';
 import {DeleteRideComponent} from "./rides/delete-ride.component";
 import {ProfileComponent} from "./users/profile.component";
 import {ChatComponent} from "./chat/chat.component";
-import {MessageComponent} from "./message/message.component";
 import {ChatService} from "./chat/chat-service";
 
 import {MatCardModule} from '@angular/material/card';
@@ -57,7 +56,6 @@ import {PhoneMaskDirective} from "./users/phone-mask.directive";
     DeleteRideComponent,
     ProfileComponent,
     ChatComponent,
-    MessageComponent,
     RouterLinkDirectiveStub,
     PhoneMaskDirective
   ],
