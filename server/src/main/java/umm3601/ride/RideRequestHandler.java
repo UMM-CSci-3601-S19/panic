@@ -136,5 +136,22 @@ public class RideRequestHandler {
     return rideController.joinRide(rideId, passengerId, passengerName);
   }
 
+  public boolean leaveRide(Request req, Response res) {
+
+    res.type("application/json");
+
+    // Turn the request into a Document
+    Document leaveRide = Document.parse(req.body());
+
+    System.out.println(leaveRide);
+
+    String userID = leaveRide.getString("passengerId");
+    System.out.println(userID);
+    String rideID = leaveRide.getString("rideId");
+    System.out.println(rideID);
+
+    return rideController.leaveRide(userID, rideID);
+  }
+
 
 }
