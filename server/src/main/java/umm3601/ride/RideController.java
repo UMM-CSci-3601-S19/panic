@@ -241,6 +241,7 @@ public class RideController {
     // These two lines create: {"passengerIds": passengerId, "passengerNames": passengerName}
     Document pullFields = new Document("passengerIds", userID);
     String fullName = userController.getStringField(userID, "fullName");
+    System.out.println(fullName);
     pullFields.append("passengerNames", fullName);
     // Appending the previous document gives us
     // {$inc: {seatsAvailable=-1}, $push: {"passengerIds":passengerId, "passengerNames":passengerName}}}

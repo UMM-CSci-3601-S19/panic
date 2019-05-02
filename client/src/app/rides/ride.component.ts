@@ -174,13 +174,15 @@ export class RideComponent implements OnInit {
     }
   }
 
-  leaveRide(userID: string, ride: Ride) {
+  leaveRide(userID: string, rideID: string) {
 
 
     const leftRide: leaveRideObject = {
       userID: userID,
-      rideID: ride._id,
+      rideID: rideID,
     };
+
+    console.log(leftRide);
 
     this.rideListService.leaveRide(leftRide).subscribe(
 

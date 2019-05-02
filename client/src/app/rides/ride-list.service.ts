@@ -78,7 +78,7 @@ export class RideListService {
       );
   }
 
-  leaveRide(editedRide: leaveRideObject) {
+  leaveRide(leaveRideObject: leaveRideObject) {
 
     const httpOptions = {
       headers: new HttpHeaders({
@@ -91,7 +91,7 @@ export class RideListService {
       responseType: 'text' as 'json'
     };
 
-    return this.http.post<string>(this.rideUrl + '/leave', editedRide, httpOptions)
+    return this.http.post<string>(this.rideUrl + '/leave', leaveRideObject, httpOptions)
       .pipe(
         tap(() => {
           this._refreshNeeded$.next();

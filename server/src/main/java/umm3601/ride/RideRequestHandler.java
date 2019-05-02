@@ -143,11 +143,11 @@ public class RideRequestHandler {
     // Turn the request into a Document
     Document leaveRide = Document.parse(req.body());
 
-    System.out.println(leaveRide);
+    System.out.println("leave-ride document" + leaveRide);
 
-    String userID = leaveRide.getString("passengerId");
+    String userID = leaveRide.getString("userID");
     System.out.println(userID);
-    String rideID = leaveRide.getString("rideId");
+    String rideID = leaveRide.getString("rideID");
     System.out.println(rideID);
 
     return rideController.leaveRide(userID, rideID);
