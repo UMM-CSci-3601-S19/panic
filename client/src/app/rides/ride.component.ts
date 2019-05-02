@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Ride} from "./ride";
 import {RideListService} from "./ride-list.service";
-import {joinRideObject} from "./joinRideObject";
+import {requestRideObject} from "./requestRideObject";
 import {DeleteRideComponent} from "./delete-ride.component";
 import {MatDialog} from "@angular/material";
 import {leaveRideObject} from "./leaveRideObject";
@@ -26,15 +26,27 @@ export class RideComponent implements OnInit {
 
   ngOnInit() {}
 
-  joinRide(rideId: string, passengerId: string, passengerName: string): void {
+  // joinRideDriver(rideId: string, driverId: string, driverName: sting): void {
+  //   const joinedRide: joinRideObject = {
+  //     rideId: rideId,
+  //     driverId: driverId,
+  //     driverName: driverName,
+  //   };
+  //
+  // }
 
-    const joinedRide: joinRideObject = {
+
+  // driveRide()
+
+  requestRide(rideId: string, passengerId: string, passengerName: string): void {
+
+    const requestedRide: requestRideObject = {
       rideId: rideId,
       passengerId: passengerId,
       passengerName: passengerName,
     };
 
-    this.rideListService.joinRide(joinedRide).subscribe(
+    this.rideListService.requestRide(requestedRide).subscribe(
 
       result => {
         console.log("here it is:" + result);
@@ -76,7 +88,7 @@ export class RideComponent implements OnInit {
 
   // These three methods are mainly used for checking if a user is allowed to join a ride, but some are also used in
   // ngIf statements for displaying certain elements on the ride cards.
-  public userCanJoinRide(ride: Ride): boolean {
+  public userCanrequestRide(ride: Ride): boolean {
     return (
       (ride.seatsAvailable > 0)
       && !this.userOwnsThisRide(ride)
