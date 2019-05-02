@@ -1,7 +1,7 @@
-import {User} from "../users/user";
-
 export interface Message {
-  from: User;
+  from_id: string;
+  from_name: string;
+  from_avatar: string;
   body: string;
   sent: Date;
 }

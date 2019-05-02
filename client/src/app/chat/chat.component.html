@@ -10,8 +10,8 @@
 <mat-dialog-content class="chat-container">
   <mat-list>
     <mat-list-item *ngFor="let m of messages">
-      <img matListAvatar [src]="m.from.pictureUrl" alt="{{m.from.fullName}}'s avatar">
-      <h3 matLine>{{m.from.fullName}}</h3>
+      <img matListAvatar [src]="m.from_avatar" alt="{{m.from_name}}'s avatar">
+      <h3 matLine>{{m.from_name}}</h3>
       <p matLine>{{m.body}}</p>
     </mat-list-item>
   </mat-list>
