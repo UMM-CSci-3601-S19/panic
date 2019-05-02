@@ -167,6 +167,17 @@
 
     <mat-divider [inset]="true" *ngIf="ride.notes"></mat-divider>
 
+
+<!-- -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
+    <button id="leave-ride-button"
+            mat-raised-button
+            (click)="leaveRide(this.currUserId, ride._id.$oid)">Leave Ride
+
+
+    </button>
+<!-- -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
+
+
     <div  *ngIf="ride.notes" class="ride-info notes">
       <small>NOTES:</small>
       <div>{{ride.notes}}</div>
