@@ -9,6 +9,7 @@ import {AppComponent} from './app.component';
 import {HomeComponent} from './home/home.component';
 
 import {RideListComponent} from "./rides/ride-list.component";
+import { RideComponent } from "./rides/ride.component";
 
 import {RideListService} from './rides/ride-list.service';
 import {UserService} from "./users/user.service";
@@ -34,6 +35,7 @@ import {MatCheckboxModule}  from "@angular/material/checkbox";
 
 import {RouterLinkDirectiveStub} from "./rides/router-link-directive-stub";
 import {PhoneMaskDirective} from "./users/phone-mask.directive";
+import {ProfileService} from "./users/profile.service";
 
 @NgModule({
   imports: [
@@ -57,7 +59,8 @@ import {PhoneMaskDirective} from "./users/phone-mask.directive";
     ProfileComponent,
     ChatComponent,
     RouterLinkDirectiveStub,
-    PhoneMaskDirective
+    PhoneMaskDirective,
+    RideComponent
   ],
   providers: [
     RideListService,
@@ -66,10 +69,14 @@ import {PhoneMaskDirective} from "./users/phone-mask.directive";
     UserService,
     ValidatorService,
     ChatService,
+    ProfileService,
     {provide: APP_BASE_HREF, useValue: '/'},
   ],
   entryComponents: [
-    AddRideComponent, EditRideComponent, DeleteRideComponent, ChatComponent
+    AddRideComponent,
+    EditRideComponent,
+    DeleteRideComponent,
+    ChatComponent
   ],
   bootstrap: [AppComponent]
 })

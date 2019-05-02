@@ -14,7 +14,7 @@ export class AppService {
 
   initClient() {
     gapi.client.init({
-      'clientId': '121498793046-vuuo0thmp21gmnskaei3330bq50ni6s7.apps.googleusercontent.com',
+      'clientId': '828151406788-7pmre36dp4bboog4j03fl3ochdc6ed8r.apps.googleusercontent.com',
       'scope': 'profile email'
     });
   }

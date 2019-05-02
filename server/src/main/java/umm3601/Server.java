@@ -76,11 +76,12 @@ public class Server {
 
     // RIDE ENDPOINTS'
     get("api/rides", rideRequestHandler::getRides);
-    get("api/myRides", rideRequestHandler::getMyRides);
+    get("api/myRides/:userId", rideRequestHandler::getMyRides);
     post("api/rides/new", rideRequestHandler::addNewRide);
     post("api/rides/remove", rideRequestHandler::deleteRide);
     post("api/rides/update", rideRequestHandler::editRide);
     post("api/rides/join", rideRequestHandler::joinRide);
+    post("api/rides/leave", rideRequestHandler::leaveRide);
 
     // USER ENDPOINTS
     get("api/user/:id",userRequestHandler::getUserJSON);
@@ -102,7 +103,7 @@ public class Server {
 
       try {
 
-        String CLIENT_SECRET_FILE = "./src/main/java/umm3601/server_files/credentials.json";
+        String CLIENT_SECRET_FILE = "../credentials.json";
 
 
         GoogleClientSecrets clientSecrets =
