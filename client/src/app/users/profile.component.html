@@ -75,7 +75,15 @@
             <mat-panel-description> Round Trip: {{ride.roundTrip}}</mat-panel-description>
             <mat-panel-description> Smoking Allowed?: {{!ride.nonSmoking}}</mat-panel-description>
           </mat-expansion-panel>
+            <button id="leave-ride-button"
+                    mat-raised-button
+                    (click)="leaveRide(this.currUserId, ride)">Leave Ride
+
+
+            </button>
         </mat-accordion>
+
+
         </mat-card-content>
       </mat-card>
     </div>
