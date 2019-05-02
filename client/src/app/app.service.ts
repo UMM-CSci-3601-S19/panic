@@ -55,13 +55,8 @@ export class AppService {
   }
 
   public isSignedIn(): boolean {
-    status = localStorage.getItem('isSignedIn');
-    if (status == 'true') {
-      return true;
-    }
-    else {
-      return false;
-    }
+    let status = localStorage.getItem('isSignedIn');
+    return status == "true";
   }
 
   loadClient() {
