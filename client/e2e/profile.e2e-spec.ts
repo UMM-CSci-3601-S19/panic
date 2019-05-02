@@ -9,7 +9,7 @@ browser.driver.controlFlow().execute = function () {
 
 
   origFn.call(browser.driver.controlFlow(), () => {
-    return protractor.promise.delayed(80);
+    return protractor.promise.delayed(0);
   });
 
   return origFn.apply(browser.driver.controlFlow(), args);
@@ -46,7 +46,7 @@ describe('create and populate a profile page for user', () => {
     });
 
     it('find the user\'s pic', () =>{
-      expect(page.elementExistsWithId("https://picsum.photos/200/300/?random")).toBe(true);
+      expect(page.elementExistsWithId("https://picsum.photos/94/94/?random")).toBe(true);
     });
 
     it('Should find Upcoming Ride Card Title', () =>{
