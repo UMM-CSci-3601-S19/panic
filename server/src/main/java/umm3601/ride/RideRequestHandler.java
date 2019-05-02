@@ -117,23 +117,23 @@ public class RideRequestHandler {
       departureDate, departureTime, isDriving, roundTrip, nonSmoking);
   }
 
-  public boolean joinRide(Request req, Response res) {
+  public boolean requestRide(Request req, Response res) {
 
     res.type("application/json");
 
     // Turn the request into a Document
-    Document joinRide = Document.parse(req.body());
+    Document requestRide = Document.parse(req.body());
 
-    System.out.println(joinRide);
+    System.out.println(requestRide);
 
-    String rideId = joinRide.getObjectId("rideId").toHexString();
+    String rideId = requestRide.getObjectId("rideId").toHexString();
     System.out.println(rideId);
-    String passengerId = joinRide.getString("passengerId");
+    String passengerId = requestRide.getString("passengerId");
     System.out.println(passengerId);
-    String passengerName = joinRide.getString("passengerName");
+    String passengerName = requestRide.getString("passengerName");
     System.out.println(passengerName);
 
-    return rideController.joinRide(rideId, passengerId, passengerName);
+    return rideController.requestRide(rideId, passengerId, passengerName);
   }
 
   public boolean leaveRide(Request req, Response res) {
