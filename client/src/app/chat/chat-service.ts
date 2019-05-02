@@ -16,7 +16,6 @@ export class ChatService {
   readonly baseUrl: string = environment.API_URL + 'chat';
   private API_KEY = (<any>Credentials).API_KEY;
   public client;
-  private loggedInUser = JSON.parse(localStorage.user);
   private userToken;
 
   constructor(private http: HttpClient) {
@@ -27,7 +26,7 @@ export class ChatService {
     let rideFeed = this.client.feed('ride', feedId, this.userToken);
 
     let activity = {
-      actor: message.from._id,
+      actor: message.from_id,
       verb: "send",
       object: message,
       foreign_id: feedId
@@ -69,7 +68,7 @@ export class ChatService {
   }
 
   connectStream() {
-    this.getToken(this.loggedInUser).subscribe( userToken => {
+    this.getDevToken().subscribe( userToken => {
       this.userToken = userToken;
       this.client = stream.connect(this.API_KEY, userToken,"49831");
       return this.client;
@@ -86,7 +85,7 @@ export class ChatService {
    * @param {Object} user
    * @returns {Observable<string>}
    */
-  getToken(user: User): Observable<string> {
+  getDevToken(): Observable<string> {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -94,6 +93,6 @@ export class ChatService {
       responseType: 'text' as 'json'
     };
 
-    return this.http.post<string>(this.baseUrl + "/authenticate", user, httpOptions);
+    return this.http.post<string>(this.baseUrl + "/authenticate", {}, httpOptions);
   }
 }
