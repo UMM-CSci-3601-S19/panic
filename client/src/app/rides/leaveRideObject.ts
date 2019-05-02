@@ -1,4 +1,4 @@
 export interface leaveRideObject {
-  rideId: string;
-  passengerId: string;
+  rideID: string;
+  userID: string;
 }
