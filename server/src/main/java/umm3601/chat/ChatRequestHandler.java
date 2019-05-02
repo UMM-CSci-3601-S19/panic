@@ -35,10 +35,6 @@ public class ChatRequestHandler {
   public Token authenticateDevUser(Request req, Response res) {
     res.type("application/json");
 
-//    Document user = Document.parse(req.body());
-//    String userId = user.getString("_id");
-//    System.out.println("userId=" + userId);
-
     Map<String, Object> tokenHeaders = new HashMap<>();
     tokenHeaders.put("alg", "HS256");
     tokenHeaders.put("typ", "JWT");
