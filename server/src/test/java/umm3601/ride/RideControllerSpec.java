@@ -46,8 +46,8 @@ public class RideControllerSpec {
     rideDocuments.drop();
     List<Document> testRides = new ArrayList<>();
     testRides.add(Document.parse("{\n" +
-      "                    user: \"Colt\",\n" +
-      "                    userId: \"001\",\n" +
+      "                    owner: \"Colt\",\n" +
+      "                    ownerID: \"001\",\n" +
       "                    seatsAvailable: 0,\n" +
       "                    origin: \"Morris Campus, Gay Hall\",\n" +
       "                    destination: \"Twin Cities\"\n" +
@@ -60,8 +60,8 @@ public class RideControllerSpec {
       "                    passengerNames: [],\n" +
       "                }"));
     testRides.add(Document.parse("{\n" +
-      "                    user: \"Avery\",\n" +
-      "                    userId: \"002\",\n" +
+      "                    owner: \"Avery\",\n" +
+      "                    ownerID: \"002\",\n" +
       "                    seatsAvailable: 10,\n" +
       "                    origin: \"534 e 5th St, Morris MN 56261\",\n" +
       "                    destination: \"Culver's, Alexandria\"\n" +
@@ -74,8 +74,8 @@ public class RideControllerSpec {
       "                    passengerNames: [],\n" +
       "                }"));
     testRides.add(Document.parse("{\n" +
-      "                    user: \"Michael\",\n" +
-      "                    userId: \"003\",\n" +
+      "                    owner: \"Michael\",\n" +
+      "                    ownerID: \"003\",\n" +
       "                    seatsAvailable: 0,\n" +
       "                    origin: \"On campus\",\n" +
       "                    destination: \"Willies\"\n" +
@@ -84,16 +84,16 @@ public class RideControllerSpec {
       "                    isDriving: false,\n" +
       "                    roundTrip: true,\n" +
       "                    nonSmoking: false,\n" +
-      "                    passengerIds: [],\n" +
-      "                    passengerNames: [],\n" +
+      "                    passengerIds: [\"004\"],\n" +
+      "                    passengerNames: [\"Ellis\"],\n" +
       "                }"));
 
     ellisRideId = new ObjectId();
     BasicDBObject ellisRide = new BasicDBObject("_id", ellisRideId);
     ellisRideIdToString = ellisRide.getString("_id");
 
-    ellisRide = ellisRide.append("user", "Ellis")
-      .append("userId", "004")
+    ellisRide = ellisRide.append("owner", "Ellis")
+      .append("ownerID", "004")
       .append("seatsAvailable", 1)
       .append("origin", "Casey's General Store")
       .append("destination", "Perkin's")
@@ -114,7 +114,12 @@ public class RideControllerSpec {
 
   private static String getUser(BsonValue val) {
     BsonDocument ride = val.asDocument();
-    return ((BsonString) ride.get("user")).getValue();
+    return ((BsonString) ride.get("owner")).getValue();
+  }
+
+  private static String getDestination(BsonValue val) {
+    BsonDocument ride = val.asDocument();
+    return ((BsonString) ride.get("destination")).getValue();
   }
 
   private static int getSeatsAvailable(BsonValue val) {
@@ -139,6 +144,17 @@ public class RideControllerSpec {
   }
 
   @Test
+  public void getMyRides() {
+    String myRides = rideController.getMyRides("004");
+    BsonArray list = parseJsonArray(myRides);
+    assertEquals("Should be 2 rides", 2, list.size());
+
+    List<String> destinations = list.stream().map(RideControllerSpec::getDestination).sorted().collect(Collectors.toList());
+    List<String> expectedDestinations = Arrays.asList("Perkin's", "Willies");
+    assertEquals("Destiantions should match", expectedDestinations, destinations);
+  }
+
+  @Test
   public void addRide(){
 
     String newId = rideController.addNewRide("Dave Roberts", "005","I talk a lot about math",
@@ -150,7 +166,7 @@ public class RideControllerSpec {
 
     assertNotNull("Add new ride should return true when ride is added,", newId);
     Map<String, String[]> argMap = new HashMap<>();
-    argMap.put("user", new String[]{"Dave Roberts"});
+    argMap.put("owner", new String[]{"Dave Roberts"});
     String jsonResult = rideController.getRides(argMap);
     BsonArray docs = parseJsonArray(jsonResult);
 
@@ -159,7 +175,7 @@ public class RideControllerSpec {
       .map(RideControllerSpec::getUser)
       .sorted()
       .collect(Collectors.toList());
-    assertEquals("Should return name of new user", "Dave Roberts", userName.get(2));
+    assertEquals("Should return name of new owner", "Dave Roberts", userName.get(2));
 
 
     System.out.println();
@@ -172,7 +188,7 @@ public class RideControllerSpec {
     // rides to having 0 sets available.
 
 
-    String newId = rideController.addNewRide("Nate Foss", "006","Good morning! How are you? ...Good.", 1, "Morris", "232 Alton Drive Miami, FL", "5/13/19", "5PM",
+    rideController.addNewRide("Nate Foss", "006","Good morning! How are you? ...Good.", 1, "Morris", "232 Alton Drive Miami, FL", "5/13/19", "5PM",
       false, true,true);
 
     Map<String, String[]> emptyMap = new HashMap<>();
@@ -205,7 +221,7 @@ public class RideControllerSpec {
   public void getUsersByRideId() {
     String jsonResult = rideController.getRide(ellisRideId.toHexString());
     Document ellis = Document.parse(jsonResult);
-    assertEquals("Name should match", "Ellis", ellis.get("user"));
+    assertEquals("Name should match", "Ellis", ellis.get("owner"));
     String noJsonResult = rideController.getRide(new ObjectId().toString());
     assertNull("No user name should match", noJsonResult);
   }
@@ -232,25 +248,25 @@ public class RideControllerSpec {
     String ride = rideController.getRide(ellisRideIdToString);
 
     // Since the ride is requested, the controller should changes seatsAvailable to 0.
-    assertTrue(ride.toString().contains("\"seatsAvailable\": 0"));
+    assertTrue(ride.contains("\"seatsAvailable\": 0"));
 
     // Passing in an empty time should tell the ride controller to turn it to an 'impossible time'
-    assertTrue(ride.toString().contains("\"departureTime\": \"99:99\""));
+    assertTrue(ride.contains("\"departureTime\": \"99:99\""));
 
     // Likewise, passing an empty date results in a (contextually) impossible date
-    assertTrue(ride.toString().contains("\"departureDate\": " + "\"3000-01-01T05:00:00.000Z\""));
+    assertTrue(ride.contains("\"departureDate\": " + "\"3000-01-01T05:00:00.000Z\""));
 
     // The rest are self-explanatory and should be exactly what we passed into editRide() to be updated.
-    assertTrue(ride.toString().contains("\"origin\": \"Pizza Hut\""));   // Should contain the new origin
-    assertTrue(ride.toString().contains("\"isDriving\": false"));   // Should contain the new isDriving
-    assertTrue(ride.toString().contains("\"nonSmoking\": false"));   // Should contain the new nonSmoking
-    assertTrue(ride.toString().contains("\"roundTrip\": false"));   // Should contain the new roundTrip
+    assertTrue(ride.contains("\"origin\": \"Pizza Hut\""));   // Should contain the new origin
+    assertTrue(ride.contains("\"isDriving\": false"));   // Should contain the new isDriving
+    assertTrue(ride.contains("\"nonSmoking\": false"));   // Should contain the new nonSmoking
+    assertTrue(ride.contains("\"roundTrip\": false"));   // Should contain the new roundTrip
 
     // We should check the old values as well, since they should not be changed
-    assertTrue(ride.toString().contains("\"notes\": \"\""));   // Should contain the old notes
-    assertTrue(ride.toString().contains("\"destination\": \"Perkin's\""));   // Should contain old destination
-    assertTrue(ride.toString().contains("\"passengerIds\": [\"123\", \"abc\"]"));  // contains old passenger ids
-    assertTrue(ride.toString().contains("\"passengerNames\": [\"Bob Dylan\", \"Dave Mira\"]"));  // old names
+    assertTrue(ride.contains("\"notes\": \"\""));   // Should contain the old notes
+    assertTrue(ride.contains("\"destination\": \"Perkin's\""));   // Should contain old destination
+    assertTrue(ride.contains("\"passengerIds\": [\"123\", \"abc\"]"));  // contains old passenger ids
+    assertTrue(ride.contains("\"passengerNames\": [\"Bob Dylan\", \"Dave Mira\"]"));  // old names
 
   }
 
@@ -268,14 +284,30 @@ public class RideControllerSpec {
     String ride = rideController.getRide(ellisRideIdToString);
 
     // The original seatsAvailable was 1... since 1 person joined, the seatsAvailable should now be 0.
-    assertTrue(ride.toString().contains("\"seatsAvailable\": 0"));
+    assertTrue(ride.contains("\"seatsAvailable\": 0"));
 
     // Now we check the passengerIds field.
-    assertTrue(ride.toString().contains("\"passengerIds\": [\"123\", \"abc\", \"nkf\"]"));
+    assertTrue(ride.contains("\"passengerIds\": [\"123\", \"abc\", \"nkf\"]"));
 
     // Finally, check the passengerNames field.
-    assertTrue(ride.toString().contains("\"passengerNames\": [\"Bob Dylan\", \"Dave Mira\", \"Nate Foss\"]"));
+    assertTrue(ride.contains("\"passengerNames\": [\"Bob Dylan\", \"Dave Mira\", \"Nate Foss\"]"));
 
+  }
+
+  @Test
+  public void deleteRide() {
+    Map<String, String[]> emptyMap = new HashMap<>();
+    String rides = rideController.getRides(emptyMap);
+    BsonArray list = parseJsonArray(rides);
+
+    assertEquals("There are 4 rides in the list", 4, list.size());
+
+    assertTrue("Ride is deleted", rideController.deleteRide(ellisRideIdToString));
+
+    String updatedRides = rideController.getRides(emptyMap);
+    BsonArray updatedList = parseJsonArray(updatedRides);
+
+    assertEquals("There are 3 rides in the list", 3, updatedList.size());
   }
 
 }

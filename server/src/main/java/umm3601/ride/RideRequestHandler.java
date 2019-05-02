@@ -31,7 +31,22 @@ public class RideRequestHandler {
 
   public String getMyRides(Request req, Response res) {
     res.type("application/json");
-    return rideController.getMyRides(req.queryMap().toMap());
+    String userId = req.params("userId");
+    String myRides;
+    try {
+      myRides = rideController.getMyRides(userId);
+    } catch (IllegalArgumentException e) {
+      res.status(400);
+      res.body("Could not find the userId " + userId);
+      return "";
+    }
+    if (myRides != null) {
+      return myRides;
+    } else {
+      res.status(404);
+      res.body("The requested user with userId " + userId + " was not found");
+      return "";
+    }
   }
 
   /**
@@ -48,8 +63,8 @@ public class RideRequestHandler {
 
     Document newRide = Document.parse(req.body());
 
-    String user = newRide.getString("user");
-    String userId = newRide.getString("userId");
+    String owner = newRide.getString("owner");
+    String ownerID = newRide.getString("ownerID");
     String notes = newRide.getString("notes");
     int seatsAvailable = newRide.getInteger("seatsAvailable");
     String origin = newRide.getString("origin");
@@ -60,7 +75,7 @@ public class RideRequestHandler {
     boolean roundTrip = newRide.getBoolean("roundTrip");
     boolean nonSmoking = newRide.getBoolean("nonSmoking");
 
-    return rideController.addNewRide(user, userId, notes, seatsAvailable, origin, destination,
+    return rideController.addNewRide(owner, ownerID, notes, seatsAvailable, origin, destination,
       departureDate, departureTime, isDriving, roundTrip, nonSmoking);
 
   }
@@ -119,6 +134,23 @@ public class RideRequestHandler {
     System.out.println(passengerName);
 
     return rideController.joinRide(rideId, passengerId, passengerName);
+  }
+
+  public boolean leaveRide(Request req, Response res) {
+
+    res.type("application/json");
+
+    // Turn the request into a Document
+    Document leaveRide = Document.parse(req.body());
+
+    System.out.println("leave-ride document" + leaveRide);
+
+    String userID = leaveRide.getString("userID");
+    System.out.println("userID " + userID);
+    String rideID = leaveRide.getString("rideID");
+    System.out.println(rideID);
+
+    return rideController.leaveRide(userID, rideID);
   }
 
 

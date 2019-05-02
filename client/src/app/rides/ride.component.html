@@ -145,13 +145,13 @@
     </div>
 
     <div id="ride-info-driver-id-isDriving" class="ride-info driver" *ngIf="ride.isDriving">
-      <a routerLink="/profile/{{ride.userId}}" class="/profile/{{ride.userId}}">{{ride.user}}</a>
-      is offering this ride
+
+      <a routerLink="/profile/{{ride.ownerID}}">{{ride.owner}}</a> is offering this ride
     </div>
 
     <div id="ride-info-driver-id" class="ride-info driver" *ngIf="!ride.isDriving">
-      <a routerLink="/profile/{{ride.userId}}" class="/profile/{{ride.userId}}">{{ride.user}}</a>
-      is requesting this ride
+      <a routerLink="/profile/{{ride.ownerID}}">{{ride.owner}}</a> is requesting this ride
+
     </div>
 
     <div id="ride-info-tags" class="ride-info driver" >
@@ -168,6 +168,19 @@
     </div>
 
     <mat-divider [inset]="true" *ngIf="ride.notes"></mat-divider>
+
+
+<!-- -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
+    <button *ngIf="userIsAPassenger(ride)"
+
+      id="leave-ride-button"
+      mat-raised-button
+      (click)="leaveRide(this.currUserId, ride._id.$oid)">Leave Ride
+
+
+    </button>
+<!-- -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
+
 
     <div  *ngIf="ride.notes" class="ride-info notes">
       <small>NOTES:</small>
