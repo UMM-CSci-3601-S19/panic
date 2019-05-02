@@ -7,87 +7,51 @@ declare let gapi: any;
 
 @Injectable()
 export class AppService {
-  constructor(private http: HttpClient) {
+  private http: HttpClient;
+
+  constructor(private client: HttpClient) {
+    this.http = client;
   }
-
-  googleAuth;
-
-  initClient() {
-    gapi.client.init({
-      'clientId': '828151406788-7pmre36dp4bboog4j03fl3ochdc6ed8r.apps.googleusercontent.com',
-      'scope': 'profile email'
-    });
-  }
-
-  handleClientLoad() {
-    gapi.load('client:auth2', this.initClient);
-  }
-
-  // This sends the auth code of our user to the server and stores the fields in local storage when we get data back
-  // from gapi
-  sendAuthCode(code: string): void {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-      }),
-    };
-
-    this.http.post(environment.API_URL + "login", {code: code}, httpOptions)
-      .subscribe(onSuccess => {
-        console.log("Code sent to server");
-        console.log(onSuccess);
-        localStorage.setItem("_id", onSuccess["_id"]);
-        localStorage.setItem("userId", onSuccess["userId"]);
-        localStorage.setItem("oid", onSuccess["_id"]["$oid"]);
-        localStorage.setItem("email", onSuccess["email"]);
-        localStorage.setItem("userFullName", onSuccess["fullName"]);
-        localStorage.setItem("userLastName", onSuccess["lastName"]);
-        localStorage.setItem("userFirstName", onSuccess["firstName"]);
-        localStorage.setItem("pictureUrl", onSuccess["pictureUrl"]);
-        window.location.reload();
-
-        console.log(localStorage.getItem("_id"));
-        console.log(localStorage.getItem("userId"));
-        console.log(localStorage.getItem("oid"));
-        console.log(localStorage.getItem("email"));
-        console.log(localStorage.getItem("userFullName"));
-        console.log(localStorage.getItem("userLastName"));
-        console.log(localStorage.getItem("userFirstName"));
-        console.log(localStorage.getItem("pictureUrl"));
-
-      }, onFail => {
-        console.log("ERROR: Code couldn't be sent to the server");
-      });
-  }
-
 
   signIn() {
-    this.googleAuth = gapi.auth2.getAuthInstance();
-    console.log(" This is google Auth " + this.googleAuth);
-    this.googleAuth.grantOfflineAccess().then((resp) => {
-      localStorage.setItem('isSignedIn', 'true');
-      this.sendAuthCode(resp.code);
+    console.log("Signing in");
+    console.log("gapi " + gapi.toString());
+    console.log("gapi.auth2 " + gapi.auth2);
+    let authInstance = gapi.auth2.getAuthInstance();
+    authInstance.signIn()
+      .then((data) => {
+        let idToken = data.getAuthResponse().id_token;
+        const httpOptions = {
+          headers: new HttpHeaders({
+            'Content-Type': 'application/json'
+          }),
+          responseType: 'text' as 'json'
+        };
+
+        this.http.post(environment.API_URL + "login", {idToken: idToken}, httpOptions)
+          .subscribe(serverData => {
+            console.log("Code sent to server");
+            let data = serverData.toString();
+            let currUser = JSON.parse(data);
+            localStorage.setItem("isSignedIn", 'true');
+            localStorage.setItem("userId", currUser.userId);
+            localStorage.setItem("userFullName", currUser.fullName);
+            localStorage.setItem("pictureUrl", currUser.pictureUrl);
+            window.location.reload();
+          });
     });
   }
 
   signOut() {
-    this.handleClientLoad();
+    let authInstance = gapi.auth2.getAuthInstance();
 
-    this.googleAuth = gapi.auth2.getAuthInstance();
-
-    this.googleAuth.then(() => {
-      this.googleAuth.signOut();
-      localStorage.setItem('isSignedIn', 'false');
-      localStorage.setItem("_id", "");
-      localStorage.setItem("userId", "");
-      localStorage.setItem("oid", "");
-      localStorage.setItem("email", "");
-      localStorage.setItem("userFullName", "");
-      localStorage.setItem("userLastName", "");
-      localStorage.setItem("userFirstName", "");
-      localStorage.setItem("pictureUrl", "");
+    if (authInstance.signOut()) {
+      localStorage.removeItem('isSignedIn');
+      localStorage.removeItem("userId");
+      localStorage.removeItem("userFullName");
+      localStorage.removeItem("pictureUrl");
       window.location.reload();
-    })
+    }
   }
 
   public isSignedIn(): boolean {
@@ -100,4 +64,15 @@ export class AppService {
     }
   }
 
+  loadClient() {
+    console.log("gapi follows:");
+    console.log(gapi);
+    gapi.load('auth2', function() {
+      gapi.auth2.init({'clientId': '828151406788-7pmre36dp4bboog4j03fl3ochdc6ed8r.apps.googleusercontent.com'});
+    });
+  }
+
+  ngOnInit() {
+    this.loadClient();
+  }
 }
