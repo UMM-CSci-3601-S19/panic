@@ -146,11 +146,13 @@
 
     <div id="ride-info-driver-id-isDriving" class="ride-info driver" *ngIf="ride.isDriving">
 
-      <a routerLink="/profile/{{ride.ownerID}}">{{ride.owner}}</a> is offering this ride
+      <a routerLink="/profile/{{ride.ownerID}}" class="/profile/{{ride.ownerID}}">{{ride.owner}}
+        </a> is offering this ride
     </div>
 
     <div id="ride-info-driver-id" class="ride-info driver" *ngIf="!ride.isDriving">
-      <a routerLink="/profile/{{ride.ownerID}}">{{ride.owner}}</a> is requesting this ride
+      <a routerLink="/profile/{{ride.ownerID}}" class="/profile/{{ride.ownerID}}">{{ride.owner}}
+      </a> is requesting this ride
 
     </div>
 
