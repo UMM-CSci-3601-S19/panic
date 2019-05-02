@@ -34,15 +34,15 @@
 
       <div>
         <button mat-raised-button
-                class="join-ride-button"
-                id="join-ride-button"
+                class="request-ride-button"
+                id="request-ride-button"
                 color="primary"
                 type="button"
                 style="width: 100%"
-                [disabled]="!this.userCanJoinRide(ride)"
-                (click) = "joinRide(ride._id, this.currUserId, this.currUserFullName)">
+                [disabled]="!this.userCanrequestRide(ride)"
+                (click) = "requestRide(ride._id, this.currUserId, this.currUserFullName)">
           <mat-icon>add_circle_outline</mat-icon>
-          Join This Ride
+          Request This Ride
         </button>
 
         <br>
