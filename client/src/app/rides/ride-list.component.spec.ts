@@ -188,13 +188,13 @@ describe('Ride list', () => {
   });
 
   it('contains a ride with user \'Chris\' and his UserId', () => {
-    expect(rideList.rides.some((ride: Ride) => ride.user === 'Chris')).toBe(true);
-    expect(rideList.rides.some((ride: Ride) => ride.userId === '001')).toBe(true);
+    expect(rideList.rides.some((ride: Ride) => ride.owner === 'Chris')).toBe(true);
+    expect(rideList.rides.some((ride: Ride) => ride.ownerID === '001')).toBe(true);
   });
 
   it('contain a ride with user \'Dennis\' and his UserId', () => {
-    expect(rideList.rides.some((ride: Ride) => ride.user === 'Dennis')).toBe(true);
-    expect(rideList.rides.some((ride: Ride) => ride.userId === '002')).toBe(true);
+    expect(rideList.rides.some((ride: Ride) => ride.owner === 'Dennis')).toBe(true);
+    expect(rideList.rides.some((ride: Ride) => ride.ownerID === '002')).toBe(true);
   });
 
   it('has two rides that have 3 available seats', () => {
@@ -256,7 +256,7 @@ describe('Ride list', () => {
 
 
   it('doesn\'t contain a ride with user \'Dilbert\'', () => {
-    expect(rideList.rides.some((ride: Ride) => ride.user === 'Dilbert')).toBe(false);
+    expect(rideList.rides.some((ride: Ride) => ride.owner === 'Dilbert')).toBe(false);
   });
 
   it('doesn\'t contain a ride with origin \'The Circus\'', () => {

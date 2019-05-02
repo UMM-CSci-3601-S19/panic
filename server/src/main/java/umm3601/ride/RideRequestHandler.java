@@ -63,8 +63,8 @@ public class RideRequestHandler {
 
     Document newRide = Document.parse(req.body());
 
-    String user = newRide.getString("user");
-    String userId = newRide.getString("userId");
+    String owner = newRide.getString("owner");
+    String ownerID = newRide.getString("ownerID");
     String notes = newRide.getString("notes");
     int seatsAvailable = newRide.getInteger("seatsAvailable");
     String origin = newRide.getString("origin");
@@ -75,7 +75,7 @@ public class RideRequestHandler {
     boolean roundTrip = newRide.getBoolean("roundTrip");
     boolean nonSmoking = newRide.getBoolean("nonSmoking");
 
-    return rideController.addNewRide(user, userId, notes, seatsAvailable, origin, destination,
+    return rideController.addNewRide(owner, ownerID, notes, seatsAvailable, origin, destination,
       departureDate, departureTime, isDriving, roundTrip, nonSmoking);
 
   }

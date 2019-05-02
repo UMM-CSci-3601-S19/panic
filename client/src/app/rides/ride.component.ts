@@ -85,12 +85,16 @@ export class RideComponent implements OnInit {
   }
 
   public userOwnsThisRide(ride: Ride): boolean {
-    return (ride.userId === this.currUserId);
+    return (ride.ownerID === this.currUserId);
   }
 
   public userIsAPassenger(ride: Ride): boolean {
     return (ride.passengerIds.indexOf(this.currUserId) !== -1);
   }
+
+  // public userIsADriver(ride: Ride): boolean {
+  //   return (ride.
+  // }
 
   giveRideToService(ride: Ride){
 

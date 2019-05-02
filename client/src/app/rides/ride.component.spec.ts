@@ -14,8 +14,8 @@ describe('RideComponent', () => {
   };
   let rideStub: Ride = {
     _id: '',
-    user: '',
-    userId: '',
+    owner: '',
+    ownerID: '',
     notes: '',
     seatsAvailable: 0,
     origin: '',

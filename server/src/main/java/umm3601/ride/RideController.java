@@ -112,7 +112,7 @@ public class RideController {
     return serializeIterable(matchingRides);
   }
 
-  String addNewRide(String user, String userId, String notes, int seatsAvailable, String origin, String destination,
+  String addNewRide(String owner, String ownerID, String notes, int seatsAvailable, String origin, String destination,
                            String departureDate, String departureTime, boolean isDriving, boolean roundTrip, boolean nonSmoking) {
 
     // See methods at bottom of RideController
@@ -126,8 +126,8 @@ public class RideController {
     List<BasicDBObject> passengerNames = new ArrayList<>();
 
     Document newRide = new Document();
-    newRide.append("user", user);
-    newRide.append("userId", userId);
+    newRide.append("owner", owner);
+    newRide.append("ownerID", ownerID);
     newRide.append("notes", notes);
     newRide.append("seatsAvailable", seatsAvailable);
     newRide.append("origin", origin);

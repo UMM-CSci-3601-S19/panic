@@ -44,8 +44,8 @@ export class AddRideComponent implements OnInit {
   addRide(): void {
     const newRide: Ride = {
       _id: '',
-      user: this.rideUser,
-      userId: this.rideUserId,
+      owner: this.rideUser,
+      ownerID: this.rideUserId,
       notes: this.rideNotes,
       seatsAvailable: this.rideSeats,
       origin: this.rideOrigin,
