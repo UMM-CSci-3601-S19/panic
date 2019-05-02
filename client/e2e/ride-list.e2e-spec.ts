@@ -17,7 +17,7 @@ browser.driver.controlFlow().execute = function () {
   // If you're tired of it taking long you can remove this call or change the delay
   // to something smaller (even 0).
   origFn.call(browser.driver.controlFlow(), () => {
-    return protractor.promise.delayed(100);
+    return protractor.promise.delayed(0);
   });
 
   return origFn.apply(browser.driver.controlFlow(), args);
@@ -45,7 +45,7 @@ describe('Organize rides by soonest to latest', () => {
     page.navigateTo(); // Go to the ride-list page...
 
     // Here we will get all elements with class='rides' on the page, and for each element, we call a function...
-    element.all(by.className("rides")).each(function(element, index) {
+    element.all(by.className("rideCard")).each(function(element, index) {
 
       // ...the function extracts ALL underlying text of that element, and then...
       element.getText().then(function(text) {
@@ -75,7 +75,7 @@ describe('Organize rides by soonest to latest', () => {
     let futureFound = false;
 
     page.navigateTo();
-    element.all(by.className("rides")).each(function(element, index) {
+    element.all(by.className("rideCard")).each(function(element, index) {
       element.getText().then(function(text) {
 
         if (text.toString().includes("Shelby Present")) {
@@ -98,7 +98,7 @@ describe('Organize rides by soonest to latest', () => {
     let futureFound = false;
 
     page.navigateTo();
-    element.all(by.className("rides")).each(function(element, index) {
+    element.all(by.className("rideCard")).each(function(element, index) {
       element.getText().then(function(text) {
 
         if (text.toString().includes("Hollie Past")) {
@@ -122,7 +122,7 @@ describe('Organize rides by soonest to latest', () => {
     let futureFound = false;
 
     page.navigateTo();
-    element.all(by.className("rides")).each(function(element, index) {
+    element.all(by.className("rideCard")).each(function(element, index) {
       element.getText().then(function(text) {
 
         if (text.toString().includes("Hollie Past")) {
@@ -282,7 +282,7 @@ describe('Ride list', () => {
   let page: RidePage;
 
   beforeEach(() => {
-    page = new RidePage()
+    page = new RidePage();
     browser.executeScript("window.localStorage.setItem('isSignedIn','true')");
   });
 
@@ -292,7 +292,7 @@ describe('Ride list', () => {
   });
 
   it('should load some rides', () => {
-    expect(page.elementExistsWithCss('.rides')).toBeTruthy();
+    expect(page.elementExistsWithClass('rideCard')).toBeTruthy();
   });
 
   it('Should have an add ride button', () => {
@@ -356,7 +356,7 @@ describe("Joining rides", () => {
 
     // Finally, the card should display that there are no more seats available.
     expect(page.getUniqueRide('Shelby Present')).toMatch('0 SEATS LEFT');
-  })
+  });
 
   // Now we check for a ride that belongs to the current user
   it("should find a message when the ride belongs to current user", () => {
@@ -520,7 +520,7 @@ describe('Can delete a ride', () => {
     page.click('confirmDeleteRideButton');
 
     // Now we make sure our ride no longer exists, and that ride list length has be decremented to 6
-    expect(page.elementDoesNotExistWithId('Patton Vang')).toBeFalsy();
+    expect(page.elementExistsWithId('Patton Vang')).toBeFalsy();
     page.getRides().then((rides) => {
       expect(rides.length).toBe(6);
     });
@@ -597,7 +597,7 @@ describe('Add Ride', () => {
     // JohnDoe (the latest ride with a date provided).
     // This test is similar to the "organize rides soonest to latest" tests
 
-    element.all(by.className("rides")).each(function (element, index) {
+    element.all(by.className("rideCard")).each(function (element, index) {
       element.getText().then(function (text) {
 
         if (text.toString().includes("JohnDoe")) {
@@ -611,18 +611,22 @@ describe('Add Ride', () => {
       });
     });
   });
-})
+});
 
 
+describe('go to a profile from rides page', () => {
+  let page: RidePage;
 
+  beforeEach(() => {
+    page = new RidePage();
+    browser.executeScript("window.localStorage.setItem('isSignedIn','true')");
+    browser.executeScript("window.localStorage.setItem('userId','655477182929676100000')");
+  });
 
-
-
-
-
-
-
-
-
-
-
+  it('loads a user\'s profile when clicking on their name', () => {
+    page.navigateTo();
+    page.clickOnLink("/profile/832471086850197399999");
+    expect(page.elementExistsWithId("profileEmail")).toBeTruthy();
+    expect(page.elementExistsWithId("https://picsum.photos/94/94/?random")).toBeTruthy();
+  });
+});
