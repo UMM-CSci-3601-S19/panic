@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 
-import Credentials from '../../../credentials.json';
+import Credentials from '../../../../credentials.json';
 
 import {Observable} from 'rxjs/Observable';
 
@@ -14,7 +14,7 @@ import {Message} from "../message/message";
 @Injectable()
 export class ChatService {
   readonly baseUrl: string = environment.API_URL + 'chat';
-  private API_KEY = (<any>Credentials).API_KEY;
+  private API_KEY = Credentials.getstream_api_key;
   public client;
   private userToken;
 
