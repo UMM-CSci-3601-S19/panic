@@ -202,7 +202,7 @@ public class RideController {
     return tryUpdateOne(filter, updateDoc);
   }
 
-  boolean joinRide(String rideId, String passengerId, String passengerName) {
+  boolean requestRide(String rideId, String passengerId, String passengerName) {
 
     ObjectId objId = new ObjectId(rideId); // _id must be formatted like this for the match to work
     Document filter = new Document("_id", objId); // Here is the actual document we match against
