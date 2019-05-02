@@ -2,9 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {RideListService} from './ride-list.service';
 import {Ride} from './ride';
 import {Observable} from 'rxjs/Observable';
-import {MatDialog} from "@angular/material";
+import {MatDialog, MatDialogConfig} from "@angular/material";
 import {DeleteRideComponent} from "./delete-ride.component";
 import {joinRideObject} from "./joinRideObject";
+import {ChatComponent} from "../chat/chat.component";
 
 @Component({
   selector: 'ride-list-component',
@@ -44,6 +45,14 @@ export class RideListComponent implements OnInit {
       });
     // this.refreshRides();
     this.loadService();
+  }
+
+  openChat(rideId: string): void {
+    const dialogRef = this.dialog.open(ChatComponent, <MatDialogConfig>{
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+    });
+    dialogRef.componentInstance.feedId = rideId;
   }
 
   // These methods are used in ngIf statements that deal with displaying dates and times. The thing is that
