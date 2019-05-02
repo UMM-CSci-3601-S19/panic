@@ -5,7 +5,7 @@ import {Observable} from 'rxjs/Observable';
 
 import {Ride} from './ride';
 import {environment} from '../../environments/environment';
-import {joinRideObject} from "./joinRideObject";
+import {requestRideObject} from "./requestRideObject";
 import {leaveRideObject} from "./leaveRideObject";
 import {Subject} from "rxjs/Subject";
 import {tap} from "rxjs/operators";
@@ -57,7 +57,7 @@ export class RideListService {
 
 
 
-  joinRide(editedRide: joinRideObject) {
+  requestRide(editedRide: requestRideObject) {
 
     const httpOptions = {
       headers: new HttpHeaders({
@@ -70,7 +70,7 @@ export class RideListService {
       responseType: 'text' as 'json'
     };
 
-    return this.http.post<string>(this.rideUrl + '/join', editedRide, httpOptions)
+    return this.http.post<string>(this.rideUrl + '/request', editedRide, httpOptions)
       .pipe(
         tap(() => {
           this._refreshNeeded$.next();
