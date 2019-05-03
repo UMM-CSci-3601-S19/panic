@@ -78,6 +78,8 @@ public class Server {
     post("api/rides/new", rideRequestHandler::addNewRide);
     post("api/rides/remove", rideRequestHandler::deleteRide);
     post("api/rides/update", rideRequestHandler::editRide);
+    post("api/rides/join", rideRequestHandler::joinRide);
+    post("api/rides/leave", rideRequestHandler::leaveRide);
     post("api/rides/approve-join", rideRequestHandler::approveJoinRide);
     post("api/rides/request-join", rideRequestHandler::requestJoinRide);
 

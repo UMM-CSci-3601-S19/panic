@@ -22,8 +22,8 @@ describe ('User Service: ',() =>{
   const testRides: Ride[] = [
     {
       _id: '5c832bec201270bd881ace79',
-      user: "Suzette Rutledge",
-      userId: "342389477594424000000",
+      owner: "Suzette Rutledge",
+      ownerID: "342389477594424000000",
       notes: "Occaecat reprehenderit do exercitation laborum. Dolore culpa ut veniam ipsum fugiat voluptate excepteur labore laborum ad Lorem sint aute.",
       seatsAvailable: 1,
       origin: "8631 Hudson Avenue, Crayne, IA 98438",

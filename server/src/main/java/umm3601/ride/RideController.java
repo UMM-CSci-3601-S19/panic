@@ -10,6 +10,7 @@ import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
+import umm3601.user.UserController;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -23,6 +24,8 @@ import static umm3601.DatabaseHelper.serializeIterable;
 public class RideController {
 
   private final MongoCollection<Document> rideCollection;
+  private final MongoCollection<Document> userCollection;
+  private final UserController userController;
 
   /**
    * Construct a controller for rides.
@@ -32,6 +35,8 @@ public class RideController {
   public RideController(MongoDatabase database) {
 
     rideCollection = database.getCollection("rides");
+    userCollection = database.getCollection("users");
+    userController = new UserController(database);
   }
 
   String getRide(String id) {
@@ -56,7 +61,7 @@ public class RideController {
 
     BasicDBObject orQuery = new BasicDBObject();
     List<BasicDBObject> params = new ArrayList<BasicDBObject>();
-    params.add(new BasicDBObject("userId", userId));
+    params.add(new BasicDBObject("ownerID", userId));
     params.add(new BasicDBObject("passengerIds", userId));
     orQuery.put("$or", params);
 
@@ -108,7 +113,7 @@ public class RideController {
     return serializeIterable(matchingRides);
   }
 
-  String addNewRide(String user, String userId, String notes, int seatsAvailable, String origin, String destination,
+  String addNewRide(String owner, String ownerID, String notes, int seatsAvailable, String origin, String destination,
                            String departureDate, String departureTime, boolean isDriving, boolean roundTrip, boolean nonSmoking) {
 
     // See methods at bottom of RideController
@@ -122,8 +127,8 @@ public class RideController {
     List<BasicDBObject> passengerNames = new ArrayList<>();
 
     Document newRide = new Document();
-    newRide.append("user", user);
-    newRide.append("userId", userId);
+    newRide.append("owner", owner);
+    newRide.append("ownerID", ownerID);
     newRide.append("notes", notes);
     newRide.append("seatsAvailable", seatsAvailable);
     newRide.append("origin", origin);
@@ -217,6 +222,33 @@ public class RideController {
     // {$inc: {seatsAvailable=-1}, $push: {"passengerIds":passengerId, "passengerNames":passengerName}}}
     fullUpdate.append("$inc", incrementFields);
     fullUpdate.append("$push", pushFields);
+
+    // Now pass the full update in with the filter and update the record it matches.
+    return tryUpdateOne(filter, fullUpdate);
+
+  }
+
+  boolean leaveRide(String userID, String rideID) {
+
+    ObjectId objId = new ObjectId(rideID); // _id must be formatted like this for the match to work
+    Document filter = new Document("_id", objId); // Here is the actual document we match against
+
+    // Create an empty document that will contain our full update
+    Document fullUpdate = new Document();
+
+    // This line creates: {"seatsAvailable":+1}
+    Document incrementFields = new Document("seatsAvailable", +1);
+
+    // These two lines create: {"passengerIds": passengerId, "passengerNames": passengerName}
+    Document pullFields = new Document("passengerIds", userID);
+    String fullName = userController.getStringField(userID, "fullName");
+    System.out.println(fullName);
+    pullFields.append("passengerNames", fullName);
+    // Appending the previous document gives us
+    // {$inc: {seatsAvailable=-1}, $push: {"passengerIds":passengerId, "passengerNames":passengerName}}}
+    fullUpdate.append("$inc", incrementFields);
+    fullUpdate.append("$pull", pullFields);
+    System.out.println(fullName);
 
     // Now pass the full update in with the filter and update the record it matches.
     return tryUpdateOne(filter, fullUpdate);

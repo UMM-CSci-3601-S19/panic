@@ -44,8 +44,8 @@ export class AddRideComponent implements OnInit {
   addRide(): void {
     const newRide: Ride = {
       _id: '',
-      user: this.rideUser,
-      userId: this.rideUserId,
+      owner: this.rideUser,
+      ownerID: this.rideUserId,
       notes: this.rideNotes,
       seatsAvailable: this.rideSeats,
       origin: this.rideOrigin,
@@ -60,12 +60,9 @@ export class AddRideComponent implements OnInit {
     console.log("COMPONENT: The new Ride in addRide() is " + JSON.stringify(newRide));
 
     if (newRide != null) {
-      console.log("Is the subscribe the problem??");
       this.rideListService.addNewRide(newRide).subscribe(
         result => {
-          console.log("here it is:" + result);
           this.highlightedID = result;
-          console.log("COMPONENT: The RESULT in addRide() is " + JSON.stringify(result));
         },
         err => {
           // This should probably be turned into some sort of meaningful response.

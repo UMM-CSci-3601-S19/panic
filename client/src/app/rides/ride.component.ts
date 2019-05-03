@@ -4,6 +4,8 @@ import {RideListService} from "./ride-list.service";
 import {joinRideObject} from "./joinRideObject";
 import {DeleteRideComponent} from "./delete-ride.component";
 import {MatDialog, MatDialogConfig} from "@angular/material";
+import {MatDialog} from "@angular/material";
+import {leaveRideObject} from "./leaveRideObject";
 
 @Component({
   selector: 'app-ride',
@@ -133,12 +135,16 @@ export class RideComponent implements OnInit {
   }
 
   public userOwnsThisRide(ride: Ride): boolean {
-    return (ride.userId === this.currUserId);
+    return (ride.ownerID === this.currUserId);
   }
 
   public userIsAPassenger(ride: Ride): boolean {
     return (ride.passengerIds.indexOf(this.currUserId) !== -1);
   }
+
+  // public userIsADriver(ride: Ride): boolean {
+  //   return (ride.
+  // }
 
   giveRideToService(ride: Ride){
 
@@ -221,5 +227,29 @@ export class RideComponent implements OnInit {
       return "Passengers: " + passengerNames;
     }
   }
+
+  leaveRide(userID: string, rideID: string) {
+
+
+    const leftRide: leaveRideObject = {
+      userID: userID,
+      rideID: rideID,
+    };
+
+    console.log(leftRide);
+
+    this.rideListService.leaveRide(leftRide).subscribe(
+
+      result => {
+        console.log("here it is:" + result);
+        this.highlightedID = result;
+      },
+      err => {
+        // This should probably be turned into some sort of meaningful response.
+        console.log('There was an error adding the ride.');
+        console.log('The newRide or dialogResult was ' );
+        console.log('The error was ' + JSON.stringify(err));
+      });
+  };
 
 }

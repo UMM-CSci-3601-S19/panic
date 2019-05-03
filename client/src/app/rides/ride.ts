@@ -1,7 +1,7 @@
 export interface Ride {
   _id: string;
-  user: string;
-  userId: string;
+  owner: string;
+  ownerID: string;
   notes: string;
   seatsAvailable: number;
   origin: string;
