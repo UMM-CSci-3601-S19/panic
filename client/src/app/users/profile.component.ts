@@ -7,8 +7,8 @@ import {Ride} from "../rides/ride";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {profileInfoObject} from "./profileInfoObject";
 import {ProfileService} from "./profile.service";
-import {RideListComponent} from "../rides/ride-list.component";
 import {RideListService} from "../rides/ride-list.service";
+import {joinRideObject} from "../rides/joinRideObject";
 
 @Component({
   selector: 'profile-component',

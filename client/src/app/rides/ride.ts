@@ -12,6 +12,7 @@ export interface Ride {
   roundTrip?: boolean;
   nonSmoking: boolean;
   pendingPassengerIds?: string[];
+  pendingPassengerNames?: string[];
   passengerIds?: string[];
   passengerNames?: string[];
 }

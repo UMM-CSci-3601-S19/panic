@@ -223,7 +223,14 @@ public class RideController {
 
   }
 
-  boolean requestJoinRide(String rideId, String passengerId, String passengerName){
+  boolean requestJoinRide(String rideId, String pendingPassengerId, String pendingPassengerName){
+
+    System.out.println("---------------------------");
+    System.out.println("RideController");
+    System.out.println("Join Ride id is " + rideId);
+    System.out.println("Join Ride passenger id is " + pendingPassengerId);
+    System.out.println("Join Ride passenger name is " + pendingPassengerName);
+    System.out.println("---------------------------");
 
     ObjectId objId = new ObjectId(rideId); // _id must be formatted like this for the match to work
     Document filter = new Document("_id", objId); // Here is the actual document we match against
@@ -231,9 +238,11 @@ public class RideController {
     // Create an empty document that will contain our full update
     Document fullUpdate = new Document();
 
-    // These two lines create: {"passengerIds": passengerId, "passengerNames": passengerName}
-    Document pushFields = new Document("passengerIds", passengerId);
-    pushFields.append("passengerNames", passengerName);
+    // These two lines create: {"pendingPassengerId": pendingPassengerId, "pendingPassengerName": pendingPassengerName}
+    Document pushFields = new Document("pendingPassengerIds", pendingPassengerId);
+    pushFields.append("pendingPassengerNames", pendingPassengerName);
+
+    System.out.println("Push Fields is " + pushFields);
 
     // Appending the previous document gives us
     // {$push: {"passengerIds":passengerId, "passengerNames":passengerName}}
@@ -244,6 +253,8 @@ public class RideController {
   }
 
   private boolean tryUpdateOne(Document filter, Document updateDoc) {
+
+    System.out.println("We have reached tryUpdateOne in Ride Controller!!!!");
     try {
       // Call updateOne(the document to match against, and the $set + updated fields document
       UpdateResult output = rideCollection.updateOne(filter, updateDoc);

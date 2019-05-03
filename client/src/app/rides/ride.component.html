@@ -21,7 +21,7 @@
           <span>Edit Ride</span>
         </button>
 
-        <button mat-menu-item (click)="openDeleteDialog(ride._id)" id="deleteDialogOpen" >
+        <button mat-menu-item (click)="openDeleteDialog(ride._id)" class="deleteDialogOpen" >
           <span>Delete Ride</span>
         </button>
 
@@ -102,7 +102,7 @@
         </button>
 
 
-        <button mat-menu-item (click)="openDeleteDialog(ride._id)" id="deleteDialogOpen">
+        <button mat-menu-item (click)="openDeleteDialog(ride._id)" class="deleteDialogOpen">
           <span>Delete Ride</span>
         </button>
 
@@ -166,6 +166,23 @@
     <div  *ngIf="ride.notes" class="ride-info notes">
       <small>NOTES:</small>
       <div>{{ride.notes}}</div>
+    </div>
+
+    <!--===========================================-->
+
+    <div *ngIf="ride.isDriving">Passenger Requests
+      <div *ngFor="let pendingPassengerId of passengerRequests; let i = index"
+           [id] = "pendingPassengerId" class="ride-passenger requests">
+        <button mat-raised-button
+                class="accept-passenger-button"
+                id="accept-passenger-button"
+                color="primary"
+                type="button"
+                style="width: 100%"
+                (click) = "approveJoinRide(ride._id, ride.pendingPassengerIds[i], ride.pendingPassengerNames[i])">
+          Accept</button>
+        <button>Decline</button>
+     </div>
     </div>
 
   </mat-card-content>

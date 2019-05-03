@@ -16,6 +16,7 @@ export class RideComponent implements OnInit {
 
   public currUserId = localStorage.getItem("userId");
   public currUserFullName = localStorage.getItem("userFullName");
+  public passengerRequests: joinRideObject[] = [];
 
   private highlightedID: string = '';
   private highlightedDestination: string = '';
@@ -23,10 +24,29 @@ export class RideComponent implements OnInit {
   constructor(private rideListService: RideListService,
               public dialog: MatDialog) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log("rideComponent ngOnInit reached");
+    if (this.ride.pendingPassengerIds) {
+      console.log("inside if");
+      this.makePassengerRequestObjects();
+    }
+  }
+
+  makePassengerRequestObjects() {
+    console.log("We made it to makePassengerRequestObjects in Ride Component!!!!!");
+    console.log("ride=" + this.ride);
+    let numIds = this.ride.passengerIds.length;
+    for(let i=0; i<=numIds; i++){
+      let newJoinRequest: joinRideObject = {
+        rideId: this.ride._id,
+        pendingPassengerId: this.ride.pendingPassengerIds[i],
+        pendingPassengerName: this.ride.pendingPassengerNames[i]
+      };
+      this.passengerRequests.push(newJoinRequest);
+    }
+  }
 
   approveJoinRide(rideId: string, passengerId: string, passengerName: string): void {
-
     const joinedRide: joinRideObject = {
       rideId: rideId,
       pendingPassengerId: passengerId,
@@ -54,6 +74,13 @@ export class RideComponent implements OnInit {
       pendingPassengerId: passengerId,
       pendingPassengerName: passengerName,
     };
+
+    console.log("---------------------------");
+    console.log("Ride Component");
+    console.log("Join Ride id is" + rideId);
+    console.log("Join Ride passenger id is " + passengerId);
+    console.log("Join Ride passenger name is " + passengerName);
+    console.log("---------------------------");
 
     this.rideListService.requestJoinRide(joinedRide).subscribe(
 

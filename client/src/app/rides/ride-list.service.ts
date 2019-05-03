@@ -77,6 +77,8 @@ export class RideListService {
 
   requestJoinRide(editedRide: joinRideObject) {
 
+    console.log("We have reached requestJoinRide in Ride List Service!!!!");
+
     const httpOptions = {
       headers: new HttpHeaders({
         // We're sending JSON
