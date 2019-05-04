@@ -26,9 +26,7 @@ export class RideComponent implements OnInit {
               public dialog: MatDialog) { }
 
   ngOnInit() {
-    console.log("rideComponent ngOnInit reached");
     if (this.ride.pendingPassengerIds) {
-      console.log("inside if");
       this.makePassengerRequestObjects();
     }
   }
@@ -38,12 +36,9 @@ export class RideComponent implements OnInit {
   }
 
   makePassengerRequestObjects() {
-    console.log("--------------------------");
-    console.log("Making passenger Requests!");
-    console.log("ride=" + this.ride);
-    let numIds = this.ride.passengerIds.length;
+    let numIds = this.ride.pendingPassengerIds.length;
     console.log("Here is the length of the passenger ids: " + numIds);
-    for(let i=0; i<=numIds; i++){
+    for(let i=0; i<numIds; i++){
       let newJoinRequest: joinRideObject = {
         rideId: this.ride._id,
         pendingPassengerId: this.ride.pendingPassengerIds[i],
@@ -51,8 +46,6 @@ export class RideComponent implements OnInit {
       };
       this.passengerRequests.push(newJoinRequest);
     }
-    console.log("Here are the passenger requests: " + this.passengerRequests);
-    console.log("--------------------------");
   }
 
   approveJoinRide(rideId: string, passengerId: string, passengerName: string): void {
@@ -173,6 +166,7 @@ export class RideComponent implements OnInit {
       (ride.seatsAvailable > 0)
       && !this.userOwnsThisRide(ride)
       && !this.userIsAPassenger(ride)
+      && !this.userIsAPendingPassenger(ride)
     )
   }
 
@@ -182,6 +176,10 @@ export class RideComponent implements OnInit {
 
   public userIsAPassenger(ride: Ride): boolean {
     return (ride.passengerIds.indexOf(this.currUserId) !== -1);
+  }
+
+  public userIsAPendingPassenger(ride: Ride): boolean {
+    return (ride.pendingPassengerIds.indexOf(this.currUserId) !== -1);
   }
 
   // public userIsADriver(ride: Ride): boolean {
