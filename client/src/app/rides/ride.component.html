@@ -1,4 +1,22 @@
-<mat-card class="rideCard">
+<mat-card *ngIf="!fullCard" class="slim-ride-card">
+  <div class="ride-card-content">
+    <div class="departing">
+      <span>{{ride.departureDate | date: 'MMM d'}}</span>
+      <span>{{ride.departureTime}}</span>
+    </div>
+    <div class="start-location">
+      {{ride.origin}}
+    </div>
+    <div class="end-location">
+      {{ride.destination}}
+    </div>
+  </div>
+  <!--<div *ngIf="!ride.isDriving" class="needs-driver">-->
+    <!--NEEDS DRIVER-->
+  <!--</div>-->
+</mat-card>
+
+<mat-card *ngIf="fullCard" class="full-ride-card">
 
   <!--======================================================================================================-->
 

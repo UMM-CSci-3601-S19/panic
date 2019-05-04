@@ -10,7 +10,7 @@ import {ChatComponent} from "../chat/chat.component";
 @Component({
   selector: 'app-ride',
   templateUrl: './ride.component.html',
-  styleUrls: ['./ride.component.css']
+  styleUrls: ['./ride.component.scss']
 })
 export class RideComponent implements OnInit {
 
@@ -21,6 +21,8 @@ export class RideComponent implements OnInit {
 
   private highlightedID: string = '';
   private highlightedDestination: string = '';
+
+  private fullCard: boolean = false;
 
   constructor(private rideListService: RideListService,
               public dialog: MatDialog) { }

@@ -80,3 +80,52 @@
   font-weight: bold;
   color: #000;
 }
+
+.slim-ride-card {
+  font-size: 0.8rem;
+
+  .ride-card-content {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+
+    .start-location, .end-location {
+      flex: 2;
+      padding: 3px;
+      background: #efefef;
+      border-radius: 3px;
+
+      span {
+        display: block;
+        font-weight: bold;
+        font-size: 0.6rem;
+      }
+    }
+
+    .start-location {
+      margin: 4px 2px 4px 4px;
+    }
+
+    .end-location {
+      margin: 4px 4px 4px 2px;
+    }
+
+    .departing {
+      flex: 1;
+      text-align: center;
+      background-color: #ffcc33;
+      color: #000;
+      font-weight: bold;
+      padding: 4px;
+    }
+  }
+
+  .needs-driver {
+    padding: 2px 2px 2px 4px;
+    background-color: #f44336;
+    color: white;
+    font-weight: bold;
+  }
+}
+
