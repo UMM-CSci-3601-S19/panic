@@ -18,20 +18,6 @@
   border-top-right-radius: 2px;
 }
 
-.seats-left {
-  display: inline-block;
-  padding: 4px 6px;
-  margin-top: 8px;
-  border-radius: 2px;
-  background-color: #fff;
-  color: #000;
-  font-weight: bold;
-}
-
-.departure-time {
-  font-weight: bolder;
-}
-
 /* Ride card contents */
 .ride-info {
   color: #222;
@@ -44,6 +30,7 @@
   flex-wrap: nowrap;
   align-items: stretch;
   justify-content: flex-start;
+  margin: 10px 0 15px 0;
 }
 
 .route mat-icon {
@@ -52,8 +39,8 @@
 }
 
 .origin, .destination {
-  background: #ddd;
-  border-radius: 2px;
+  background: #efefef;
+  border-radius: 5px;
   padding: 6px;
 }
 
@@ -64,7 +51,7 @@
   font-weight: bold;
 }
 
-.passengers_div {
+.passengers {
   font-weight: bold;
   margin-top: 7px;
   margin-bottom: 7px;
@@ -78,6 +65,32 @@
 .notes small {
   font-weight: bold;
   color: #000;
+}
+
+.departure-and-seats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .departure-time {
+    font-weight: bolder;
+  }
+
+  .seats-left {
+    padding: 4px 6px;
+    border-radius: 2px;
+    background-color: #7a0019;
+    color: #fff;
+    font-weight: bold;
+  }
+}
+
+.person {
+  font-size: 0.8rem;
+  h3 {
+    font-weight: bold;
+    font-size: 0.9rem;
+  }
 }
 
 .slim-ride-card {

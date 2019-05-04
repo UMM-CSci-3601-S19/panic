@@ -6,6 +6,8 @@ import {DeleteRideComponent} from "./delete-ride.component";
 import {MatDialog, MatDialogConfig} from "@angular/material";
 import {leaveRideObject} from "./leaveRideObject";
 import {ChatComponent} from "../chat/chat.component";
+import {User} from "../users/user";
+import {UserService} from "../users/user.service";
 
 @Component({
   selector: 'app-ride',
@@ -23,11 +25,21 @@ export class RideComponent implements OnInit {
   private highlightedDestination: string = '';
 
   public fullCard: boolean = false;
+  public people: User[] = [];
 
   constructor(private rideListService: RideListService,
-              public dialog: MatDialog) { }
+              public dialog: MatDialog,
+              public userService: UserService) {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+    let peopleIds = this.ride.passengerIds;
+    peopleIds.push(this.ride.ownerID);
+
+    for (let id: string in peopleIds) {
+      this.people.push(this.userService.getUserById(id));
+    }
+  }
 
   openRide() {
     const dialogRef = this.dialog.open(RideComponent, <MatDialogConfig>{
