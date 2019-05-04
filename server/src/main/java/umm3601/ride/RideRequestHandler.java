@@ -137,7 +137,7 @@ public class RideRequestHandler {
     String passengerName = joinRide.getString("pendingPassengerName");
     System.out.println("The passengerName for joinRide is " + passengerName);
 
-    return rideController.declineJoinRide(rideId, passengerId, passengerName);
+    return rideController.approveJoinRide(rideId, passengerId, passengerName);
   }
 
   public boolean declineJoinRide(Request req, Response res) {
@@ -160,7 +160,7 @@ public class RideRequestHandler {
     String passengerName = joinRide.getString("pendingPassengerName");
     System.out.println("The passengerName for joinRide is " + passengerName);
 
-    return rideController.approveJoinRide(rideId, passengerId, passengerName);
+    return rideController.declineJoinRide(rideId, passengerId, passengerName);
   }
 
   public boolean requestJoinRide(Request req, Response res) {
