@@ -45,8 +45,8 @@ export class EditRideComponent implements OnInit {
 
     const editedRide: Ride = {
       _id: this.rideId,
-      user: this.rideUser,
-      userId: this.rideUserId,
+      owner: this.rideUser,
+      ownerID: this.rideUserId,
       notes: this.rideNotes,
       seatsAvailable: this.rideSeatsAvailable,
       origin: this.rideOrigin,
@@ -98,8 +98,8 @@ export class EditRideComponent implements OnInit {
 
   setRideFields() {
     this.rideId = this.rideListService.singleRide._id;
-    this.rideUser = this.rideListService.singleRide.user;
-    this.rideUserId = this.rideListService.singleRide.userId;
+    this.rideUser = this.rideListService.singleRide.owner;
+    this.rideUserId = this.rideListService.singleRide.ownerID;
     this.rideNotes = this.rideListService.singleRide.notes;
     this.rideSeatsAvailable = this.rideListService.singleRide.seatsAvailable;
     this.rideOrigin = this.rideListService.singleRide.origin;

@@ -74,11 +74,12 @@ public class Server {
 
     // RIDE ENDPOINTS'
     get("api/rides", rideRequestHandler::getRides);
-    get("api/myRides", rideRequestHandler::getMyRides);
+    get("api/myRides/:userId", rideRequestHandler::getMyRides);
     post("api/rides/new", rideRequestHandler::addNewRide);
     post("api/rides/remove", rideRequestHandler::deleteRide);
     post("api/rides/update", rideRequestHandler::editRide);
     post("api/rides/join", rideRequestHandler::joinRide);
+    post("api/rides/leave", rideRequestHandler::leaveRide);
 
     // USER ENDPOINTS
     get("api/user/:id",userRequestHandler::getUserJSON);

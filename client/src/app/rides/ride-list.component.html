@@ -91,7 +91,7 @@
       <app-ride #elem
                 *ngFor="let ride of this.filterRides(rideDestination, rideOrigin, rideDriving,
                 rideNonSmoking, rideRoundTrip)"
-                [id]="ride.user" [ride]="ride"></app-ride>
+                [id]="ride.owner" [ride]="ride"></app-ride>
     </div>
 
     <ng-template #ridesError>

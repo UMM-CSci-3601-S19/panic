@@ -180,4 +180,9 @@ public class UserControllerSpec {
       afterDocs.get("phone").asString().getValue());
   }
 
+  @Test
+  public void saveProfile() {
+    assertTrue(userController.saveProfile("537114095323778200000", "(123) 456-7890"));
+  }
+
 }
