@@ -22,7 +22,7 @@ export class RideComponent implements OnInit {
   private highlightedID: string = '';
   private highlightedDestination: string = '';
 
-  private fullCard: boolean = false;
+  public fullCard: boolean = false;
 
   constructor(private rideListService: RideListService,
               public dialog: MatDialog) { }
