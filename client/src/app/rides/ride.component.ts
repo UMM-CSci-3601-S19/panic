@@ -27,7 +27,7 @@ export class RideComponent implements OnInit {
 
   ngOnInit() {}
 
-  DriveRide(rideId: string, driverId: string, driverName: string): void {
+  driveRide(rideId: string, driverId: string, driverName: string): void {
     const drivenRide: driveRideObject = {
       rideId: rideId,
       driverId: driverId,
@@ -112,6 +112,20 @@ export class RideComponent implements OnInit {
   public userIsAPassenger(ride: Ride): boolean {
     return (ride.passengerIds.indexOf(this.currUserId) !== -1);
   }
+
+  public userCanDriveRide(ride: Ride): boolean {
+    return (
+      (ride.seatsAvailable > 0)
+      && !this.userOwnsThisRide(ride)
+      && !this.userIsAPassenger(ride)
+    )
+  }
+  public userIsADriver(ride: Ride): boolean {
+    return (ride.driverId)!== this.currUserId;
+
+  }
+
+
 
   // public userIsADriver(ride: Ride): boolean {
   //   return (ride.
