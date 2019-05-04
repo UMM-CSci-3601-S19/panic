@@ -125,6 +125,8 @@ public class RideController {
     // that way they can be filled later when if someone wants to join
     List<BasicDBObject> passengerIds = new ArrayList<>();
     List<BasicDBObject> passengerNames = new ArrayList<>();
+    List<BasicDBObject> pendingPassengerIds = new ArrayList<>();
+    List<BasicDBObject> pendingPassengerNames = new ArrayList<>();
 
     Document newRide = new Document();
     newRide.append("owner", owner);
@@ -140,6 +142,8 @@ public class RideController {
     newRide.append("nonSmoking", nonSmoking);
     newRide.append("passengerIds", passengerIds);
     newRide.append("passengerNames", passengerNames);
+    newRide.append("pendingPassengerIds", passengerIds);
+    newRide.append("pendingPassengerNames", passengerNames);
 
     try {
       rideCollection.insertOne(newRide);
