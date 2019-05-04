@@ -29,6 +29,15 @@ export class RideComponent implements OnInit {
 
   ngOnInit() {}
 
+  openRide() {
+    const dialogRef = this.dialog.open(RideComponent, <MatDialogConfig>{
+      maxWidth: '100vw',
+      maxHeight: '100vh'
+    });
+    dialogRef.componentInstance.fullCard = true;
+    dialogRef.componentInstance.ride = this.ride;
+  }
+
   joinRide(rideId: string, passengerId: string, passengerName: string): void {
 
     const joinedRide: joinRideObject = {

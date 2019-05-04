@@ -1,4 +1,4 @@
-<mat-card *ngIf="!fullCard" class="slim-ride-card">
+<mat-card *ngIf="!fullCard" class="slim-ride-card" (click)="openRide()">
   <div class="ride-card-content">
     <div class="departing">
       <span>{{ride.departureDate | date: 'MMM d'}}</span>

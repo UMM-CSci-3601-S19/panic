@@ -76,7 +76,8 @@ import {ProfileService} from "./users/profile.service";
     AddRideComponent,
     EditRideComponent,
     DeleteRideComponent,
-    ChatComponent
+    ChatComponent,
+    RideComponent
   ],
   bootstrap: [AppComponent]
 })
