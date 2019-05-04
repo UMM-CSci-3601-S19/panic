@@ -10,7 +10,7 @@ import {RideListService} from "../rides/ride-list.service";
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.css'],
+  styleUrls: ['./chat.component.scss'],
   providers: []
 })
 export class ChatComponent implements OnInit {

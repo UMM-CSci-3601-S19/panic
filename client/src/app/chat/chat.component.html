@@ -9,10 +9,11 @@
 </h2>
 <mat-dialog-content class="chat-container">
   <mat-list>
-    <mat-list-item *ngFor="let m of messages">
-      <img matListAvatar [src]="m.from_avatar" alt="{{m.from_name}}'s avatar">
+    <mat-list-item *ngFor="let m of messages" class="message">
+      <img matListAvatar [src]="m.from_avatar" alt="avatar">
       <h3 matLine>{{m.from_name}}</h3>
-      <p matLine>{{m.body}}</p>
+      <span matLine class="sent">{{m.sent | date: 'MMM d, h:mm a' }}</span>
+      <span matLine class="body">{{m.body}}</span>
     </mat-list-item>
   </mat-list>
 </mat-dialog-content>
