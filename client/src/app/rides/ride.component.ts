@@ -37,7 +37,6 @@ export class RideComponent implements OnInit {
 
   makePassengerRequestObjects() {
     let numIds = this.ride.pendingPassengerIds.length;
-    console.log("Here is the length of the passenger ids: " + numIds);
     for(let i=0; i<numIds; i++){
       let newJoinRequest: joinRideObject = {
         rideId: this.ride._id,
@@ -132,6 +131,15 @@ export class RideComponent implements OnInit {
         console.log('The error was ' + JSON.stringify(err));
       });
   };
+
+  //These methods are made to retrieve a specific id or name of a pending passenger
+  //so they can be used to identify someone who's requesting a ride
+  public retrievePendingPassengerId(idIndex: number): string{
+    return this.ride.pendingPassengerIds[idIndex];
+  }
+  public retrievePendingPassengerName(nameIndex: number): string{
+    return this.ride.pendingPassengerNames[nameIndex];
+  }
 
   openDeleteDialog(currentId: object): void {
     console.log("openDeleteDialog");
