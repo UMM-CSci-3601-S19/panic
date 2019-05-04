@@ -33,9 +33,8 @@
     <mat-card-title>
 
       <div *ngIf="!this.userOwnsThisRide(ride)">
-        <button mat-raised-button
+        <button *ngIf="!this.userIsAPassenger(ride) && !this.userIsAPendingPassenger(ride)" mat-raised-button
                 class="join-ride-button"
-                id="join-ride-button"
                 color="primary"
                 type="button"
                 style="width: 100%"
@@ -44,17 +43,23 @@
           <mat-icon>add_circle_outline</mat-icon>
           Join This Ride
         </button>
-
+        <button *ngIf="this.userIsAPendingPassenger(ride)" mat-raised-button
+                class="join-ride-button"
+                color="primary"
+                type="button"
+                style="width: 100%"
+                [disabled]=true>
+          <mat-icon>access_time</mat-icon>
+          Request Pending
+        </button>
+        <button *ngIf="userIsAPassenger(ride)" mat-raised-button
+                id="leave-ride-button"
+                color="accent"
+                type="button"
+                style="width: 100%"
+                (click)="leaveRide(this.currUserId, ride._id.$oid)">Leave Ride
+        </button>
         <br>
-
-        <div *ngIf="userIsAPassenger(ride)" style="font-weight: bold; color: rgba(255,0,0,0.75)">
-          You are already part of this ride.
-        </div>
-
-        <div *ngIf="!userIsAPassenger(ride) && ride.seatsAvailable < 1"
-             style="font-weight: bold; color: rgba(255,0,0,0.75)">
-          This ride is full.
-        </div>
       </div>
 
       <div class="departure-time">
@@ -74,8 +79,7 @@
       </div>
 
       <div class="seats-left">
-        <small *ngIf="ride.seatsAvailable === 1"> {{ride.seatsAvailable}} SEAT LEFT </small>
-        <small *ngIf="ride.seatsAvailable !== 1"> {{ride.seatsAvailable}} SEATS LEFT </small>
+        <mat-icon>event_seat</mat-icon> {{ride.seatsAvailable}}
       </div>
       <!--============================================================================================-->
     </mat-card-title>
@@ -165,16 +169,6 @@
 
     <mat-divider [inset]="true" *ngIf="ride.notes"></mat-divider>
 
-
-<!-- ----------------------------------------------------------- -->
-    <button *ngIf="userIsAPassenger(ride)"
-
-      id="leave-ride-button"
-      mat-raised-button
-      (click)="leaveRide(this.currUserId, ride._id.$oid)">Leave Ride
-
-
-    </button>
 <!-- ----------------------------------------------------------- -->
 
 
@@ -192,7 +186,7 @@
       Passenger Requests
       <div *ngFor="let pendingPassengerId of passengerRequests; let i = index"
            [id] = "pendingPassengerId" class="ride-passenger requests">
-         wants to join:
+        <a routerLink="/profile/{{retrievePendingPassengerId(i)}}">{{retrievePendingPassengerName(i)}}</a> wants to join:
         <button mat-raised-button
                 class="accept-passenger-button"
                 id="accept-passenger-button"
