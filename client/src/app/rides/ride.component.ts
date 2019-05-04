@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {Ride} from "./ride";
 import {RideListService} from "./ride-list.service";
 import {requestRideObject} from "./requestRideObject";
+import {driveRideObject} from "./driveRideObject";
 import {DeleteRideComponent} from "./delete-ride.component";
 import {MatDialog} from "@angular/material";
 import {leaveRideObject} from "./leaveRideObject";
@@ -30,8 +31,20 @@ export class RideComponent implements OnInit {
     const drivenRide: driveRideObject = {
       rideId: rideId,
       driverId: driverId,
-      driverName: DriverName,
+      driverName: driverName,
     };
+    this.rideListService.driveRide(drivenRide).subscribe(
+
+      result => {
+        console.log("here it is:" + result);
+        this.highlightedID = result;
+      },
+      err => {
+        // This should probably be turned into some sort of meaningful response.
+        console.log('There was an error adding the ride.');
+        console.log('The newRide or dialogResult was ' );
+        console.log('The error was ' + JSON.stringify(err));
+      });
   }
 
   requestRide(rideId: string, passengerId: string, passengerName: string): void {
@@ -84,7 +97,7 @@ export class RideComponent implements OnInit {
 
   // These three methods are mainly used for checking if a user is allowed to join a ride, but some are also used in
   // ngIf statements for displaying certain elements on the ride cards.
-  public userCanrequestRide(ride: Ride): boolean {
+  public userCanRequestRide(ride: Ride): boolean {
     return (
       (ride.seatsAvailable > 0)
       && !this.userOwnsThisRide(ride)
