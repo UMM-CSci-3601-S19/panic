@@ -189,10 +189,10 @@
 -->
 
     <div *ngIf="this.userOwnsThisRide(ride)" class="ride-info">
-      <small>Passenger Requests</small>
+      Passenger Requests
       <div *ngFor="let pendingPassengerId of passengerRequests; let i = index"
            [id] = "pendingPassengerId" class="ride-passenger requests">
-        passengerRequests[i].pendingPassengerName wants to join
+         wants to join:
         <button mat-raised-button
                 class="accept-passenger-button"
                 id="accept-passenger-button"
@@ -201,7 +201,7 @@
                 style="width: 30%"
                 (click) = "approveJoinRide(ride._id, ride.pendingPassengerIds[i], ride.pendingPassengerNames[i])">
           Accept</button>
-        <button mat-raised-button=""
+        <button mat-raised-button
                 class="decline-passenger-button"
                 id="decline-passenger-button"
                 color="accent"
