@@ -36,7 +36,7 @@ export class RideComponent implements OnInit {
   // }
 
 
-  // driveRide()
+
 
   requestRide(rideId: string, passengerId: string, passengerName: string): void {
 
