@@ -1,3 +1,5 @@
-export interface driveRideObject {}
-  passengerIds: string;
-  passengerNames: string;
+export interface driveRideObject {
+  rideId: string;
+  driverId: string;
+  driverName: string;
+}
