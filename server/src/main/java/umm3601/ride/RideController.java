@@ -124,6 +124,8 @@ public class RideController {
     // that way they can be filled later when if someone wants to join
     List<BasicDBObject> passengerIds = new ArrayList<>();
     List<BasicDBObject> passengerNames = new ArrayList<>();
+    String driverId = "";
+    String driverName = "";
 
     Document newRide = new Document();
     newRide.append("owner", owner);
@@ -139,6 +141,8 @@ public class RideController {
     newRide.append("nonSmoking", nonSmoking);
     newRide.append("passengerIds", passengerIds);
     newRide.append("passengerNames", passengerNames);
+    newRide.append("driverIds", driverId);
+    newRide.append("driverNames", driverName);
 
     try {
       rideCollection.insertOne(newRide);
@@ -201,6 +205,33 @@ public class RideController {
     // Now the actual updating of seatsAvailable, passengers, and names.
     return tryUpdateOne(filter, updateDoc);
   }
+
+  boolean driveRide(String rideId, String driverId, String driverName) {
+
+    ObjectId objId = new ObjectId(rideId); // _id must be formatted like this for the match to work
+    Document filter = new Document("_id", objId); // Here is the actual document we match against
+
+    // Create an empty document that will contain our full update
+    Document fullUpdate = new Document();
+
+    // This line creates: {"seatsAvailable":-1}
+    Document incrementFields = new Document("seatsAvailable", -1);
+
+    // These two lines create: {"passengerIds": passengerId, "passengerNames": passengerName}
+    Document pushFields = new Document("driverIds", driverId);
+    pushFields.append("driverNames", driverName);
+
+    // Appending the previous document gives us
+    // {$inc: {seatsAvailable=-1}, $push: {"passengerIds":passengerId, "passengerNames":passengerName}}}
+    fullUpdate.append("$inc", incrementFields);
+    fullUpdate.append("$push", pushFields);
+
+    // Now pass the full update in with the filter and update the record it matches.
+    return tryUpdateOne(filter, fullUpdate);
+
+  }
+
+
 
   boolean requestRide(String rideId, String passengerId, String passengerName) {
 
