@@ -15,7 +15,9 @@
     "roundTrip": true,
     "nonSmoking": false,
     "passengerIds": [],
-    "passengerNames": []
+    "passengerNames": [],
+    "pendingPassengerIds": [],
+    "pendingPassengerNames": []
   },
 
   {
@@ -34,7 +36,9 @@
     "roundTrip": false,
     "nonSmoking": true,
     "passengerIds": [],
-    "passengerNames": []
+    "passengerNames": [],
+    "pendingPassengerIds": [],
+    "pendingPassengerNames": []
   },
 
   {
@@ -53,7 +57,9 @@
     "roundTrip": false,
     "nonSmoking": true,
     "passengerIds": [],
-    "passengerNames": []
+    "passengerNames": [],
+    "pendingPassengerIds": [],
+    "pendingPassengerNames": []
   },
 
   {
@@ -72,7 +78,9 @@
     "roundTrip": false,
     "nonSmoking": true,
     "passengerIds": [],
-    "passengerNames": []
+    "passengerNames": [],
+    "pendingPassengerIds": [],
+    "pendingPassengerNames": []
   },
 
   {
@@ -91,7 +99,9 @@
     "roundTrip": true,
     "nonSmoking": true,
     "passengerIds": [],
-    "passengerNames": []
+    "passengerNames": [],
+    "pendingPassengerIds": [],
+    "pendingPassengerNames": []
   },
 
   {
@@ -110,7 +120,9 @@
     "roundTrip": true,
     "nonSmoking": false,
     "passengerIds": ["007"],
-    "passengerNames": ["James Bond"]
+    "passengerNames": ["James Bond"],
+    "pendingPassengerIds": [],
+    "pendingPassengerNames": []
   },
 
   {
@@ -129,7 +141,9 @@
     "roundTrip": false,
     "nonSmoking": true,
     "passengerIds": [],
-    "passengerNames": []
+    "passengerNames": [],
+    "pendingPassengerIds": [],
+    "pendingPassengerNames": []
   },
 
   {
@@ -148,7 +162,9 @@
     "roundTrip": true,
     "nonSmoking": true,
     "passengerIds": [],
-    "passengerNames": []
+    "passengerNames": [],
+    "pendingPassengerIds": [],
+    "pendingPassengerNames": []
   }
 
 ]
