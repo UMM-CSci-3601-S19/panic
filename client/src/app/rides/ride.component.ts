@@ -4,7 +4,6 @@ import {RideListService} from "./ride-list.service";
 import {joinRideObject} from "./joinRideObject";
 import {DeleteRideComponent} from "./delete-ride.component";
 import {MatDialog, MatDialogConfig} from "@angular/material";
-import {MatDialog} from "@angular/material";
 import {leaveRideObject} from "./leaveRideObject";
 
 @Component({
@@ -34,10 +33,16 @@ export class RideComponent implements OnInit {
     }
   }
 
+  public getLocalUserId() {
+    return localStorage.getItem("userId");
+  }
+
   makePassengerRequestObjects() {
-    console.log("We made it to makePassengerRequestObjects in Ride Component!!!!!");
+    console.log("--------------------------");
+    console.log("Making passenger Requests!");
     console.log("ride=" + this.ride);
     let numIds = this.ride.passengerIds.length;
+    console.log("Here is the length of the passenger ids: " + numIds);
     for(let i=0; i<=numIds; i++){
       let newJoinRequest: joinRideObject = {
         rideId: this.ride._id,
@@ -46,6 +51,8 @@ export class RideComponent implements OnInit {
       };
       this.passengerRequests.push(newJoinRequest);
     }
+    console.log("Here are the passenger requests: " + this.passengerRequests);
+    console.log("--------------------------");
   }
 
   approveJoinRide(rideId: string, passengerId: string, passengerName: string): void {
@@ -54,6 +61,13 @@ export class RideComponent implements OnInit {
       pendingPassengerId: passengerId,
       pendingPassengerName: passengerName,
     };
+
+    console.log("---------------------------");
+    console.log("Ride Component - Approve Join Ride");
+    console.log("Join Ride id is" + rideId);
+    console.log("Join Ride passenger id is " + passengerId);
+    console.log("Join Ride passenger name is " + passengerName);
+    console.log("---------------------------");
 
     this.rideListService.approveJoinRide(joinedRide).subscribe(
 
@@ -69,6 +83,34 @@ export class RideComponent implements OnInit {
       });
   };
 
+  declineJoinRide(rideId: string, passengerId: string, passengerName: string): void {
+    const joinedRide: joinRideObject = {
+      rideId: rideId,
+      pendingPassengerId: passengerId,
+      pendingPassengerName: passengerName,
+    };
+
+    console.log("---------------------------");
+    console.log("Ride Component - Decline Join Ride");
+    console.log("Join Ride id is" + rideId);
+    console.log("Join Ride passenger id is " + passengerId);
+    console.log("Join Ride passenger name is " + passengerName);
+    console.log("---------------------------");
+
+    this.rideListService.declineJoinRide(joinedRide).subscribe(
+
+      result => {
+        console.log("Successfully decline ride:" + result);
+        this.highlightedID = result;
+      },
+      err => {
+        // This should probably be turned into some sort of meaningful response.
+        console.log('There was an error declining the ride.');
+        console.log('The newRide or dialogResult was ' );
+        console.log('The error was ' + JSON.stringify(err));
+      });
+  };
+
   requestJoinRide(rideId: string, passengerId: string, passengerName: string): void {
 
     const joinedRide: joinRideObject = {
@@ -78,7 +120,7 @@ export class RideComponent implements OnInit {
     };
 
     console.log("---------------------------");
-    console.log("Ride Component");
+    console.log("Ride Component - Request Join Ride");
     console.log("Join Ride id is" + rideId);
     console.log("Join Ride passenger id is " + passengerId);
     console.log("Join Ride passenger name is " + passengerName);

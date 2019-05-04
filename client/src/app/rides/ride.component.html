@@ -77,7 +77,7 @@
         <small *ngIf="ride.seatsAvailable === 1"> {{ride.seatsAvailable}} SEAT LEFT </small>
         <small *ngIf="ride.seatsAvailable !== 1"> {{ride.seatsAvailable}} SEATS LEFT </small>
       </div>
-
+      <!--============================================================================================-->
     </mat-card-title>
   </mat-card-header>
 
@@ -159,14 +159,14 @@
 
     <mat-divider [inset]="true" *ngIf="ride.notes"></mat-divider>
 
-    <div class = "passengers_div "*ngIf="ride.isDriving">
+    <div class = "passengers_div " *ngIf="ride.isDriving">
       {{this.listRidePassengers(ride.passengerNames)}}
     </div>
 
     <mat-divider [inset]="true" *ngIf="ride.notes"></mat-divider>
 
 
-<!-- -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
+<!-- ----------------------------------------------------------- -->
     <button *ngIf="userIsAPassenger(ride)"
 
       id="leave-ride-button"
@@ -175,7 +175,7 @@
 
 
     </button>
-<!-- -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
+<!-- ----------------------------------------------------------- -->
 
 
     <div  *ngIf="ride.notes" class="ride-info notes">
@@ -184,19 +184,31 @@
     </div>
 
     <!--===========================================-->
+<!--
+    && ride.ownerID === getLocalUserId()
+-->
 
-    <div *ngIf="ride.isDriving">Passenger Requests
+    <div *ngIf="this.userOwnsThisRide(ride)" class="ride-info">
+      <small>Passenger Requests</small>
       <div *ngFor="let pendingPassengerId of passengerRequests; let i = index"
            [id] = "pendingPassengerId" class="ride-passenger requests">
+        passengerRequests[i].pendingPassengerName wants to join
         <button mat-raised-button
                 class="accept-passenger-button"
                 id="accept-passenger-button"
                 color="primary"
                 type="button"
-                style="width: 100%"
+                style="width: 30%"
                 (click) = "approveJoinRide(ride._id, ride.pendingPassengerIds[i], ride.pendingPassengerNames[i])">
           Accept</button>
-        <button>Decline</button>
+        <button mat-raised-button=""
+                class="decline-passenger-button"
+                id="decline-passenger-button"
+                color="accent"
+                type="button"
+                style="width: 30%"
+                (click) = "declineJoinRide(ride._id, ride.pendingPassengerIds[i], ride.pendingPassengerNames[i])">
+          Decline</button>
      </div>
     </div>
 

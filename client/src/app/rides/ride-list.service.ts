@@ -58,6 +58,8 @@ export class RideListService {
 
   approveJoinRide(editedRide: joinRideObject) {
 
+    console.log("We have reached approveJoinRide in Ride List Service!!!!");
+
     const httpOptions = {
       headers: new HttpHeaders({
         // We're sending JSON
@@ -70,6 +72,29 @@ export class RideListService {
     };
 
     return this.http.post<string>(this.rideUrl + '/approve-join', editedRide, httpOptions)
+      .pipe(
+        tap(() => {
+          this._refreshNeeded$.next();
+        })
+      );
+  }
+
+  declineJoinRide(editedRide: joinRideObject) {
+
+    console.log("We have reached declineJoinRide in Ride List Service!!!!");
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        // We're sending JSON
+        'Content-Type': 'application/json'
+      }),
+      // But we're getting a simple (text) string in response
+      // The server sends the hex version of the new ride back
+      // so we know how to find/access that user again later.
+      responseType: 'text' as 'json'
+    };
+
+    return this.http.post<string>(this.rideUrl + '/decline-join', editedRide, httpOptions)
       .pipe(
         tap(() => {
           this._refreshNeeded$.next();
