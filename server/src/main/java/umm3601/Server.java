@@ -22,7 +22,7 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import org.json.*;
 
-public class Server {
+public class  Server {
   private static final String databaseName = "dev";
   private static final int serverPort = 4567;
 
@@ -80,6 +80,7 @@ public class Server {
     post("api/rides/update", rideRequestHandler::editRide);
     post("api/rides/request", rideRequestHandler::requestRide);
     post("api/rides/leave", rideRequestHandler::leaveRide);
+    post("api/rides/drive", rideRequestHandler::driveRide);
 
     // USER ENDPOINTS
     get("api/user/:id",userRequestHandler::getUserJSON);
