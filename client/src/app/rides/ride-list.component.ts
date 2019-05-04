@@ -41,14 +41,6 @@ export class RideListComponent implements OnInit {
     this.loadService();
   }
 
-  openChat(rideId: string): void {
-    const dialogRef = this.dialog.open(ChatComponent, <MatDialogConfig>{
-      maxWidth: '100vw',
-      maxHeight: '100vh',
-    });
-    dialogRef.componentInstance.feedId = rideId;
-  }
-
   public filterRides(searchDestination: string, searchOrigin: string,
                      searchIsDriving: boolean, searchNonSmoking: boolean,
                      searchRoundTrip): Ride[] {

@@ -3,8 +3,9 @@ import {Ride} from "./ride";
 import {RideListService} from "./ride-list.service";
 import {joinRideObject} from "./joinRideObject";
 import {DeleteRideComponent} from "./delete-ride.component";
-import {MatDialog} from "@angular/material";
+import {MatDialog, MatDialogConfig} from "@angular/material";
 import {leaveRideObject} from "./leaveRideObject";
+import {ChatComponent} from "../chat/chat.component";
 
 @Component({
   selector: 'app-ride',
@@ -47,6 +48,14 @@ export class RideComponent implements OnInit {
         console.log('The error was ' + JSON.stringify(err));
       });
   };
+
+  openChat(rideId: string): void {
+    const dialogRef = this.dialog.open(ChatComponent, <MatDialogConfig>{
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+    });
+    dialogRef.componentInstance.feedId = rideId;
+  }
 
   openDeleteDialog(currentId: object): void {
     console.log("openDeleteDialog");
