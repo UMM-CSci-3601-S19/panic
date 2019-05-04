@@ -26,17 +26,13 @@ export class RideComponent implements OnInit {
 
   ngOnInit() {}
 
-  // joinRideDriver(rideId: string, driverId: string, driverName: sting): void {
-  //   const joinedRide: joinRideObject = {
-  //     rideId: rideId,
-  //     driverId: driverId,
-  //     driverName: driverName,
-  //   };
-  //
-  // }
-
-
-
+  DriveRide(rideId: string, driverId: string, driverName: string): void {
+    const drivenRide: driveRideObject = {
+      rideId: rideId,
+      driverId: driverId,
+      driverName: DriverName,
+    };
+  }
 
   requestRide(rideId: string, passengerId: string, passengerName: string): void {
 
