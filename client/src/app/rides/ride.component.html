@@ -1,5 +1,5 @@
 
-<mat-expansion-panel #elem class="rides" [id]="ride.driver" hideToggle="true">
+<mat-expansion-panel #elem class="rides" [id]="ride.owner" hideToggle="true" [expanded]="openState">
   <mat-expansion-panel-header class="ride-title" [collapsedHeight]="'auto'" [expandedHeight]="'auto'">
 
     <div></div>
@@ -36,26 +36,36 @@
   </mat-expansion-panel-header>
 
   <div id="body-wrapper">
+    <div class="seats-available" *ngIf="ride.seatsAvailable < 1">
+      There are no seats left on this ride.
+    </div>
+    <div class="seats-available" *ngIf="ride.seatsAvailable > 0">
+      There are {{ride.seatsAvailable}} seats left on this ride.
+    </div>
     <div id="ride-info-driver-id" class="ride-info-driver">
-      {{ride.driver}} is offering this ride
+      {{ride.owner}} is the owner of this ride.
     </div>
     <mat-divider></mat-divider>
 
-    <div *ngIf="ride.notes" class="ride-info notes">
-      <small>DRIVER NOTES:</small>
-      <div>{{ride.notes}}</div>
-    </div>
+    <!--<div *ngIf="ride.notes" class="ride-info notes">-->
+      <!--<small>DRIVER NOTES:</small>-->
+      <!--<div>{{ride.notes}}</div>-->
+    <!--</div>-->
     <mat-action-row class="action-row">
-      <!-- -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
-      <button *ngIf="userIsAPassenger(ride)"
 
+      <button *ngIf="userIsAPassenger(ride)"
               id="leave-ride-button"
               mat-raised-button
-              (click)="leaveRide(this.currUserId, ride._id.$oid)">Leave Ride
-
-
+              (click)="leaveRide(this.currUserId, ride._id.$oid);openCard()">
+        Leave Ride
       </button>
-      <!-- -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
+
+      <button *ngIf="!userIsAPassenger(ride)"
+              id="join-ride-button"
+              mat-raised-button
+              (click) = "joinRide(ride._id, this.currUserId, this.currUserFullName);openCard()">
+        Join This Ride
+      </button>
       <button mat-button id="open-chat-button" (click)="openChat(ride._id)">
         <mat-icon>chat</mat-icon>
       </button>
