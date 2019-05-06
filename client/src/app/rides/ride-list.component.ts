@@ -68,7 +68,7 @@ export class RideListComponent implements OnInit {
     if (searchIsDriving != null) {
 
       this.filteredRides = this.filteredRides.filter(ride => {
-        return ride.isDriving === searchIsDriving;
+        return (!!ride.driver) === searchIsDriving;
       });
     }
 
