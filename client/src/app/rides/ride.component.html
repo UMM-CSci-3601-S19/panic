@@ -69,6 +69,7 @@
     </div>
 
     <h3>Passengers</h3>
+    <mat-divider></mat-divider>
     <mat-nav-list>
       <mat-list-item *ngFor="let person of people" class="person" routerLink="/profile/{{person.userId}}">
         <img matListAvatar [src]="person.pictureUrl" alt="avatar">
@@ -79,22 +80,19 @@
     </mat-nav-list>
 
     <div *ngIf="ride.nonSmoking || ride.roundTrip">
+      <h3>Tags</h3>
+      <mat-divider></mat-divider>
+      <br>
       <mat-chip-list>
         <mat-chip *ngIf="ride.nonSmoking">Smoke free</mat-chip>
         <mat-chip *ngIf="ride.roundTrip">Round trip</mat-chip>
       </mat-chip-list>
     </div>
 
-    <mat-divider [inset]="true" *ngIf="ride.notes"></mat-divider>
-
-    <div class = "passengers" *ngIf="ride.isDriving">
-      {{this.listRidePassengers(ride.passengerNames)}}
-    </div>
-
-    <mat-divider [inset]="true" *ngIf="ride.notes"></mat-divider>
-
-    <div *ngIf="ride.notes" class="ride-info notes">
-      <small>NOTES:</small>
+    <div *ngIf="ride.notes">
+      <h3>Notes</h3>
+      <mat-divider></mat-divider>
+      <br>
       <div>{{ride.notes}}</div>
     </div>
   </mat-card-content>

@@ -87,10 +87,15 @@
 
 .person {
   font-size: 0.8rem;
-  h3 {
+  h4 {
     font-weight: bold;
     font-size: 0.9rem;
   }
+}
+
+h3 {
+  margin-top: 25px;
+  margin-bottom: 10px;
 }
 
 .slim-ride-card {
