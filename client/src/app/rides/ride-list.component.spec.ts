@@ -12,6 +12,8 @@ import 'rxjs/add/operator/do';
 import {By} from "@angular/platform-browser";
 import {Subject} from "rxjs/Subject";
 import {RideComponent} from "./ride.component";
+import {ChatService} from "../chat/chat-service";
+import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 describe('Ride list', () => {
 
@@ -83,9 +85,12 @@ describe('Ride list', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [CustomModule],
+      imports: [CustomModule, HttpClientTestingModule],
       declarations: [RideListComponent,RouterLinkDirectiveStub,RideComponent],
-      providers: [{provide: RideListService, useValue: rideListServiceStub}]
+      providers: [
+        {provide: RideListService, useValue: rideListServiceStub},
+        ChatService
+      ]
     });
   });
 
@@ -438,9 +443,11 @@ describe('Misbehaving Ride List', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [FormsModule, CustomModule],
+      imports: [FormsModule, CustomModule, HttpClientTestingModule],
       declarations: [RideListComponent,RouterLinkDirectiveStub, RideComponent],
-      providers: [{provide: RideListService, useValue: rideListServiceStub}]
+      providers: [{provide: RideListService, useValue: rideListServiceStub},
+        ChatService
+      ]
     });
   });
 
