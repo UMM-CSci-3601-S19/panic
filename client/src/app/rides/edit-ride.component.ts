@@ -45,7 +45,7 @@ export class EditRideComponent implements OnInit {
   editRide(): void {
 
     const editedRide: Ride = {
-      _id: this.rideId,
+      _id: {$oid: this.rideId},
       owner: this.rideUser,
       ownerID: this.rideUserId,
       driver: this.rideDriver,
@@ -99,7 +99,7 @@ export class EditRideComponent implements OnInit {
   }
 
   setRideFields() {
-    this.rideId = this.rideListService.singleRide._id;
+    this.rideId = this.rideListService.singleRide._id.$oid;
     this.rideUser = this.rideListService.singleRide.owner;
     this.rideUserId = this.rideListService.singleRide.ownerID;
     this.rideDriver = this.rideListService.singleRide.driver;
