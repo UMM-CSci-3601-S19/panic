@@ -28,6 +28,19 @@ export class RideListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    localStorage.removeItem("rideId");
+    localStorage.removeItem("rideUser");
+    localStorage.removeItem("rideUserId");
+    localStorage.removeItem("rideNotes");
+    localStorage.removeItem("rideSeatsAvailable");
+    localStorage.removeItem("rideOrigin");
+    localStorage.removeItem("rideDestination");
+    localStorage.removeItem("rideDepartureDate");
+    localStorage.removeItem("rideDepartureTime");
+    localStorage.removeItem("rideIsDriving");
+    localStorage.removeItem("rideRoundTrip");
+    localStorage.removeItem("rideNonSmoking");
+
     this.rideListService.refreshNeeded$
       .subscribe(() => {
         this.refreshRides();
