@@ -5,6 +5,8 @@ import {CustomModule} from "../custom.module";
 import {RouterTestingModule} from "@angular/router/testing";
 import {RideListService} from "./ride-list.service";
 import {Ride} from "./ride";
+import {UserService} from "../users/user.service";
+import {ChatComponent} from "../chat/chat.component";
 
 describe('RideComponent', () => {
   let component: RideComponent;
@@ -13,7 +15,6 @@ describe('RideComponent', () => {
   let rideListServiceStub: {
   };
   let rideStub: Ride = {
-    _id: '',
     owner: '',
     ownerID: '',
     notes: '',
@@ -22,7 +23,6 @@ describe('RideComponent', () => {
     destination: '',
     departureDate: '',
     departureTime: '',
-    isDriving: false,
     nonSmoking: false,
     passengerIds: []
   };
@@ -30,8 +30,10 @@ describe('RideComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [ CustomModule, RouterTestingModule ],
-      declarations: [ RideComponent ],
-      providers: [{ provide: RideListService, useValue: rideListServiceStub }]
+      declarations: [ RideComponent, ChatComponent ],
+      providers: [
+        { provide: RideListService, useValue: rideListServiceStub },
+        { provide: UserService }]
     })
     .compileComponents();
   }));

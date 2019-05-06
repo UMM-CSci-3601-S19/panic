@@ -14,6 +14,7 @@ import {Subject} from "rxjs/Subject";
 import {RideComponent} from "./ride.component";
 import {ChatService} from "../chat/chat-service";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {ChatComponent} from "../chat/chat.component";
 
 describe('Ride list', () => {
 
@@ -33,7 +34,7 @@ describe('Ride list', () => {
     rideListServiceStub = {
       getRides: () => Observable.of([
         {
-          _id: 'chris_id',
+          _id: {$oid: 'chris_id'},
           owner: 'Chris',
           ownerID: "001",
           driver: 'Chris',
@@ -50,7 +51,7 @@ describe('Ride list', () => {
           passengerNames: []
         },
         {
-          _id: 'dennis_id',
+          _id: {$oid: 'dennis_id'},
           owner: 'Dennis',
           ownerID: "002",
           notes: 'These are Dennis\'s ride notes',
@@ -61,11 +62,11 @@ describe('Ride list', () => {
           departureTime: '11:30:00',
           nonSmoking: true,
           roundTrip: true,
-          passengerIds: [],
-          passengerNames: []
+          passengerIds: ["002"],
+          passengerNames: ['Dennis']
         },
         {
-          _id: 'agatha_id',
+          _id: {$oid: 'agatha_id'},
           owner: 'Agatha',
           ownerID: "003",
           driver: 'Agatha',
@@ -87,7 +88,7 @@ describe('Ride list', () => {
 
     TestBed.configureTestingModule({
       imports: [CustomModule, HttpClientTestingModule],
-      declarations: [RideListComponent,RouterLinkDirectiveStub,RideComponent],
+      declarations: [RideListComponent,RouterLinkDirectiveStub,RideComponent, ChatComponent],
       providers: [
         {provide: RideListService, useValue: rideListServiceStub},
         ChatService
@@ -232,7 +233,7 @@ describe('Ride list', () => {
   });
 
   it('has one ride with _id \'dennis_id\'', () => {
-    expect(rideList.rides.filter((ride: Ride) => ride._id === 'dennis_id').length).toBe(1);
+    expect(rideList.rides.filter((ride: Ride) => ride._id.$oid === 'dennis_id').length).toBe(1);
   });
 
   it('has three rides with notes containing \'These are\'', () => {
@@ -282,7 +283,7 @@ describe('Ride list', () => {
   });
 
   it('doesn\'t have a ride with _id \'bob_id\'', () => {
-    expect(rideList.rides.some((ride: Ride) => ride._id === 'bob_id')).toBe(false);
+    expect(rideList.rides.some((ride: Ride) => ride._id.$oid === 'bob_id')).toBe(false);
   });
 
   it('doesn\'t have a ride with notes \'Smoker\'', () => {
@@ -445,7 +446,7 @@ describe('Misbehaving Ride List', () => {
 
     TestBed.configureTestingModule({
       imports: [FormsModule, CustomModule, HttpClientTestingModule],
-      declarations: [RideListComponent,RouterLinkDirectiveStub, RideComponent],
+      declarations: [RideListComponent,RouterLinkDirectiveStub, RideComponent,ChatComponent],
       providers: [{provide: RideListService, useValue: rideListServiceStub},
         ChatService
       ]
