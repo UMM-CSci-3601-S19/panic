@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ChatService} from "./chat-service";
 
 import {FormControl, FormGroup} from "@angular/forms";
@@ -16,7 +16,7 @@ import {RideListService} from "../rides/ride-list.service";
 export class ChatComponent implements OnInit {
 
   // feedId is set in the ride-list component when the chat dialog is opened.
-  public feedId: string;
+  @Input() feedId: string;
   public messages: Message[];
 
   public loggedInUserId: string = localStorage.getItem('oid');

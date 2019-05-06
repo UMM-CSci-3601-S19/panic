@@ -91,11 +91,18 @@
       </mat-chip-list>
     </div>
 
-    <div *ngIf="ride.notes">
+    <div *ngIf="ride.notes" class="notes">
       <h3>Notes</h3>
       <mat-divider></mat-divider>
       <br>
       <div>{{ride.notes}}</div>
+    </div>
+
+    <div>
+      <h3>Chat</h3>
+      <mat-divider></mat-divider>
+      <br>
+      <app-chat [feedId]="ride._id.$oid"></app-chat>
     </div>
   </mat-card-content>
 
