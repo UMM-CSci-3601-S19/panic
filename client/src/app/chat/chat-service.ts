@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 
-import Credentials from '../../../../credentials.json';
+import * as Credentials from '../../../../credentials.json';
 
 import {Observable} from 'rxjs/Observable';
 
