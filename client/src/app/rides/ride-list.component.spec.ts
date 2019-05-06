@@ -12,6 +12,9 @@ import 'rxjs/add/operator/do';
 import {By} from "@angular/platform-browser";
 import {Subject} from "rxjs/Subject";
 import {RideComponent} from "./ride.component";
+import {ChatService} from "../chat/chat-service";
+import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {ChatComponent} from "../chat/chat.component";
 
 describe('Ride list', () => {
 
@@ -31,23 +34,24 @@ describe('Ride list', () => {
     rideListServiceStub = {
       getRides: () => Observable.of([
         {
-          _id: 'chris_id',
+          _id: {$oid: 'chris_id'},
           owner: 'Chris',
           ownerID: "001",
+          driver: 'Chris',
+          driverID: 'chris_id',
           notes: 'These are Chris\'s ride notes',
           seatsAvailable: 3,
           origin: 'UMM',
           destination: 'Willie\'s',
           departureDate: '3/6/2019',
           departureTime: '10:00:00',
-          isDriving: true,
           nonSmoking: true,
           roundTrip: true,
           passengerIds: [],
           passengerNames: []
         },
         {
-          _id: 'dennis_id',
+          _id: {$oid: 'dennis_id'},
           owner: 'Dennis',
           ownerID: "002",
           notes: 'These are Dennis\'s ride notes',
@@ -56,23 +60,23 @@ describe('Ride list', () => {
           destination: 'Minneapolis, MN',
           departureDate: '8/15/2018',
           departureTime: '11:30:00',
-          isDriving: false,
           nonSmoking: true,
           roundTrip: true,
-          passengerIds: [],
-          passengerNames: []
+          passengerIds: ["002"],
+          passengerNames: ['Dennis']
         },
         {
-          _id: 'agatha_id',
+          _id: {$oid: 'agatha_id'},
           owner: 'Agatha',
           ownerID: "003",
+          driver: 'Agatha',
+          driverID: 'agatha_id',
           notes: 'These are Agatha\'s ride notes',
           seatsAvailable: 3,
           origin: 'UMM',
           destination: 'Fergus Falls, MN',
           departureDate: '3/30/2019',
           departureTime: '16:30:00',
-          isDriving: true,
           nonSmoking: false,
           roundTrip: false,
           passengerIds: [],
@@ -83,9 +87,12 @@ describe('Ride list', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [CustomModule],
-      declarations: [RideListComponent,RouterLinkDirectiveStub,RideComponent],
-      providers: [{provide: RideListService, useValue: rideListServiceStub}]
+      imports: [CustomModule, HttpClientTestingModule],
+      declarations: [RideListComponent,RouterLinkDirectiveStub,RideComponent, ChatComponent],
+      providers: [
+        {provide: RideListService, useValue: rideListServiceStub},
+        ChatService
+      ]
     });
   });
 
@@ -202,11 +209,11 @@ describe('Ride list', () => {
   });
 
   it('has two rides that where a ride is being offered', () => {
-    expect(rideList.rides.filter((ride: Ride) => ride.isDriving).length).toBe(2);
+    expect(rideList.rides.filter((ride: Ride) => ride.driver).length).toBe(2);
   });
 
   it('has one ride that where a ride is being requested', () => {
-    expect(rideList.rides.filter((ride: Ride) => !ride.isDriving).length).toBe(1);
+    expect(rideList.rides.filter((ride: Ride) => !ride.driver).length).toBe(1);
   });
 
   it('has two rides with origin \'UMM\'', () => {
@@ -226,7 +233,7 @@ describe('Ride list', () => {
   });
 
   it('has one ride with _id \'dennis_id\'', () => {
-    expect(rideList.rides.filter((ride: Ride) => ride._id === 'dennis_id').length).toBe(1);
+    expect(rideList.rides.filter((ride: Ride) => ride._id.$oid === 'dennis_id').length).toBe(1);
   });
 
   it('has three rides with notes containing \'These are\'', () => {
@@ -276,7 +283,7 @@ describe('Ride list', () => {
   });
 
   it('doesn\'t have a ride with _id \'bob_id\'', () => {
-    expect(rideList.rides.some((ride: Ride) => ride._id === 'bob_id')).toBe(false);
+    expect(rideList.rides.some((ride: Ride) => ride._id.$oid === 'bob_id')).toBe(false);
   });
 
   it('doesn\'t have a ride with notes \'Smoker\'', () => {
@@ -284,7 +291,7 @@ describe('Ride list', () => {
   });
 
   it('doesn\'t have a requested ride with zero or more seats available', () => {
-    expect(rideList.rides.some((ride: Ride) => !ride.isDriving && ride.seatsAvailable > 0)).toBe(false);
+    expect(rideList.rides.some((ride: Ride) => !ride.driver && ride.seatsAvailable > 0)).toBe(false);
   });
   /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -438,9 +445,11 @@ describe('Misbehaving Ride List', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [FormsModule, CustomModule],
-      declarations: [RideListComponent,RouterLinkDirectiveStub, RideComponent],
-      providers: [{provide: RideListService, useValue: rideListServiceStub}]
+      imports: [FormsModule, CustomModule, HttpClientTestingModule],
+      declarations: [RideListComponent,RouterLinkDirectiveStub, RideComponent,ChatComponent],
+      providers: [{provide: RideListService, useValue: rideListServiceStub},
+        ChatService
+      ]
     });
   });
 

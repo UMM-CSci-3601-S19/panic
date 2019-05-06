@@ -52,9 +52,15 @@ export class AddRideComponent implements OnInit {
       departureDate: this.rideDepartureDate,
       departureTime: this.rideDepartureTime,
       roundTrip: this.rideRoundTrip,
-      isDriving: this.rideDriving,
       nonSmoking: this.rideNonSmoking,
     };
+
+    if (this.rideDriving) {
+      newRide.driver = newRide.owner;
+      newRide.driverID = newRide.ownerID;
+    } else {
+      newRide.passengerIds.push(newRide.ownerID);
+    }
 
     console.log("COMPONENT: The new Ride in addRide() is " + JSON.stringify(newRide));
 

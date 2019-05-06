@@ -65,18 +65,19 @@ public class RideRequestHandler {
 
     String owner = newRide.getString("owner");
     String ownerID = newRide.getString("ownerID");
+    String driver = newRide.getString("driver");
+    String driverID = newRide.getString("driverID");
     String notes = newRide.getString("notes");
     int seatsAvailable = newRide.getInteger("seatsAvailable");
     String origin = newRide.getString("origin");
     String destination = newRide.getString("destination");
     String departureDate = newRide.getString("departureDate");
     String departureTime = newRide.getString("departureTime");
-    boolean isDriving = newRide.getBoolean("isDriving");
     boolean roundTrip = newRide.getBoolean("roundTrip");
     boolean nonSmoking = newRide.getBoolean("nonSmoking");
 
-    return rideController.addNewRide(owner, ownerID, notes, seatsAvailable, origin, destination,
-      departureDate, departureTime, isDriving, roundTrip, nonSmoking);
+    return rideController.addNewRide(owner, ownerID, driver, driverID, notes, seatsAvailable, origin, destination,
+      departureDate, departureTime, roundTrip, nonSmoking);
 
   }
 
@@ -103,18 +104,19 @@ public class RideRequestHandler {
 //    We don't include the following fields, because they shouldn't be edited.
 //    String user = editRide.getString("user");
 //    String userId = editRide.getString("userId");
+    String driver = editRide.getString("driver");
+    String driverID = editRide.getString("driverID");
     String notes = editRide.getString("notes");
     int seatsAvailable = editRide.getInteger("seatsAvailable");
     String origin = editRide.getString("origin");
     String destination = editRide.getString("destination");
     String departureDate = editRide.getString("departureDate");
     String departureTime = editRide.getString("departureTime");
-    Boolean isDriving = editRide.getBoolean("isDriving");
     Boolean roundTrip = editRide.getBoolean("roundTrip");
     Boolean nonSmoking = editRide.getBoolean("nonSmoking");
 
-    return rideController.editRide(id, notes, seatsAvailable, origin, destination,
-      departureDate, departureTime, isDriving, roundTrip, nonSmoking);
+    return rideController.editRide(id, driver, driverID, notes, seatsAvailable, origin, destination,
+      departureDate, departureTime, roundTrip, nonSmoking);
   }
 
   public boolean joinRide(Request req, Response res) {

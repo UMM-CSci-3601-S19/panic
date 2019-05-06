@@ -14,7 +14,7 @@
           <div id="rideUserTitle">
             {{rideUser}} is
           </div>
-            <div *ngIf="rideIsDriving; then driving_message else riding_message"> </div>
+            <div *ngIf="rideDriver; then driving_message else riding_message"> </div>
             <ng-template #driving_message > offering this ride </ng-template>
             <ng-template #riding_message> requesting this ride </ng-template>
 
@@ -39,11 +39,11 @@
 
           <!--==============================================================================================-->
 
-          <mat-form-field *ngIf="rideIsDriving">
+          <mat-form-field *ngIf="rideDriver">
             <input type="number" class="inputRideInfo" matInput #input id="seatsAvailableField"
                    placeholder="Seats Available"
                    [(ngModel)]="rideSeatsAvailable" formControlName="seatsAvailable">
-            <mat-error *ngIf="rideIsDriving">
+            <mat-error *ngIf="rideDriver">
               <mat-error *ngFor="let validation of this.validatorService.ride_validation_messages.seatsAvailable">
                 <mat-error class="error-message"
                            *ngIf="validatorService.rideForm.get('seatsAvailable').hasError(validation.type) &&

@@ -2,6 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {RideListService} from './ride-list.service';
 import {Ride} from './ride';
 import {Observable} from 'rxjs/Observable';
+import {MatDialog, MatDialogConfig} from "@angular/material";
+import {DeleteRideComponent} from "./delete-ride.component";
+import {joinRideObject} from "./joinRideObject";
+import {ChatComponent} from "../chat/chat.component";
+import {ChatService} from "../chat/chat-service";
 
 @Component({
   selector: 'ride-list-component',
@@ -23,8 +28,8 @@ export class RideListComponent implements OnInit {
   public rideRoundTrip: boolean = false;
 
   // Inject the RideListService into this component.
-  constructor(public rideListService: RideListService) {
- //   rideListService.addListener(this);
+  constructor(public rideListService: RideListService, public chatService: ChatService, public dialog: MatDialog) {
+    this.chatService.connectStream();
   }
 
   ngOnInit(): void {
@@ -76,7 +81,7 @@ export class RideListComponent implements OnInit {
     if (searchIsDriving != null) {
 
       this.filteredRides = this.filteredRides.filter(ride => {
-        return ride.isDriving === searchIsDriving;
+        return (!!ride.driver) === searchIsDriving;
       });
     }
 

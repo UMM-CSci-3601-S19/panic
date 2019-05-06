@@ -3,13 +3,16 @@ import {Ride} from "./ride";
 import {RideListService} from "./ride-list.service";
 import {joinRideObject} from "./joinRideObject";
 import {DeleteRideComponent} from "./delete-ride.component";
-import {MatDialog} from "@angular/material";
+import {MatDialog, MatDialogConfig} from "@angular/material";
 import {leaveRideObject} from "./leaveRideObject";
+import {ChatComponent} from "../chat/chat.component";
+import {User} from "../users/user";
+import {UserService} from "../users/user.service";
 
 @Component({
   selector: 'app-ride',
   templateUrl: './ride.component.html',
-  styleUrls: ['./ride.component.css']
+  styleUrls: ['./ride.component.scss']
 })
 export class RideComponent implements OnInit {
 
@@ -21,10 +24,38 @@ export class RideComponent implements OnInit {
   private highlightedID: string = '';
   private highlightedDestination: string = '';
 
-  constructor(private rideListService: RideListService,
-              public dialog: MatDialog) { }
+  public fullCard: boolean = false;
+  public people: User[];
 
-  ngOnInit() {}
+  constructor(private rideListService: RideListService,
+              public dialog: MatDialog,
+              public userService: UserService) {
+  }
+
+  ngOnInit() {
+    this.people = [];
+
+    if (this.ride.driverID) {
+      this.userService.getUserById(this.ride.driverID).subscribe( driver => {
+        this.people.push(driver);
+      });
+    }
+
+    for (let id of this.ride.passengerIds) {
+      this.userService.getUserById(id).subscribe(user => {
+        this.people.push(user);
+      });
+    }
+  }
+
+  openRide() {
+    const dialogRef = this.dialog.open(RideComponent, <MatDialogConfig>{
+      maxWidth: '100vw',
+      maxHeight: '100vh'
+    });
+    dialogRef.componentInstance.fullCard = true;
+    dialogRef.componentInstance.ride = this.ride;
+  }
 
   joinRide(rideId: string, passengerId: string, passengerName: string): void {
 
@@ -47,6 +78,14 @@ export class RideComponent implements OnInit {
         console.log('The error was ' + JSON.stringify(err));
       });
   };
+
+  openChat(rideId: string): void {
+    const dialogRef = this.dialog.open(ChatComponent, <MatDialogConfig>{
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+    });
+    dialogRef.componentInstance.feedId = rideId;
+  }
 
   openDeleteDialog(currentId: object): void {
     console.log("openDeleteDialog");

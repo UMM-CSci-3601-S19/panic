@@ -22,6 +22,8 @@ export class EditRideComponent implements OnInit {
   public rideId: string;
   public rideUser = localStorage.getItem("userFullName");
   public rideUserId = localStorage.getItem("userId");
+  public rideDriver: string;
+  public rideDriverID: string;
   public rideNotes: string;
   public rideSeatsAvailable: number;
   public rideOrigin: string;
@@ -32,7 +34,6 @@ export class EditRideComponent implements OnInit {
   public tempBool: boolean = false;
 
   // Please leave as true for now, it's important.
-  public rideIsDriving: boolean = true;
   public rideRoundTrip: boolean = false;
   public rideNonSmoking: boolean = false;
 
@@ -49,13 +50,14 @@ export class EditRideComponent implements OnInit {
       },
       owner: this.rideUser,
       ownerID: this.rideUserId,
+      driver: this.rideDriver,
+      driverID: this.rideDriverID,
       notes: this.rideNotes,
       seatsAvailable: this.rideSeatsAvailable,
       origin: this.rideOrigin,
       destination: this.rideDestination,
       departureDate: this.rideDepartureDate,
       departureTime: this.rideDepartureTime,
-      isDriving: this.rideIsDriving,
       roundTrip: this.rideRoundTrip,
       nonSmoking: this.rideNonSmoking
     };
@@ -102,13 +104,14 @@ export class EditRideComponent implements OnInit {
     this.rideId = localStorage.getItem("rideId");
     this.rideUser = localStorage.getItem("rideUser");
     this.rideUserId = localStorage.getItem("rideUserId");
+    this.rideDriver = localStorage.getItem("rideDriver");
+    this.rideDriverID = localStorage.getItem("rideDriverID");
     this.rideNotes = localStorage.getItem("rideNotes");
     this.rideSeatsAvailable = +parseInt(localStorage.getItem("rideSeatsAvailable"));
     this.rideOrigin = localStorage.getItem("rideOrigin");
     this.rideDestination = localStorage.getItem("rideDestination");
     this.rideDepartureDate = localStorage.getItem("rideDepartureDate");
     this.rideDepartureTime = localStorage.getItem("rideDepartureTime");
-    this.rideIsDriving = ("true" == localStorage.getItem("rideIsDriving"));
     this.rideRoundTrip = ("true" == localStorage.getItem("rideRoundTrip"));
     this.rideNonSmoking = ("true" == localStorage.getItem("rideNonSmoking"));
   }
@@ -125,7 +128,7 @@ export class EditRideComponent implements OnInit {
     this.setRideSeats();
     this.setRideFields();
     this.validatorService.createForm();
-    if (this.rideIsDriving === false) {
+    if (!this.rideDriver) {
       this.validatorService.rideForm.removeControl("driving");
       this.validatorService.rideForm.removeControl("seatsAvailable");
     }
