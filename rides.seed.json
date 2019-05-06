@@ -41,8 +41,8 @@
     "_id": {
       "$oid": "5c832bec201270bd881ace78"
     },
-    "user": "Harry Potter",
-    "userId": "832471086850197399999",
+    "owner": "Harry Potter",
+    "ownerID": "832471086850197399999",
     "notes": "Occaecat reprehenderit do exercitation laborum. Dolore culpa ut veniam ipsum fugiat voluptate excepteur labore laborum ad Lorem sint aute.",
     "seatsAvailable": -1,
     "origin": "8631 Hudson Avenue, Crayne, IA 98438",
@@ -109,7 +109,7 @@
     "isDriving": true,
     "roundTrip": true,
     "nonSmoking": false,
-    "passengerIds": ["007"],
+    "passengerIds": [],
     "passengerNames": ["James Bond"]
   },
 
