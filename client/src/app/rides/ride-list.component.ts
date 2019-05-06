@@ -28,7 +28,7 @@ export class RideListComponent implements OnInit {
   public rideRoundTrip: boolean = false;
 
   // Inject the RideListService into this component.
-  constructor(public rideListService: RideListService, public dialog: MatDialog, public chatService: ChatService) {
+  constructor(public rideListService: RideListService, public chatService: ChatService, public dialog: MatDialog) {
     this.chatService.connectStream();
   }
 
