@@ -99,13 +99,6 @@
 
     <mat-divider [inset]="true" *ngIf="ride.notes"></mat-divider>
 
-    <button
-      *ngIf="userIsAPassenger(ride)"
-      id="leave-ride-button"
-      mat-raised-button
-      (click)="leaveRide(this.currUserId, ride._id.$oid)">Leave Ride
-    </button>
-
     <div *ngIf="ride.notes" class="ride-info notes">
       <small>NOTES:</small>
       <div>{{ride.notes}}</div>
@@ -118,11 +111,17 @@
             id="join-ride-button"
             color="primary"
             type="button"
-            style="width: 100%"
             [disabled]="!this.userCanJoinRide(ride)"
             (click) = "joinRide(ride._id, this.currUserId, this.currUserFullName)">
       <mat-icon>add_circle_outline</mat-icon>
       Join This Ride
+    </button>
+    <button
+      *ngIf="userIsAPassenger(ride)"
+      id="leave-ride-button"
+      mat-raised-button
+      color="warn"
+      (click)="leaveRide(this.currUserId, ride._id.$oid)">Leave Ride
     </button>
   </mat-card-actions>
 
