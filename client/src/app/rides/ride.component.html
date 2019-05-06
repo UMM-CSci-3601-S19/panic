@@ -84,11 +84,13 @@
 
     </div>
 
-    <div>
-      <mat-icon aria-hidden="false" *ngIf="ride.nonSmoking">smoke_free</mat-icon>
-      <b *ngIf="ride.nonSmoking">Non-Smoking &nbsp; &nbsp;</b>
-      <mat-icon  aria-hidden="false" *ngIf="ride.roundTrip">repeat</mat-icon>
-      <b *ngIf="ride.roundTrip">Round Trip</b>
+    <div *ngIf="ride.nonSmoking || ride.roundTrip">
+      <span>Tags</span>
+      <mat-divider [inset]="true"></mat-divider>
+      <mat-chip-list>
+        <mat-chip *ngIf="ride.nonSmoking">Smoke free</mat-chip>
+        <mat-chip *ngIf="ride.roundTrip">Round trip</mat-chip>
+      </mat-chip-list>
     </div>
 
     <mat-divider [inset]="true" *ngIf="ride.notes"></mat-divider>
