@@ -73,6 +73,7 @@
       <mat-list-item *ngFor="let person of people" class="person">
         <img matListAvatar [src]="person.pictureUrl" alt="avatar">
         <h3 matLine>{{person.fullName}}</h3>
+        <mat-chip *ngIf="person.userId == ride.driverID">DRIVER</mat-chip>
       </mat-list-item>
     </mat-list>
 

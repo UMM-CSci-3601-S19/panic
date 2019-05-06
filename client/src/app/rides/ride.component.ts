@@ -35,15 +35,15 @@ export class RideComponent implements OnInit {
   ngOnInit() {
     this.people = [];
 
-    for (let id of this.ride.passengerIds) {
-      this.userService.getUserById(id).subscribe(user => {
-        this.people.push(user);
-      });
-    }
-
     if (this.ride.driverID) {
       this.userService.getUserById(this.ride.driverID).subscribe( driver => {
         this.people.push(driver);
+      });
+    }
+
+    for (let id of this.ride.passengerIds) {
+      this.userService.getUserById(id).subscribe(user => {
+        this.people.push(user);
       });
     }
   }
