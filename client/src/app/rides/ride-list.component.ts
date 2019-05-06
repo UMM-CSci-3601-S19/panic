@@ -27,14 +27,7 @@ export class RideListComponent implements OnInit {
  //   rideListService.addListener(this);
   }
 
-  ngOnInit(): void {
-    this.rideListService.refreshNeeded$
-      .subscribe(() => {
-        this.refreshRides();
-      });
-    // this.refreshRides();
-    this.loadService();
-  }
+
 
   public filterRides(searchDestination: string, searchOrigin: string,
                      searchIsDriving: boolean, searchNonSmoking: boolean,
@@ -179,5 +172,15 @@ export class RideListComponent implements OnInit {
   public toggleRoundTrip() {
     this.rideRoundTrip = !this.rideRoundTrip;
   }
+
+  ngOnInit(): void {
+    this.rideListService.refreshNeeded$
+      .subscribe(() => {
+        this.refreshRides();
+      });
+    // this.refreshRides();
+    this.loadService();
+  }
+
 
 }

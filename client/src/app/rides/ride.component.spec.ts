@@ -24,7 +24,10 @@ describe('RideComponent', () => {
     departureTime: '',
     isDriving: false,
     nonSmoking: false,
-    passengerIds: []
+    passengerIds: [],
+    passengerNames: [],
+    pendingPassengerIds: [],
+    pendingPassengerNames: []
   };
 
   beforeEach(async(() => {
