@@ -25,11 +25,7 @@ export class RideComponent implements OnInit {
   constructor(private rideListService: RideListService,
               public dialog: MatDialog) { }
 
-  ngOnInit() {
-    if (this.ride.pendingPassengerIds) {
-      this.makePassengerRequestObjects();
-    }
-  }
+
 
   public getLocalUserId() {
     return localStorage.getItem("userId");
@@ -44,6 +40,12 @@ export class RideComponent implements OnInit {
         pendingPassengerName: this.ride.pendingPassengerNames[i]
       };
       this.passengerRequests.push(newJoinRequest);
+    }
+  }
+
+  checkPassengerRequests() {
+    if (this.ride.pendingPassengerIds != null) {
+      this.makePassengerRequestObjects();
     }
   }
 
@@ -182,6 +184,10 @@ export class RideComponent implements OnInit {
     return (ride.ownerID === this.currUserId);
   }
 
+  public rideHasPassengerRequests(ride: Ride): boolean{
+    return (ride.pendingPassengerIds.length > 0);
+  }
+
   public userIsAPassenger(ride: Ride): boolean {
     return (ride.passengerIds.indexOf(this.currUserId) !== -1);
   }
@@ -299,5 +305,8 @@ export class RideComponent implements OnInit {
         console.log('The error was ' + JSON.stringify(err));
       });
   };
+
+  ngOnInit() {
+  }
 
 }
