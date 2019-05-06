@@ -63,6 +63,7 @@ export class RideComponent implements OnInit {
             console.log('openDeleteDialog has gotten a result!');
             this.highlightedDestination = result;
             console.log('The result is ' + result);
+            window.location.reload();
           },
 
           err => {
