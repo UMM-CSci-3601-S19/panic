@@ -65,18 +65,19 @@ public class RideRequestHandler {
 
     String owner = newRide.getString("owner");
     String ownerID = newRide.getString("ownerID");
+    String driver = newRide.getString("driver");
+    String driverID = newRide.getString("driverID");
     String notes = newRide.getString("notes");
     int seatsAvailable = newRide.getInteger("seatsAvailable");
     String origin = newRide.getString("origin");
     String destination = newRide.getString("destination");
     String departureDate = newRide.getString("departureDate");
     String departureTime = newRide.getString("departureTime");
-    boolean isDriving = newRide.getBoolean("isDriving");
     boolean roundTrip = newRide.getBoolean("roundTrip");
     boolean nonSmoking = newRide.getBoolean("nonSmoking");
 
-    return rideController.addNewRide(owner, ownerID, notes, seatsAvailable, origin, destination,
-      departureDate, departureTime, isDriving, roundTrip, nonSmoking);
+    return rideController.addNewRide(owner, ownerID, driver, driverID, notes, seatsAvailable, origin, destination,
+      departureDate, departureTime, roundTrip, nonSmoking);
 
   }
 

@@ -112,11 +112,12 @@ public class RideController {
     return serializeIterable(matchingRides);
   }
 
-  String addNewRide(String owner, String ownerID, String notes, int seatsAvailable, String origin, String destination,
-                           String departureDate, String departureTime, boolean isDriving, boolean roundTrip, boolean nonSmoking) {
+  String addNewRide(String owner, String ownerID, String driver, String driverID, String notes, int seatsAvailable, String origin, String destination,
+                           String departureDate, String departureTime, boolean roundTrip, boolean nonSmoking) {
 
+    boolean hasDriver = (driver != null);
     // See methods at bottom of RideController
-    seatsAvailable = setSeatsForRequestedRide(isDriving, seatsAvailable);
+    seatsAvailable = setSeatsForRequestedRide(hasDriver, seatsAvailable);
     departureDate = checkUnspecifiedDate(departureDate);
     departureTime = checkUnspecifiedTime(departureTime);
 
@@ -128,13 +129,14 @@ public class RideController {
     Document newRide = new Document();
     newRide.append("owner", owner);
     newRide.append("ownerID", ownerID);
+    newRide.append("driver", driver);
+    newRide.append("driverID", driverID);
     newRide.append("notes", notes);
     newRide.append("seatsAvailable", seatsAvailable);
     newRide.append("origin", origin);
     newRide.append("destination", destination);
     newRide.append("departureDate", departureDate);
     newRide.append("departureTime", departureTime);
-    newRide.append("isDriving", isDriving);
     newRide.append("roundTrip", roundTrip);
     newRide.append("nonSmoking", nonSmoking);
     newRide.append("passengerIds", passengerIds);

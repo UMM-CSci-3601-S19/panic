@@ -36,13 +36,14 @@ describe('Ride list', () => {
           _id: 'chris_id',
           owner: 'Chris',
           ownerID: "001",
+          driver: 'Chris',
+          driverID: 'chris_id',
           notes: 'These are Chris\'s ride notes',
           seatsAvailable: 3,
           origin: 'UMM',
           destination: 'Willie\'s',
           departureDate: '3/6/2019',
           departureTime: '10:00:00',
-          isDriving: true,
           nonSmoking: true,
           roundTrip: true,
           passengerIds: [],
@@ -58,7 +59,6 @@ describe('Ride list', () => {
           destination: 'Minneapolis, MN',
           departureDate: '8/15/2018',
           departureTime: '11:30:00',
-          isDriving: false,
           nonSmoking: true,
           roundTrip: true,
           passengerIds: [],
@@ -68,13 +68,14 @@ describe('Ride list', () => {
           _id: 'agatha_id',
           owner: 'Agatha',
           ownerID: "003",
+          driver: 'Agatha',
+          driverID: 'agatha_id',
           notes: 'These are Agatha\'s ride notes',
           seatsAvailable: 3,
           origin: 'UMM',
           destination: 'Fergus Falls, MN',
           departureDate: '3/30/2019',
           departureTime: '16:30:00',
-          isDriving: true,
           nonSmoking: false,
           roundTrip: false,
           passengerIds: [],
@@ -207,11 +208,11 @@ describe('Ride list', () => {
   });
 
   it('has two rides that where a ride is being offered', () => {
-    expect(rideList.rides.filter((ride: Ride) => ride.isDriving).length).toBe(2);
+    expect(rideList.rides.filter((ride: Ride) => ride.driver).length).toBe(2);
   });
 
   it('has one ride that where a ride is being requested', () => {
-    expect(rideList.rides.filter((ride: Ride) => !ride.isDriving).length).toBe(1);
+    expect(rideList.rides.filter((ride: Ride) => !ride.driver).length).toBe(1);
   });
 
   it('has two rides with origin \'UMM\'', () => {
@@ -289,7 +290,7 @@ describe('Ride list', () => {
   });
 
   it('doesn\'t have a requested ride with zero or more seats available', () => {
-    expect(rideList.rides.some((ride: Ride) => !ride.isDriving && ride.seatsAvailable > 0)).toBe(false);
+    expect(rideList.rides.some((ride: Ride) => !ride.driver && ride.seatsAvailable > 0)).toBe(false);
   });
   /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
