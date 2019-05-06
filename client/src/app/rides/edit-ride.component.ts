@@ -44,7 +44,9 @@ export class EditRideComponent implements OnInit {
   editRide(): void {
 
     const editedRide: Ride = {
-      _id: this.rideId,
+      _id: {
+        $oid: this.rideId
+      },
       owner: this.rideUser,
       ownerID: this.rideUserId,
       notes: this.rideNotes,
@@ -97,18 +99,18 @@ export class EditRideComponent implements OnInit {
   }
 
   setRideFields() {
-    this.rideId = this.rideListService.singleRide._id;
-    this.rideUser = this.rideListService.singleRide.owner;
-    this.rideUserId = this.rideListService.singleRide.ownerID;
-    this.rideNotes = this.rideListService.singleRide.notes;
-    this.rideSeatsAvailable = this.rideListService.singleRide.seatsAvailable;
-    this.rideOrigin = this.rideListService.singleRide.origin;
-    this.rideDestination = this.rideListService.singleRide.destination;
-    this.rideDepartureDate = this.rideListService.singleRide.departureDate;
-    this.rideDepartureTime = this.rideListService.singleRide.departureTime;
-    this.rideIsDriving = this.rideListService.singleRide.isDriving;
-    this.rideRoundTrip = this.rideListService.singleRide.roundTrip;
-    this.rideNonSmoking = this.rideListService.singleRide.nonSmoking
+    this.rideId = localStorage.getItem("rideId");
+    this.rideUser = localStorage.getItem("rideUser");
+    this.rideUserId = localStorage.getItem("rideUserId");
+    this.rideNotes = localStorage.getItem("rideNotes");
+    this.rideSeatsAvailable = +parseInt(localStorage.getItem("rideSeatsAvailable"));
+    this.rideOrigin = localStorage.getItem("rideOrigin");
+    this.rideDestination = localStorage.getItem("rideDestination");
+    this.rideDepartureDate = localStorage.getItem("rideDepartureDate");
+    this.rideDepartureTime = localStorage.getItem("rideDepartureTime");
+    this.rideIsDriving = ("true" == localStorage.getItem("rideIsDriving"));
+    this.rideRoundTrip = ("true" == localStorage.getItem("rideRoundTrip"));
+    this.rideNonSmoking = ("true" == localStorage.getItem("rideNonSmoking"));
   }
 
   // IMPORTANT! This function gets called whenever the user selects 'looking for a ride'.
