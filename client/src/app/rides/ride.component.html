@@ -62,12 +62,13 @@
         <ng-template #impossible_time> unspecified time </ng-template>
       </div>
 
-      <div class="seats-left">
+      <div class="seats-left" *ngIf="ride.seatsAvailable">
         <small *ngIf="ride.seatsAvailable === 1"> {{ride.seatsAvailable}} SEAT LEFT </small>
         <small *ngIf="ride.seatsAvailable !== 1"> {{ride.seatsAvailable}} SEATS LEFT </small>
       </div>
     </div>
 
+    <h3>Passengers</h3>
     <mat-list>
       <mat-list-item *ngFor="let person of people" class="person">
         <img matListAvatar [src]="person.pictureUrl" alt="avatar">
@@ -85,8 +86,6 @@
     </div>
 
     <div *ngIf="ride.nonSmoking || ride.roundTrip">
-      <span>Tags</span>
-      <mat-divider [inset]="true"></mat-divider>
       <mat-chip-list>
         <mat-chip *ngIf="ride.nonSmoking">Smoke free</mat-chip>
         <mat-chip *ngIf="ride.roundTrip">Round trip</mat-chip>

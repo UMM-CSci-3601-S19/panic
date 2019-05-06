@@ -25,7 +25,7 @@ export class RideComponent implements OnInit {
   private highlightedDestination: string = '';
 
   public fullCard: boolean = false;
-  public people: User[] = [];
+  public people: User[];
 
   constructor(private rideListService: RideListService,
               public dialog: MatDialog,
@@ -33,12 +33,18 @@ export class RideComponent implements OnInit {
   }
 
   ngOnInit() {
-    let peopleIds = this.ride.passengerIds;
+    this.people = [];
 
-    for (let id of peopleIds) {
+    for (let id of this.ride.passengerIds) {
       this.userService.getUserById(id).subscribe(user => {
         this.people.push(user);
-      })
+      });
+    }
+
+    if (this.ride.driverID) {
+      this.userService.getUserById(this.ride.driverID).subscribe( driver => {
+        this.people.push(driver);
+      });
     }
   }
 
