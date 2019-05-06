@@ -20,6 +20,11 @@ describe('Ride list service: ', () => {
       departureTime: '10:00:00',
       isDriving: true,
       nonSmoking: true,
+      roundTrip: true,
+      pendingPassengerIds: [],
+      pendingPassengerNames: [],
+      passengerIds: [],
+      passengerNames: []
     },
     {
       _id: 'dennis_id',
@@ -33,6 +38,11 @@ describe('Ride list service: ', () => {
       departureTime: '11:30:00',
       isDriving: true,
       nonSmoking: true,
+      roundTrip: true,
+      pendingPassengerIds: [],
+      pendingPassengerNames: [],
+      passengerIds: [],
+      passengerNames: []
     },
     {
       _id: 'agatha_id',
@@ -46,6 +56,11 @@ describe('Ride list service: ', () => {
       departureTime: '16:30:00',
       isDriving: true,
       nonSmoking: false,
+      roundTrip: false,
+      pendingPassengerIds: [],
+      pendingPassengerNames: [],
+      passengerIds: [],
+      passengerNames: []
     }
   ];
 
