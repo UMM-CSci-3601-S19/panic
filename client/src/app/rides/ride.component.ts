@@ -34,10 +34,11 @@ export class RideComponent implements OnInit {
 
   ngOnInit() {
     let peopleIds = this.ride.passengerIds;
-    peopleIds.push(this.ride.ownerID);
 
-    for (let id: string in peopleIds) {
-      this.people.push(this.userService.getUserById(id));
+    for (let id of peopleIds) {
+      this.userService.getUserById(id).subscribe(user => {
+        this.people.push(user);
+      })
     }
   }
 
