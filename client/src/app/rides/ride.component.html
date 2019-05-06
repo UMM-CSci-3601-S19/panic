@@ -106,15 +106,15 @@
   </mat-card-content>
 
   <mat-card-actions>
-    <button mat-raised-button
-            class="join-ride-button"
-            id="join-ride-button"
-            color="primary"
-            type="button"
-            [disabled]="!this.userCanJoinRide(ride)"
-            (click) = "joinRide(ride._id, this.currUserId, this.currUserFullName)">
-      <mat-icon>add_circle_outline</mat-icon>
-      Join This Ride
+    <button
+      *ngIf="this.userCanJoinRide(ride)"
+      mat-raised-button
+      class="join-ride-button"
+      id="join-ride-button"
+      color="primary"
+      type="button"
+      (click) = "joinRide(ride._id, this.currUserId, this.currUserFullName)">
+      Request Ride
     </button>
     <button
       *ngIf="userIsAPassenger(ride)"
