@@ -22,6 +22,8 @@ export class EditRideComponent implements OnInit {
   public rideId: string;
   public rideUser = localStorage.getItem("userFullName");
   public rideUserId = localStorage.getItem("userId");
+  public rideDriver: string;
+  public rideDriverID: string;
   public rideNotes: string;
   public rideSeatsAvailable: number;
   public rideOrigin: string;
@@ -32,7 +34,6 @@ export class EditRideComponent implements OnInit {
   public tempBool: boolean = false;
 
   // Please leave as true for now, it's important.
-  public rideIsDriving: boolean = true;
   public rideRoundTrip: boolean = false;
   public rideNonSmoking: boolean = false;
 
@@ -47,13 +48,14 @@ export class EditRideComponent implements OnInit {
       _id: this.rideId,
       owner: this.rideUser,
       ownerID: this.rideUserId,
+      driver: this.rideDriver,
+      driverID: this.rideDriverID,
       notes: this.rideNotes,
       seatsAvailable: this.rideSeatsAvailable,
       origin: this.rideOrigin,
       destination: this.rideDestination,
       departureDate: this.rideDepartureDate,
       departureTime: this.rideDepartureTime,
-      isDriving: this.rideIsDriving,
       roundTrip: this.rideRoundTrip,
       nonSmoking: this.rideNonSmoking
     };
@@ -100,13 +102,14 @@ export class EditRideComponent implements OnInit {
     this.rideId = this.rideListService.singleRide._id;
     this.rideUser = this.rideListService.singleRide.owner;
     this.rideUserId = this.rideListService.singleRide.ownerID;
+    this.rideDriver = this.rideListService.singleRide.driver;
+    this.rideDriverID = this.rideListService.singleRide.driverID;
     this.rideNotes = this.rideListService.singleRide.notes;
     this.rideSeatsAvailable = this.rideListService.singleRide.seatsAvailable;
     this.rideOrigin = this.rideListService.singleRide.origin;
     this.rideDestination = this.rideListService.singleRide.destination;
     this.rideDepartureDate = this.rideListService.singleRide.departureDate;
     this.rideDepartureTime = this.rideListService.singleRide.departureTime;
-    this.rideIsDriving = this.rideListService.singleRide.isDriving;
     this.rideRoundTrip = this.rideListService.singleRide.roundTrip;
     this.rideNonSmoking = this.rideListService.singleRide.nonSmoking
   }
@@ -123,7 +126,7 @@ export class EditRideComponent implements OnInit {
     this.setRideSeats();
     this.setRideFields();
     this.validatorService.createForm();
-    if (this.rideIsDriving === false) {
+    if (!this.rideDriver) {
       this.validatorService.rideForm.removeControl("driving");
       this.validatorService.rideForm.removeControl("seatsAvailable");
     }

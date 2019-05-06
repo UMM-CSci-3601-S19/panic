@@ -104,18 +104,19 @@ public class RideRequestHandler {
 //    We don't include the following fields, because they shouldn't be edited.
 //    String user = editRide.getString("user");
 //    String userId = editRide.getString("userId");
+    String driver = editRide.getString("driver");
+    String driverID = editRide.getString("driverID");
     String notes = editRide.getString("notes");
     int seatsAvailable = editRide.getInteger("seatsAvailable");
     String origin = editRide.getString("origin");
     String destination = editRide.getString("destination");
     String departureDate = editRide.getString("departureDate");
     String departureTime = editRide.getString("departureTime");
-    Boolean isDriving = editRide.getBoolean("isDriving");
     Boolean roundTrip = editRide.getBoolean("roundTrip");
     Boolean nonSmoking = editRide.getBoolean("nonSmoking");
 
-    return rideController.editRide(id, notes, seatsAvailable, origin, destination,
-      departureDate, departureTime, isDriving, roundTrip, nonSmoking);
+    return rideController.editRide(id, driver, driverID, notes, seatsAvailable, origin, destination,
+      departureDate, departureTime, roundTrip, nonSmoking);
   }
 
   public boolean joinRide(Request req, Response res) {

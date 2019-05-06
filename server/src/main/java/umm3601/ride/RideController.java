@@ -171,12 +171,14 @@ public class RideController {
     }
   }
 
-  boolean editRide(String id, String notes, int seatsAvailable, String origin, String destination,
-                   String departureDate, String departureTime, Boolean isDriving, Boolean roundTrip, Boolean nonSmoking)
+  boolean editRide(String id, String driver, String driverID, String notes, int seatsAvailable, String origin, String destination,
+                   String departureDate, String departureTime, Boolean roundTrip, Boolean nonSmoking)
   {
 
+    boolean hasDriver = (driver != null);
+
     // See methods at bottom of RideController
-    seatsAvailable = setSeatsForRequestedRide(isDriving, seatsAvailable);
+    seatsAvailable = setSeatsForRequestedRide(hasDriver, seatsAvailable);
     departureDate = checkUnspecifiedDate(departureDate);
     departureTime = checkUnspecifiedTime(departureTime);
 
@@ -192,7 +194,6 @@ public class RideController {
     updateFields.append("destination", destination);
     updateFields.append("departureDate", departureDate);
     updateFields.append("departureTime", departureTime);
-    updateFields.append("isDriving", isDriving);
     updateFields.append("roundTrip", roundTrip);
     updateFields.append("nonSmoking", nonSmoking);
 
