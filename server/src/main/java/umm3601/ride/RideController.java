@@ -126,6 +126,13 @@ public class RideController {
     List<BasicDBObject> passengerIds = new ArrayList<>();
     List<BasicDBObject> passengerNames = new ArrayList<>();
 
+    if (!hasDriver) {
+      BasicDBObject rideCreator = BasicDBObject.parse("{owner:" + owner + "}");
+      BasicDBObject rideCreatorID = BasicDBObject.parse("{ownerID:" + ownerID + "}");
+      passengerIds.add(rideCreator);
+      passengerNames.add(rideCreatorID);
+    }
+
     Document newRide = new Document();
     newRide.append("owner", owner);
     newRide.append("ownerID", ownerID);
