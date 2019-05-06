@@ -1,5 +1,7 @@
 export interface Ride {
-  _id: string;
+  _id?: {
+    $oid: string
+  };
   owner: string;
   ownerID: string;
   notes: string;
