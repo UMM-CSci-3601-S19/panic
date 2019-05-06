@@ -182,8 +182,9 @@
     && ride.ownerID === getLocalUserId()
 -->
 
-    <div *ngIf="this.userOwnsThisRide(ride)" class="ride-info">
+    <div *ngIf="this.userOwnsThisRide(ride) && this.rideHasPassengerRequests(ride)" class="ride-info">
       Passenger Requests
+      {{checkPassengerRequests()}}
       <div *ngFor="let pendingPassengerId of passengerRequests; let i = index"
            [id] = "pendingPassengerId" class="ride-passenger requests">
         <a routerLink="/profile/{{retrievePendingPassengerId(i)}}">{{retrievePendingPassengerName(i)}}</a> wants to join:
