@@ -11,7 +11,6 @@ export class ValidatorService {
   ride_validation_messages = {
 
     'seatsAvailable': [
-      {type: 'pattern', message: 'Please only enter numbers'},
       {type: 'required', message: 'Please specify how many seats you\'re offering'},
       {type: 'min', message: 'Please offer at least 1 seat'},
       {type: 'max', message: 'Can\'t offer more than 12 seats'}
@@ -45,7 +44,6 @@ export class ValidatorService {
       seatsAvailable: new FormControl('seatsAvailable', Validators.compose([
         Validators.min(1),
         Validators.max(12),
-        Validators.pattern('^[0-9]*$'),
         Validators.required
       ])),
 
