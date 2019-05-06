@@ -104,6 +104,9 @@ export class RideComponent implements OnInit {
       && !this.userIsAPassenger(ride)
     )
   }
+  public userIsDriving(ride: Ride): boolean {
+    return (ride.driverId === this.currUserId);
+  }
 
   public userOwnsThisRide(ride: Ride): boolean {
     return (ride.ownerID === this.currUserId);
@@ -115,13 +118,12 @@ export class RideComponent implements OnInit {
 
   public userCanDriveRide(ride: Ride): boolean {
     return (
-      (ride.seatsAvailable > 0)
-      && !this.userOwnsThisRide(ride)
+      !this.userIsDriving(ride)
       && !this.userIsAPassenger(ride)
     )
   }
   public userIsADriver(ride: Ride): boolean {
-    return (ride.driverId)!== this.currUserId;
+    return (ride.driverId) == this.currUserId;
 
   }
 
