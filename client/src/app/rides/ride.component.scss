@@ -149,4 +149,5 @@ h3 {
 ::ng-deep mat-dialog-container {
   padding: 0 !important;
   background: transparent !important;
+  max-height: 100vh !important;
 }
