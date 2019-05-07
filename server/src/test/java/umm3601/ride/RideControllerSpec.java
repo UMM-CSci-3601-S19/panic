@@ -250,10 +250,10 @@ public class RideControllerSpec {
     assertTrue(ride.contains("\"seatsAvailable\": 1"));
 
     // Passing in an empty time should tell the ride controller to turn it to an 'impossible time'
-    assertTrue(ride.contains("\"departureTime\": \"99:99\""));
+    assertTrue(ride.contains("\"departureTime\": \"\""));
 
     // Likewise, passing an empty date results in a (contextually) impossible date
-    assertTrue(ride.contains("\"departureDate\": " + "\"3000-01-01T05:00:00.000Z\""));
+    assertTrue(ride.contains("\"departureDate\": " + "\"\""));
 
     // The rest are self-explanatory and should be exactly what we passed into editRide() to be updated.
     assertTrue(ride.contains("\"origin\": \"Pizza Hut\""));   // Should contain the new origin
