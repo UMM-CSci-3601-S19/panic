@@ -14,7 +14,7 @@ import {Message} from "../message/message";
 @Injectable()
 export class ChatService {
   readonly baseUrl: string = environment.API_URL + 'chat';
-  private API_KEY = Credentials.getstream_api_key;
+  private API_KEY = "h354aemvhp72";
   public client;
   private userToken;
 

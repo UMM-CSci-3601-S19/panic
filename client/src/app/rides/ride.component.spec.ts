@@ -7,6 +7,7 @@ import {RideListService} from "./ride-list.service";
 import {Ride} from "./ride";
 import {UserService} from "../users/user.service";
 import {ChatComponent} from "../chat/chat.component";
+import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 describe('RideComponent', () => {
   let component: RideComponent;
@@ -29,11 +30,12 @@ describe('RideComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ CustomModule, RouterTestingModule ],
+      imports: [ CustomModule, RouterTestingModule, HttpClientTestingModule ],
       declarations: [ RideComponent, ChatComponent ],
       providers: [
         { provide: RideListService, useValue: rideListServiceStub },
-        { provide: UserService }]
+        UserService
+      ]
     })
     .compileComponents();
   }));

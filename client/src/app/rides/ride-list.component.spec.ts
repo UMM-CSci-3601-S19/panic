@@ -15,6 +15,7 @@ import {RideComponent} from "./ride.component";
 import {ChatService} from "../chat/chat-service";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {ChatComponent} from "../chat/chat.component";
+import {UserService} from "../users/user.service";
 
 describe('Ride list', () => {
 
@@ -91,7 +92,8 @@ describe('Ride list', () => {
       declarations: [RideListComponent,RouterLinkDirectiveStub,RideComponent, ChatComponent],
       providers: [
         {provide: RideListService, useValue: rideListServiceStub},
-        ChatService
+        ChatService,
+        UserService
       ]
     });
   });
@@ -448,7 +450,8 @@ describe('Misbehaving Ride List', () => {
       imports: [FormsModule, CustomModule, HttpClientTestingModule],
       declarations: [RideListComponent,RouterLinkDirectiveStub, RideComponent,ChatComponent],
       providers: [{provide: RideListService, useValue: rideListServiceStub},
-        ChatService
+        ChatService,
+        UserService
       ]
     });
   });
