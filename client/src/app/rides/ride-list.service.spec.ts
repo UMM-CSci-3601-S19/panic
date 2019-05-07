@@ -9,7 +9,7 @@ describe('Ride list service: ', () => {
   // A small collection of test rides
   const testRides: Ride[] = [
     {
-      _id: 'chris_id',
+      _id: {$oid:'chris_id'},
       owner: 'Chris',
       ownerID: "001",
       notes: 'These are Chris\'s ride notes',
@@ -22,7 +22,7 @@ describe('Ride list service: ', () => {
       nonSmoking: true,
     },
     {
-      _id: 'dennis_id',
+      _id: {$oid:'dennis_id'},
       owner: 'Dennis',
       ownerID: "002",
       notes: 'These are Dennis\'s ride notes',
@@ -35,7 +35,7 @@ describe('Ride list service: ', () => {
       nonSmoking: true,
     },
     {
-      _id: 'agatha_id',
+      _id: {$oid:'agatha_id'},
       owner: 'Agatha',
       ownerID: "003",
       notes: 'These are Agatha\'s ride notes',
@@ -97,9 +97,9 @@ describe('Ride list service: ', () => {
   });
 
   it('successfully adds a ride while leaving optional fields empty', () => {
-    const ride_id = 'ride_id';
+    const ride_id = '{\"$oid\":\"ride_id\"}';
     const newRide: Ride = {
-      _id: 'ride_id',
+      _id: {$oid:'ride_id'},
       owner: 'Jesse',
       ownerID: "004",
       seatsAvailable: 10,
@@ -133,7 +133,7 @@ describe('Ride list service: ', () => {
 
   it("should successfully edit an existing ride", () => {
     const editedRide: Ride = {
-      _id: 'ride_id',
+      _id: {$oid:'ride_id'},
       owner: 'Jesse',
       ownerID: "004",
       seatsAvailable: 10,

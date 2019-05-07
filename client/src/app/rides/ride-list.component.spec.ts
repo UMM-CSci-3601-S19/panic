@@ -31,7 +31,7 @@ describe('Ride list', () => {
     rideListServiceStub = {
       getRides: () => Observable.of([
         {
-          _id: 'chris_id',
+          _id: {$oid:'chris_id'},
           owner: 'Chris',
           ownerID: "001",
           notes: 'These are Chris\'s ride notes',
@@ -47,7 +47,7 @@ describe('Ride list', () => {
           passengerNames: []
         },
         {
-          _id: 'dennis_id',
+          _id: {$oid:'dennis_id'},
           owner: 'Dennis',
           ownerID: "002",
           notes: 'These are Dennis\'s ride notes',
@@ -63,7 +63,7 @@ describe('Ride list', () => {
           passengerNames: []
         },
         {
-          _id: 'agatha_id',
+          _id: {$oid:'agatha_id'},
           owner: 'Agatha',
           ownerID: "003",
           notes: 'These are Agatha\'s ride notes',
@@ -226,7 +226,7 @@ describe('Ride list', () => {
   });
 
   it('has one ride with _id \'dennis_id\'', () => {
-    expect(rideList.rides.filter((ride: Ride) => ride._id === 'dennis_id').length).toBe(1);
+    expect(rideList.rides.filter((ride: Ride) => ride._id.$oid === 'dennis_id').length).toBe(1);
   });
 
   it('has three rides with notes containing \'These are\'', () => {
@@ -276,7 +276,7 @@ describe('Ride list', () => {
   });
 
   it('doesn\'t have a ride with _id \'bob_id\'', () => {
-    expect(rideList.rides.some((ride: Ride) => ride._id === 'bob_id')).toBe(false);
+    expect(rideList.rides.some((ride: Ride) => ride._id.$oid === 'bob_id')).toBe(false);
   });
 
   it('doesn\'t have a ride with notes \'Smoker\'', () => {
