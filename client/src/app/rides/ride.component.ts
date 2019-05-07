@@ -28,8 +28,8 @@ export class RideComponent implements OnInit {
   public people: User[];
 
   constructor(private rideListService: RideListService,
-              public dialog: MatDialog,
-              public userService: UserService) {
+              public userService: UserService,
+              public dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -46,6 +46,16 @@ export class RideComponent implements OnInit {
         this.people.push(user);
       });
     }
+  }
+
+  checkIfInRide() {
+    console.log(this.people);
+    for (let i = 0; i < this.people.length; i++) {
+      if (this.currUserId == this.people[i].userId) {
+        return true;
+      }
+    }
+    return false;
   }
 
   openRide() {

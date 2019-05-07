@@ -98,7 +98,7 @@
       <div>{{ride.notes}}</div>
     </div>
 
-    <div>
+    <div *ngIf="checkIfInRide()">
       <h3>Chat</h3>
       <mat-divider></mat-divider>
       <br>
