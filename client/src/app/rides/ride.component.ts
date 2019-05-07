@@ -174,7 +174,11 @@ export class RideComponent implements OnInit {
     localStorage.setItem("rideUserId", ride.ownerID);
     localStorage.setItem("rideDriver", ride.driver);
     localStorage.setItem("rideDriverID", ride.driverID);
-    localStorage.setItem("rideNotes", ride.notes);
+    if (!ride.notes) {
+      localStorage.setItem("rideNotes", "");
+    } else {
+      localStorage.setItem("rideNotes", ride.notes);
+    }
     localStorage.setItem("rideSeatsAvailable", ride.seatsAvailable.toString());
     localStorage.setItem("rideOrigin", ride.origin);
     localStorage.setItem("rideDestination", ride.destination);
@@ -192,7 +196,7 @@ export class RideComponent implements OnInit {
    * @returns {string} formats time like "12:00 AM" or "11:59 PM"
    */
   public hourParse(time) {
-    if (time == null) {
+    if (time == null || !time) {
       return null;
     }
     let hours = time.substring(0,2);
