@@ -1,7 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Ride} from "./ride";
 import {RideListService} from "./ride-list.service";
-import {joinRideObject} from "./joinRideObject";
+import {requestRideObject} from "./requestRideObject";
+import {driveRideObject} from "./driveRideObject";
 import {DeleteRideComponent} from "./delete-ride.component";
 import {MatDialog, MatDialogConfig} from "@angular/material";
 import {leaveRideObject} from "./leaveRideObject";
@@ -67,15 +68,35 @@ export class RideComponent implements OnInit {
     dialogRef.componentInstance.ride = this.ride;
   }
 
-  joinRide(rideId: string, passengerId: string, passengerName: string): void {
+  driveRide(rideId: string, driverId: string, driverName: string): void {
+    const drivenRide: driveRideObject = {
+      rideId: rideId,
+      driverId: driverId,
+      driverName: driverName,
+    };
+    this.rideListService.driveRide(drivenRide).subscribe(
 
-    const joinedRide: joinRideObject = {
+      result => {
+        console.log("here it is:" + result);
+        this.highlightedID = result;
+      },
+      err => {
+        // This should probably be turned into some sort of meaningful response.
+        console.log('There was an error adding the ride.');
+        console.log('The newRide or dialogResult was ' );
+        console.log('The error was ' + JSON.stringify(err));
+      });
+  }
+
+  requestRide(rideId: string, passengerId: string, passengerName: string): void {
+
+    const requestedRide: requestRideObject = {
       rideId: rideId,
       passengerId: passengerId,
       passengerName: passengerName,
     };
 
-    this.rideListService.joinRide(joinedRide).subscribe(
+    this.rideListService.requestRide(requestedRide).subscribe(
 
       result => {
         console.log("here it is:" + result);
@@ -126,12 +147,15 @@ export class RideComponent implements OnInit {
 
   // These three methods are mainly used for checking if a user is allowed to join a ride, but some are also used in
   // ngIf statements for displaying certain elements on the ride cards.
-  public userCanJoinRide(ride: Ride): boolean {
+  public userCanRequestRide(ride: Ride): boolean {
     return (
       (ride.seatsAvailable > 0)
       && !this.userOwnsThisRide(ride)
       && !this.userIsAPassenger(ride)
     )
+  }
+  public userIsDriving(ride: Ride): boolean {
+    return (ride.driverId === this.currUserId);
   }
 
   public userOwnsThisRide(ride: Ride): boolean {
@@ -141,6 +165,19 @@ export class RideComponent implements OnInit {
   public userIsAPassenger(ride: Ride): boolean {
     return (ride.passengerIds.indexOf(this.currUserId) !== -1);
   }
+
+  public userCanDriveRide(ride: Ride): boolean {
+    return (
+      !this.userIsDriving(ride)
+      && !this.userIsAPassenger(ride)
+    )
+  }
+  public userIsADriver(ride: Ride): boolean {
+    return (ride.driverId) == this.currUserId;
+
+  }
+
+
 
   // public userIsADriver(ride: Ride): boolean {
   //   return (ride.

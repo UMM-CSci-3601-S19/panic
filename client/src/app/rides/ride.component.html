@@ -117,8 +117,18 @@
       (click) = "joinRide(ride._id, this.currUserId, this.currUserFullName)">
       Request Ride
     </button>
+    <button mat-raised-button
+            *ngIf="!this.userCanDriveRide(ride)"
+            class="drive-ride-button"
+            id="drive-ride-button"
+            color="primary"
+            type="button"
+            (click) = "driveRide(ride._id, this.currUserId, this.currUserFullName)">
+      <mat-icon>add_circle_outline</mat-icon>
+      Drive Ride
+    </button>
     <button
-      *ngIf="userIsAPassenger(ride)"
+      *ngIf="userIsAPassenger(ride) || userIsADriver(ride)"
       id="leave-ride-button"
       mat-raised-button
       color="warn"
