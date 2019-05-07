@@ -3,9 +3,6 @@ import {RideListService} from './ride-list.service';
 import {Ride} from './ride';
 import {Observable} from 'rxjs/Observable';
 import {MatDialog, MatDialogConfig} from "@angular/material";
-import {DeleteRideComponent} from "./delete-ride.component";
-import {joinRideObject} from "./joinRideObject";
-import {ChatComponent} from "../chat/chat.component";
 import {ChatService} from "../chat/chat-service";
 
 @Component({
