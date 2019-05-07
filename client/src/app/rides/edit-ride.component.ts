@@ -121,6 +121,13 @@ export class EditRideComponent implements OnInit {
     this.rideSeatsAvailable = 1;
   }
 
+  check() {
+    if (!(this.rideDriver === "null")) {
+      return true;
+    }
+    return false;
+  }
+
   ngOnInit() {
     this.setRideSeats();
     this.setRideFields();

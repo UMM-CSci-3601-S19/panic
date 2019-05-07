@@ -33,7 +33,7 @@
       <button mat-icon-button [matMenuTriggerFor]="menu" id="settingsDriving" class="card-top-right-button">
         <mat-icon class="dots">more_vert</mat-icon>
       </button>
-      <mat-menu #menu="matMenu" *ngIf="(this.ride.ownerID === this.currUserId)">
+      <mat-menu #menu="matMenu">
         <div>
           <button mat-menu-item
                   (click)="giveRideToService(ride)"
