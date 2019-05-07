@@ -94,7 +94,7 @@ describe('Ride list service: ', () => {
   });
 
   it('successfully adds a ride while leaving optional fields empty', () => {
-    const ride_id = {$oid: 'ride_id'};
+    const ride_id = '{\"$oid\":\"ride_id\"}';
     const newRide: Ride = {
       _id: {$oid: 'ride_id'},
       owner: 'Jesse',
@@ -110,7 +110,7 @@ describe('Ride list service: ', () => {
 
     rideListService.addNewRide(newRide).subscribe(
       id => {
-        expect(id).toBe(ride_id.$oid);
+        expect(id).toBe(ride_id);
       },
       err => {
         expect(err).toBeNull();
