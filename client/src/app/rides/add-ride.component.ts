@@ -44,7 +44,7 @@ export class AddRideComponent implements OnInit {
   addRide(): void {
     const newRide: Ride = {
       owner: this.rideUser,
-      ownerID: this.rideUserId,
+      ownerID: localStorage.getItem("userId"),
       notes: this.rideNotes,
       seatsAvailable: this.rideSeats,
       origin: this.rideOrigin,
@@ -53,19 +53,20 @@ export class AddRideComponent implements OnInit {
       departureTime: this.rideDepartureTime,
       roundTrip: this.rideRoundTrip,
       nonSmoking: this.rideNonSmoking,
+      passengerIds: [],
+      passengerNames: []
     };
 
     if (this.rideDriving) {
       newRide.driver = newRide.owner;
       newRide.driverID = newRide.ownerID;
-    } else {
-      newRide.passengerIds.push(newRide.ownerID);
     }
 
     if (newRide != null) {
       this.rideListService.addNewRide(newRide).subscribe(
         result => {
           this.highlightedID = result;
+          this.snackBar.open("Successfully Added A Ride",'' , <MatSnackBarConfig>{duration: 5000,});
         },
         err => {
           // This should probably be turned into some sort of meaningful response.
@@ -73,8 +74,6 @@ export class AddRideComponent implements OnInit {
           console.log('The newRide or dialogResult was ' + newRide);
           console.log('The error was ' + JSON.stringify(err));
         });
-
-      this.snackBar.open("Successfully Added A Ride",'' , <MatSnackBarConfig>{duration: 5000,});
 
       this.refreshRides();
     }

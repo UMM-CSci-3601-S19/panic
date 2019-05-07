@@ -118,21 +118,15 @@ public class RideController {
     boolean hasDriver = (driver != null);
     // See methods at bottom of RideController
     seatsAvailable = setSeatsForRequestedRide(hasDriver, seatsAvailable);
-//    departureDate = checkUnspecifiedDate(departureDate);
-//    departureTime = checkUnspecifiedTime(departureTime);
 
     // Since adding a new ride comes with no passengers, we'll create some empty arrays to add to the ride,
     // that way they can be filled later when if someone wants to join
-    List<BasicDBObject> passengerIds = new ArrayList<>();
-    List<BasicDBObject> passengerNames = new ArrayList<>();
-    String driverId = "";
-    String driverName = "";
+    List<String> passengerIds = new ArrayList<>();
+    List<String> passengerNames = new ArrayList<>();
 
     if (!hasDriver) {
-      BasicDBObject rideCreator = BasicDBObject.parse("{owner:" + owner + "}");
-      BasicDBObject rideCreatorID = BasicDBObject.parse("{ownerID:" + ownerID + "}");
-      passengerIds.add(rideCreator);
-      passengerNames.add(rideCreatorID);
+      passengerIds.add(ownerID);
+      passengerNames.add(owner);
     }
 
     Document newRide = new Document();
@@ -150,8 +144,6 @@ public class RideController {
     newRide.append("nonSmoking", nonSmoking);
     newRide.append("passengerIds", passengerIds);
     newRide.append("passengerNames", passengerNames);
-    newRide.append("driverIds", driverId);
-    newRide.append("driverNames", driverName);
 
     try {
       rideCollection.insertOne(newRide);
