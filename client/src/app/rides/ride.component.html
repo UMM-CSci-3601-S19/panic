@@ -25,24 +25,26 @@
 
     <div class="menu_spacer"></div>
 
-    <button mat-icon-button [matMenuTriggerFor]="menu" id="settingsDriving" class="card-top-right-button">
-      <mat-icon class="dots">more_vert</mat-icon>
-    </button>
-    <mat-menu #menu="matMenu">
-      <div *ngIf="userOwnsThisRide(ride)">
-        <button mat-menu-item
-                (click)="giveRideToService(ride)"
-                id="editDialogOpen"
-                routerLink="/editride">
-          <span>Edit Ride</span>
-        </button>
-        <button mat-menu-item
-                (click)="openDeleteDialog(ride._id)"
-                id="deleteDialogOpen" >
-          <span>Delete Ride</span>
-        </button>
-      </div>
-    </mat-menu>
+    <div *ngIf="(this.ride.ownerID === this.currUserId)">
+      <button mat-icon-button [matMenuTriggerFor]="menu" id="settingsDriving" class="card-top-right-button">
+        <mat-icon class="dots">more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu" *ngIf="(this.ride.ownerID === this.currUserId)">
+        <div>
+          <button mat-menu-item
+                  (click)="giveRideToService(ride)"
+                  id="editDialogOpen"
+                  routerLink="/editride">
+            <span>Edit Ride</span>
+          </button>
+          <button mat-menu-item
+                  (click)="openDeleteDialog(ride._id)"
+                  id="deleteDialogOpen" >
+            <span>Delete Ride</span>
+          </button>
+        </div>
+      </mat-menu>
+    </div>
   </mat-card-header>
 
   <mat-card-content>
@@ -101,33 +103,37 @@
     </div>
   </mat-card-content>
 
+
   <mat-card-actions>
+    <!--Join as Passenger Button-->
     <button
-      *ngIf="this.userCanRequestRide(ride)"
       mat-raised-button
-      class="join-ride-button"
+      *ngIf="userCanRequestRide()"
       id="join-ride-button"
       color="primary"
       type="button"
-      (click) = "requestRide(ride._id, this.currUserId, this.currUserFullName)">
-      Request Ride
+      (click)="requestRide(ride._id, this.currUserId, this.currUserFullName)">
+      Join Ride
     </button>
-    <button mat-raised-button
-            *ngIf="!this.userCanDriveRide(ride)"
-            class="drive-ride-button"
-            id="drive-ride-button"
-            color="primary"
-            type="button"
-            (click) = "driveRide(ride._id, this.currUserId, this.currUserFullName)">
-      <mat-icon>add_circle_outline</mat-icon>
+    <!--Join as Driver Button-->
+    <button
+      mat-raised-button
+      *ngIf="!this.ride.driverID"
+      id="drive-ride-button"
+      color="primary"
+      type="button"
+      (click)="driveRide(ride._id, this.currUserId, this.currUserFullName)">
       Drive Ride
     </button>
+    <!--Leave Ride Button-->
     <button
-      *ngIf="userIsAPassenger(ride) || userIsADriver(ride)"
-      id="leave-ride-button"
       mat-raised-button
+      *ngIf="userCanLeaveRide()"
+      id="leave-ride-button"
       color="warn"
-      (click)="leaveRide(this.currUserId, ride._id.$oid)">Leave Ride
+      type="button"
+      (click)="leaveRide(this.currUserId, ride._id.$oid)">
+      Leave Ride
     </button>
   </mat-card-actions>
 

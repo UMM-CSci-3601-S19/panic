@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {Ride} from "./ride";
 import {RideListService} from "./ride-list.service";
 import {requestRideObject} from "./requestRideObject";
@@ -30,32 +30,8 @@ export class RideComponent implements OnInit {
 
   constructor(private rideListService: RideListService,
               public userService: UserService,
+              private changeDetector: ChangeDetectorRef,
               public dialog: MatDialog) {
-  }
-
-  ngOnInit() {
-    this.people = [];
-
-    if (this.ride.driverID) {
-      this.userService.getUserById(this.ride.driverID).subscribe( driver => {
-        this.people.push(driver);
-      });
-    }
-
-    for (let id of this.ride.passengerIds) {
-      this.userService.getUserById(id).subscribe(user => {
-        this.people.push(user);
-      });
-    }
-  }
-
-  checkIfInRide() {
-    for (let i = 0; i < this.people.length; i++) {
-      if (this.currUserId == this.people[i].userId) {
-        return true;
-      }
-    }
-    return false;
   }
 
   openRide() {
@@ -67,6 +43,28 @@ export class RideComponent implements OnInit {
     dialogRef.componentInstance.ride = this.ride;
   }
 
+  requestRide(rideId: string, passengerId: string, passengerName: string): void {
+
+    const requestedRide: requestRideObject = {
+      rideId: rideId,
+      passengerId: passengerId,
+      passengerName: passengerName,
+    };
+
+    this.rideListService.requestRide(requestedRide).subscribe(
+      result => {
+        this.highlightedID = result;
+        console.log('detecting changes after requesting ride');
+        this.changeDetector.detectChanges();
+      },
+      err => {
+        // This should probably be turned into some sort of meaningful response.
+        console.log('There was an error adding the ride.');
+        console.log('The newRide or dialogResult was ' );
+        console.log('The error was ' + JSON.stringify(err));
+      });
+  };
+
   driveRide(rideId: string, driverId: string, driverName: string): void {
     const drivenRide: driveRideObject = {
       rideId: rideId,
@@ -77,6 +75,7 @@ export class RideComponent implements OnInit {
 
       result => {
         this.highlightedID = result;
+        this.changeDetector.detectChanges();
       },
       err => {
         // This should probably be turned into some sort of meaningful response.
@@ -86,18 +85,18 @@ export class RideComponent implements OnInit {
       });
   }
 
-  requestRide(rideId: string, passengerId: string, passengerName: string): void {
+  leaveRide(userID: string, rideID: string) {
 
-    const requestedRide: requestRideObject = {
-      rideId: rideId,
-      passengerId: passengerId,
-      passengerName: passengerName,
+    const leftRide: leaveRideObject = {
+      userID: userID,
+      rideID: rideID,
     };
 
-    this.rideListService.requestRide(requestedRide).subscribe(
+    this.rideListService.leaveRide(leftRide).subscribe(
 
       result => {
         this.highlightedID = result;
+        this.changeDetector.detectChanges();
       },
       err => {
         // This should probably be turned into some sort of meaningful response.
@@ -106,14 +105,6 @@ export class RideComponent implements OnInit {
         console.log('The error was ' + JSON.stringify(err));
       });
   };
-
-  openChat(rideId: string): void {
-    const dialogRef = this.dialog.open(ChatComponent, <MatDialogConfig>{
-      maxWidth: '100vw',
-      maxHeight: '100vh',
-    });
-    dialogRef.componentInstance.feedId = rideId;
-  }
 
   openDeleteDialog(currentId: object): void {
     const dialogRef = this.dialog.open(DeleteRideComponent, {
@@ -141,36 +132,39 @@ export class RideComponent implements OnInit {
     });
   }
 
-  // These three methods are mainly used for checking if a user is allowed to join a ride, but some are also used in
-  // ngIf statements for displaying certain elements on the ride cards.
-  public userCanRequestRide(ride: Ride): boolean {
-    return (
-      (ride.seatsAvailable > 0)
-      && !this.userOwnsThisRide(ride)
-      && !this.userIsAPassenger(ride)
-    )
-  }
-  public userIsDriving(ride: Ride): boolean {
-    return (ride.driverId === this.currUserId);
+  checkIfInRide() {
+    for (let i = 0; i < this.people.length; i++) {
+      if (this.currUserId == this.people[i].userId) {
+        return true;
+      }
+    }
+    return false;
   }
 
-  public userOwnsThisRide(ride: Ride): boolean {
-    return (ride.ownerID === this.currUserId);
+  public userCanRequestRide(): boolean {
+    return !(this.ride.driverID === this.currUserId) &&
+           !(this.ride.passengerIds.indexOf(this.currUserId) !== -1);
   }
 
-  public userIsAPassenger(ride: Ride): boolean {
-    return (ride.passengerIds.indexOf(this.currUserId) !== -1);
+  public userCanLeaveRide(): boolean {
+    return (this.ride.passengerIds.indexOf(this.currUserId) !== -1) ||
+          ((this.ride.driverID) == this.currUserId);
   }
 
-  public userCanDriveRide(ride: Ride): boolean {
-    return (
-      !this.userIsDriving(ride)
-      && !this.userIsAPassenger(ride)
-    )
-  }
-  public userIsADriver(ride: Ride): boolean {
-    return (ride.driverId) == this.currUserId;
+  ngOnInit() {
+    this.people = [];
 
+    if (this.ride.driverID) {
+      this.userService.getUserById(this.ride.driverID).subscribe( driver => {
+        this.people.push(driver);
+      });
+    }
+
+    for (let id of this.ride.passengerIds) {
+      this.userService.getUserById(id).subscribe(user => {
+        this.people.push(user);
+      });
+    }
   }
 
   giveRideToService(ride: Ride){
@@ -216,24 +210,4 @@ export class RideComponent implements OnInit {
       return hours + ':' + min + ' PM';
     }
   }
-
-  leaveRide(userID: string, rideID: string) {
-
-    const leftRide: leaveRideObject = {
-      userID: userID,
-      rideID: rideID,
-    };
-
-    this.rideListService.leaveRide(leftRide).subscribe(
-
-      result => {
-        this.highlightedID = result;
-      },
-      err => {
-        // This should probably be turned into some sort of meaningful response.
-        console.log('There was an error adding the ride.');
-        console.log('The newRide or dialogResult was ' );
-        console.log('The error was ' + JSON.stringify(err));
-      });
-  };
 }
