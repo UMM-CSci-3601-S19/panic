@@ -155,7 +155,8 @@
       <mat-icon>play_arrow</mat-icon>
       <div class="ride-info destination">{{ride.destination}}</div>
     </div>
-    <div *ngIf="ride.driverId">
+    <div *ngIf="ride.driverId" id="driveRide">
+
       <a routerLink="/profile/{{ride.driverId}}">{{ride.driverName}}</a> is Driving this ride
 
     </div>
