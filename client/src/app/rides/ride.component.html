@@ -1,8 +1,8 @@
 <mat-card *ngIf="!fullCard" class="slim-ride-card" (click)="openRide()">
   <div class="ride-card-content">
     <div class="departing">
-      <span>{{ride.departureDate | date: 'MMM d'}}</span>
-      <span>{{ride.departureTime}}</span>
+      <div>{{ride.departureDate | date: 'MMM d'}}</div>
+      <div>{{this.hourParse(ride.departureTime)}}</div>
     </div>
     <div class="start-location">
       {{ride.origin}}
@@ -11,9 +11,6 @@
       {{ride.destination}}
     </div>
   </div>
-  <!--<div *ngIf="!ride.isDriving" class="needs-driver">-->
-    <!--NEEDS DRIVER-->
-  <!--</div>-->
 </mat-card>
 
 <mat-card *ngIf="fullCard" class="full-ride-card">
@@ -51,15 +48,13 @@
   <mat-card-content>
     <div class="departure-and-seats">
       <div class="departure-time">
-        <div *ngIf="!checkImpossibleDate(ride); then possible_date else impossible_date"> </div>
-        <ng-template #possible_date > {{this.dateParse(ride.departureDate)}} </ng-template>
-        <ng-template #impossible_date> Unspecified date </ng-template>
+        <span>
+          {{ride.departureDate | date: 'MMM d'}}
+        </span>
 
-        at
-
-        <div *ngIf="!checkImpossibleTime(ride); then possible_time else impossible_time"> </div>
-        <ng-template #possible_time > {{this.hourParse(ride.departureTime)}} </ng-template>
-        <ng-template #impossible_time> unspecified time </ng-template>
+        <span *ngIf="ride.departureTime">
+          at {{this.hourParse(ride.departureTime)}}
+        </span>
       </div>
 
       <div class="seats-left" *ngIf="ride.seatsAvailable">
@@ -108,13 +103,13 @@
 
   <mat-card-actions>
     <button
-      *ngIf="this.userCanJoinRide(ride)"
+      *ngIf="this.userCanRequestRide(ride)"
       mat-raised-button
       class="join-ride-button"
       id="join-ride-button"
       color="primary"
       type="button"
-      (click) = "joinRide(ride._id, this.currUserId, this.currUserFullName)">
+      (click) = "requestRide(ride._id, this.currUserId, this.currUserFullName)">
       Request Ride
     </button>
     <button mat-raised-button

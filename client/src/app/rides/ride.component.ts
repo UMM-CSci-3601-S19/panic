@@ -173,20 +173,7 @@ export class RideComponent implements OnInit {
 
   }
 
-
-
-  // public userIsADriver(ride: Ride): boolean {
-  //   return (ride.
-  // }
-
   giveRideToService(ride: Ride){
-
-    // Since unspecified times are still being given an 'impossible' date, we need to change that back
-    // before we send the ride to edit-ride component. NOTE: This is not necessary with impossible times,
-    // since the form handles those appropriately by leaving the time field empty.
-    if (ride.departureDate === "3000-01-01T05:00:00.000Z") {
-      ride.departureDate = null;
-    }
 
     localStorage.setItem("rideId", ride._id.$oid);
     localStorage.setItem("rideUser", ride.owner);
@@ -205,50 +192,15 @@ export class RideComponent implements OnInit {
     this.rideListService.grabRide(ride);
   }
 
-  // These methods are used in ngIf statements that deal with displaying dates and times. The thing is that
-  // rides with unspecified dates and times are stored with values that are unlikely to be real, since the sorting
-  // mechanism has trouble dealing with null values for time and date. By add year 3000 to unsepcified dates, and 99:99
-  // to 24-hour time, those entries effectively get sorted to the bottom of list (which is exactly how we want to
-  // sort unspecified dates and times.
-
-  public checkImpossibleDate(ride: Ride) {
-    return (ride.departureDate.includes("3000"))
-  }
-
-  public checkImpossibleTime(ride: Ride) {
-    return (ride.departureTime.includes("99") || ride.departureTime === "")
-  }
-
-  /**
-   * Parses ISO dates for human readable month/day, adds ordinal suffixes
-   * @param {string} selectedDate The date to be parsed, an ISO string like "2019-04-10T05:00:00.000Z"
-   * @returns {string} Returns human readable date like "April 12th"
-   */
-  public dateParse(selectedDate: string) {
-    const months = ["January", "February", "March", "April", "May", "June", "July", "August",
-      "September", "October", "November", "December"];
-    const dateDateFormat = new Date(selectedDate);
-    const dateFullMonth = months[dateDateFormat.getMonth()];
-    let date = dateDateFormat.getDate().toString();
-    if (date === '1' || date === '21' || date === '31') {
-      date += 'st';
-    } else if (date === '2' || date === '22') {
-      date += 'nd';
-    } else if (date === '3' || date === '23') {
-      date += 'rd';
-    } else {
-      date += 'th';
-    }
-
-    return dateFullMonth + " " + date;
-  }
-
   /**
    * Converts 24 hour time to AM/PM (modified from Tushar Gupta @ https://jsfiddle.net/cse_tushar/xEuUR/)
    * @param {string} time The time to be parsed in 24 hour format, 00:00 to 23:59.
    * @returns {string} formats time like "12:00 AM" or "11:59 PM"
    */
   public hourParse(time) {
+    if (time == null) {
+      return null;
+    }
     let hours = time.substring(0,2);
     let min = time.substring(3,5);
     if(hours == 0) {
@@ -284,5 +236,4 @@ export class RideComponent implements OnInit {
         console.log('The error was ' + JSON.stringify(err));
       });
   };
-
 }

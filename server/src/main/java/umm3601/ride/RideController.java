@@ -118,8 +118,8 @@ public class RideController {
     boolean hasDriver = (driver != null);
     // See methods at bottom of RideController
     seatsAvailable = setSeatsForRequestedRide(hasDriver, seatsAvailable);
-    departureDate = checkUnspecifiedDate(departureDate);
-    departureTime = checkUnspecifiedTime(departureTime);
+//    departureDate = checkUnspecifiedDate(departureDate);
+//    departureTime = checkUnspecifiedTime(departureTime);
 
     // Since adding a new ride comes with no passengers, we'll create some empty arrays to add to the ride,
     // that way they can be filled later when if someone wants to join
@@ -190,8 +190,6 @@ public class RideController {
 
     // See methods at bottom of RideController
     seatsAvailable = setSeatsForRequestedRide(hasDriver, seatsAvailable);
-    departureDate = checkUnspecifiedDate(departureDate);
-    departureTime = checkUnspecifiedTime(departureTime);
 
     // First we create a document for which we can match the document we would like to update
     ObjectId objId = new ObjectId(id); // _id must be formatted like this for the match to work
@@ -343,25 +341,6 @@ public class RideController {
       e.printStackTrace();
       return false;
     }
-  }
-
-  // We check for unspecified times, and set them way ahead into the future. This is necessary for how the date
-  // sorting works. Null dates get excluded from sorting, so we can't have that. Choosing a date far in the future
-  // puts this ride entry at the bottom of the sorted ride list.
-  private String checkUnspecifiedDate(String departureDate) {
-    if (departureDate == null || departureDate.equals("")) {
-      departureDate = "3000-01-01T05:00:00.000Z";
-    }
-    return departureDate;
-  }
-
-  // Same idea for time. Unspecified times get excluded from sorting, and a time like "99:99" puts it at the bottom of
-  // the ride list (after sorting for date).
-  private String checkUnspecifiedTime(String departureTime) {
-    if (departureTime == null || departureTime.equals("")) {
-      departureTime = "99:99";
-    }
-    return departureTime;
   }
 
   // We should set seatsAvailable to 0 for rides requested (this is to make it less confusing for people
