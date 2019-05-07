@@ -182,10 +182,6 @@ export class RideListComponent implements OnInit {
     }
   }
 
-  printCurrRide(ride: Ride): void {
-    console.log((ride));
-  }
-
   // These two methods are used in the HTML instead of ngModel, since it solves a problem where
   // clicking on the checkbox didn't always 'uncheck' the box. Implementing this method with
   // (click)=toggleNonSmoking, and checked="rideNonSmoking", fixes that bothersome problem.

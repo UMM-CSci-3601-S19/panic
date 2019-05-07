@@ -50,7 +50,6 @@ export class RideComponent implements OnInit {
   }
 
   checkIfInRide() {
-    console.log(this.people);
     for (let i = 0; i < this.people.length; i++) {
       if (this.currUserId == this.people[i].userId) {
         return true;
@@ -77,7 +76,6 @@ export class RideComponent implements OnInit {
     this.rideListService.driveRide(drivenRide).subscribe(
 
       result => {
-        console.log("here it is:" + result);
         this.highlightedID = result;
       },
       err => {
@@ -99,7 +97,6 @@ export class RideComponent implements OnInit {
     this.rideListService.requestRide(requestedRide).subscribe(
 
       result => {
-        console.log("here it is:" + result);
         this.highlightedID = result;
       },
       err => {
@@ -119,7 +116,6 @@ export class RideComponent implements OnInit {
   }
 
   openDeleteDialog(currentId: object): void {
-    console.log("openDeleteDialog");
     const dialogRef = this.dialog.open(DeleteRideComponent, {
       width: '500px',
       data: {id: currentId}
@@ -269,30 +265,16 @@ export class RideComponent implements OnInit {
     }
   }
 
-  listRidePassengers(passengerNames: string[]): string {
-    if (passengerNames.length <= 0) {
-      return ("There are currently no passengers on this ride.");
-    }
-    else if (passengerNames.length > 0) {
-      var passenger = passengerNames[0];
-      return "Passengers: " + passengerNames;
-    }
-  }
-
   leaveRide(userID: string, rideID: string) {
-
 
     const leftRide: leaveRideObject = {
       userID: userID,
       rideID: rideID,
     };
 
-    console.log(leftRide);
-
     this.rideListService.leaveRide(leftRide).subscribe(
 
       result => {
-        console.log("here it is:" + result);
         this.highlightedID = result;
       },
       err => {

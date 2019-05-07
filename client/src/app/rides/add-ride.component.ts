@@ -62,8 +62,6 @@ export class AddRideComponent implements OnInit {
       newRide.passengerIds.push(newRide.ownerID);
     }
 
-    console.log("COMPONENT: The new Ride in addRide() is " + JSON.stringify(newRide));
-
     if (newRide != null) {
       this.rideListService.addNewRide(newRide).subscribe(
         result => {
@@ -92,7 +90,6 @@ export class AddRideComponent implements OnInit {
     rides.subscribe(
       rides => {
         this.rides = rides;
-        console.log(" These are the rides getRides got back after addRide called Refresh Ride " + JSON.stringify(this.rides));
       },
       err => {
         console.log(err);

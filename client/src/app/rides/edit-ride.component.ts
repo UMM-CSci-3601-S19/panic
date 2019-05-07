@@ -62,12 +62,9 @@ export class EditRideComponent implements OnInit {
       nonSmoking: this.rideNonSmoking
     };
 
-    console.log(" The edited Ride in editRide() is " + JSON.stringify(editedRide));
-
     if (editedRide != null) {
       this.rideListService.editRide(editedRide).subscribe(
         result => {
-          console.log("here it is:" + result);
           this.highlightedID = result;
         },
         err => {
