@@ -182,14 +182,14 @@
     && ride.ownerID === getLocalUserId()
 -->
 
-    <div *ngIf="this.userOwnsThisRide(ride) && this.rideHasPassengerRequests(ride)" class="ride-info">
+    <div *ngIf="this.userOwnsThisRide(ride) && this.rideHasPassengerRequests(ride)" id="passenger-requests" class="ride-info">
       Passenger Requests
-      {{checkPassengerRequests()}}
+
       <div *ngFor="let pendingPassengerId of passengerRequests; let i = index"
            [id] = "pendingPassengerId" class="ride-passenger requests">
         <a routerLink="/profile/{{retrievePendingPassengerId(i)}}">{{retrievePendingPassengerName(i)}}</a> wants to join:
         <button mat-raised-button
-                class="accept-passenger-button"
+                class="passenger-button"
                 id="accept-passenger-button"
                 color="primary"
                 type="button"
@@ -197,7 +197,7 @@
                 (click) = "approveJoinRide(ride._id, ride.pendingPassengerIds[i], ride.pendingPassengerNames[i])">
           Accept</button>
         <button mat-raised-button
-                class="decline-passenger-button"
+                class="passenger-button"
                 id="decline-passenger-button"
                 color="accent"
                 type="button"

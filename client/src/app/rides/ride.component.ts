@@ -44,7 +44,8 @@ export class RideComponent implements OnInit {
   }
 
   checkPassengerRequests() {
-    if (this.ride.pendingPassengerIds != null) {
+    if (this.ride.pendingPassengerIds.length != 0) {
+      console.log(this.ride.pendingPassengerIds.length);
       this.makePassengerRequestObjects();
     }
   }
@@ -307,6 +308,7 @@ export class RideComponent implements OnInit {
   };
 
   ngOnInit() {
+    this.checkPassengerRequests();
   }
 
 }
