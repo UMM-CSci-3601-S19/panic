@@ -13,7 +13,7 @@ describe('RideComponent', () => {
   let rideListServiceStub: {
   };
   let rideStub: Ride = {
-    _id: '',
+    _id: {$oid:''},
     owner: '',
     ownerID: '',
     notes: '',

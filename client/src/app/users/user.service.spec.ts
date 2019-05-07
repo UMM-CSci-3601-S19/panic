@@ -21,7 +21,7 @@ describe ('User Service: ',() =>{
 
   const testRides: Ride[] = [
     {
-      _id: '5c832bec201270bd881ace79',
+      _id: {$oid:'5c832bec201270bd881ace79'},
       owner: "Suzette Rutledge",
       ownerID: "342389477594424000000",
       notes: "Occaecat reprehenderit do exercitation laborum. Dolore culpa ut veniam ipsum fugiat voluptate excepteur labore laborum ad Lorem sint aute.",
