@@ -29,7 +29,6 @@ public class UserRequestHandler {
   public String getUserJSON(Request req, Response res) {
     res.type("application/json");
     String userId = req.params("id");
-    System.err.println("The user userId req params got is " + userId);
     String user;
     try {
       user = userController.getUser(userId);
