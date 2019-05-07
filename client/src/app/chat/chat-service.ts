@@ -9,7 +9,7 @@ import {environment} from '../../environments/environment';
 import {Ride} from "../rides/ride";
 import {User} from "../users/user";
 import * as stream from 'getstream';
-import {Message} from "../message/message";
+import {Message} from "./message";
 
 @Injectable()
 export class ChatService {

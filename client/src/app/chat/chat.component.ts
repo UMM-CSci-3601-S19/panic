@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {ChatService} from "./chat-service";
 
 import {FormControl, FormGroup} from "@angular/forms";
-import {Message} from "../message/message";
+import {Message} from "./message";
 import {User} from "../users/user";
 import {UserService} from "../users/user.service";
 import {RideListService} from "../rides/ride-list.service";
