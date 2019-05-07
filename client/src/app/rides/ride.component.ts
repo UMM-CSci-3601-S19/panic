@@ -148,13 +148,14 @@ export class RideComponent implements OnInit {
     localStorage.setItem("rideId", ride._id.$oid);
     localStorage.setItem("rideUser", ride.owner);
     localStorage.setItem("rideUserId", ride.ownerID);
+    localStorage.setItem("rideDriver", ride.driver);
+    localStorage.setItem("rideDriverID", ride.driverID);
     localStorage.setItem("rideNotes", ride.notes);
     localStorage.setItem("rideSeatsAvailable", ride.seatsAvailable.toString());
     localStorage.setItem("rideOrigin", ride.origin);
     localStorage.setItem("rideDestination", ride.destination);
     localStorage.setItem("rideDepartureDate", ride.departureDate);
     localStorage.setItem("rideDepartureTime", ride.departureTime);
-    localStorage.setItem("rideIsDriving", ride.isDriving.toString());
     localStorage.setItem("rideRoundTrip", ride.roundTrip.toString());
     localStorage.setItem("rideNonSmoking", ride.nonSmoking.toString());
 
