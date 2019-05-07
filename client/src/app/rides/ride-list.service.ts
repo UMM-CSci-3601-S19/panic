@@ -54,30 +54,6 @@ export class RideListService {
       );
   }
 
-  driveRide(editedRide: driveRideObject) {
-
-    const httpOptions = {
-      headers: new HttpHeaders({
-        // We're sending JSON
-        'Content-Type': 'application/json'
-      }),
-      // But we're getting a simple (text) string in response
-      // The server sends the hex version of the new ride back
-      // so we know how to find/access that user again later.
-      responseType: 'text' as 'json'
-    };
-
-    return this.http.post<string>(this.rideUrl + '/drive', editedRide, httpOptions)
-      .pipe(
-        tap(() => {
-          this._refreshNeeded$.next();
-        })
-      );
-  }
-
-
-
-
   requestRide(editedRide: requestRideObject) {
 
     const httpOptions = {
@@ -92,6 +68,27 @@ export class RideListService {
     };
 
     return this.http.post<string>(this.rideUrl + '/request', editedRide, httpOptions)
+      .pipe(
+        tap(() => {
+          this._refreshNeeded$.next();
+        })
+      );
+  }
+
+  driveRide(editedRide: driveRideObject) {
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        // We're sending JSON
+        'Content-Type': 'application/json'
+      }),
+      // But we're getting a simple (text) string in response
+      // The server sends the hex version of the new ride back
+      // so we know how to find/access that user again later.
+      responseType: 'text' as 'json'
+    };
+
+    return this.http.post<string>(this.rideUrl + '/drive', editedRide, httpOptions)
       .pipe(
         tap(() => {
           this._refreshNeeded$.next();

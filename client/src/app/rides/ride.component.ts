@@ -43,12 +43,12 @@ export class RideComponent implements OnInit {
     dialogRef.componentInstance.ride = this.ride;
   }
 
-  requestRide(rideId: string, passengerId: string, passengerName: string): void {
+  requestRide(rideId: string): void {
 
     const requestedRide: requestRideObject = {
       rideId: rideId,
-      passengerId: passengerId,
-      passengerName: passengerName,
+      passengerId: this.currUserId,
+      passengerName: this.currUserFullName
     };
 
     this.rideListService.requestRide(requestedRide).subscribe(
@@ -143,7 +143,8 @@ export class RideComponent implements OnInit {
 
   public userCanRequestRide(): boolean {
     return !(this.ride.driverID === this.currUserId) &&
-           !(this.ride.passengerIds.indexOf(this.currUserId) !== -1);
+           !(this.ride.passengerIds.indexOf(this.currUserId) !== -1) &&
+            (this.ride.seatsAvailable > 0);
   }
 
   public userCanLeaveRide(): boolean {

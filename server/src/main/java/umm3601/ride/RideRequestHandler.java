@@ -143,14 +143,9 @@ public class RideRequestHandler {
     // Turn the request into a Document
     Document requestRide = Document.parse(req.body());
 
-    System.out.println(requestRide);
-
     String rideId = requestRide.getObjectId("rideId").toHexString();
-    System.out.println(rideId);
     String passengerId = requestRide.getString("passengerId");
-    System.out.println(passengerId);
     String passengerName = requestRide.getString("passengerName");
-    System.out.println(passengerName);
 
     return rideController.requestRide(rideId, passengerId, passengerName);
   }
