@@ -14,6 +14,7 @@ import umm3601.ride.RideRequestHandler;
 import static spark.Spark.*;
 import static spark.debug.DebugScreen.enableDebugScreen;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.InputStream;
 
@@ -98,7 +99,12 @@ public class Server {
 
       try {
 
-        String CLIENT_SECRET_FILE = "../credentials.json";
+        File file = new File("src/main/java/umm3601/server_files/credentials.json");
+        String path = file.getAbsolutePath();
+
+        String CLIENT_SECRET_FILE = path;   //"../credentials.json";
+
+ //https://github.com/UMM-CSci-3601-S19/iteration-3-toon-squad/blob/droplet-state/server/src/main/java/umm3601/server_files/Google_Oauth_Documention.md
 
 
         GoogleClientSecrets clientSecrets =
