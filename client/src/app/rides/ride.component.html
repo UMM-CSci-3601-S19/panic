@@ -34,15 +34,15 @@
 
       <div>
         <button mat-raised-button
-                class="join-ride-button"
-                id="join-ride-button"
+                class="request-ride-button"
+                id="request-ride-button"
                 color="primary"
                 type="button"
                 style="width: 100%"
-                [disabled]="!this.userCanJoinRide(ride)"
-                (click) = "joinRide(ride._id, this.currUserId, this.currUserFullName)">
+                [disabled]="!this.userCanRequestRide(ride)"
+                (click) = "requestRide(ride._id, this.currUserId, this.currUserFullName)">
           <mat-icon>add_circle_outline</mat-icon>
-          Join This Ride
+          Request This Ride
         </button>
 
         <br>
@@ -116,6 +116,18 @@
     <!--=============================================-->
 
     <mat-card-title>
+      <button mat-raised-button
+              class="drive-ride-button"
+              id="drive-ride-button"
+              color="primary"
+              type="button"
+              style="width: 100%"
+              [disabled]="!this.userCanDriveRide(ride)"
+              (click) = "driveRide(ride._id, this.currUserId, this.currUserFullName)">
+        <mat-icon>add_circle_outline</mat-icon>
+        Drive This Ride
+      </button>
+
       <div class="departure-time">
 
         <mat-icon style="color: blue"> transfer_within_a_station </mat-icon>
@@ -142,6 +154,10 @@
       <div class="ride-info origin">{{ride.origin}}</div>
       <mat-icon>play_arrow</mat-icon>
       <div class="ride-info destination">{{ride.destination}}</div>
+    </div>
+    <div *ngIf="ride.driverId">
+      <a routerLink="/profile/{{ride.driverId}}">{{ride.driverName}}</a> is Driving this ride
+
     </div>
 
     <div id="ride-info-driver-id-isDriving" class="ride-info driver" *ngIf="ride.isDriving">
@@ -171,7 +187,7 @@
 
 
 <!-- -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
-    <button *ngIf="userIsAPassenger(ride)"
+    <button *ngIf="userIsAPassenger(ride) || userIsADriver(ride)"
 
       id="leave-ride-button"
       mat-raised-button
@@ -179,6 +195,14 @@
 
 
     </button>
+    <!--<button *ngIf="userIsADriver(ride)"-->
+
+            <!--id="leave-ride-buttona"-->
+            <!--mat-raised-button-->
+            <!--(click)="leaveRide(this.currUserId, ride._id.$oid)">Leave Ride-->
+
+
+    <!--</button>-->
 <!-- -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
 
 
