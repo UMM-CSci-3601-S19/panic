@@ -99,7 +99,6 @@ public class RideControllerSpec {
       .append("destination", "Perkin's")
       .append("departureDate", "2024-011-27T05:00:00.000Z")
       .append("departureTime", "")
-      .append("isDriving", false)
       .append("roundTrip", true)
       .append("nonSmoking", true)
       .append("passengerIds", new String[] {"123", "abc"} )
@@ -157,9 +156,9 @@ public class RideControllerSpec {
   @Test
   public void addRide(){
 
-    String newId = rideController.addNewRide("Dave Roberts", "005","I talk a lot about math",
+    String newId = rideController.addNewRide("Dave Roberts", "005","Dave Roberts", "005","I talk a lot about math",
       2, "Shopko", "UMM Science Building Parking Lot", "5/13/19","5PM",
-      false,true,true);
+      true,true);
 
     // NOTE: While there are 2 seats for this 'requested ride', the controller SHOULD change it to 0
     // if it is working correctly
@@ -188,8 +187,8 @@ public class RideControllerSpec {
     // rides to having 0 sets available.
 
 
-    rideController.addNewRide("Nate Foss", "006","Good morning! How are you? ...Good.", 1, "Morris", "232 Alton Drive Miami, FL", "5/13/19", "5PM",
-      false, true,true);
+    rideController.addNewRide("Nate Foss", "006","", "","Good morning! How are you? ...Good.", 1, "Morris", "232 Alton Drive Miami, FL", "5/13/19", "5PM",
+      true,true);
 
     Map<String, String[]> emptyMap = new HashMap<>();
     String jsonResult = rideController.getRides(emptyMap);
@@ -209,7 +208,7 @@ public class RideControllerSpec {
       .map(RideControllerSpec::getSeatsAvailable)
       .sorted()
       .collect(Collectors.toList());
-    List<Integer> expectedSeatsAvailable = Arrays.asList(0, 0, 0, 1, 10);
+    List<Integer> expectedSeatsAvailable = Arrays.asList(0, 0, 1, 1, 10);
 
     // Notice that the order is reversed due to sorting... Avery has 10 seats, but now he is at the end of the list.
     // Similarly, Nate is now at the beginning of the list and should have 0 seats.
@@ -231,8 +230,8 @@ public class RideControllerSpec {
 
     // Since rideController.editRide() returns true when a ride was modified, we should store the boolean
     // and test it later. First we store it...
-    Boolean someRideWasModified = rideController.editRide(ellisRideIdToString, "", 1,
-      "Pizza Hut", "Perkin's", "","", false, false, false);
+    Boolean someRideWasModified = rideController.editRide(ellisRideIdToString, "","", "Some Notes",1,
+      "Pizza Hut", "Perkin's", "","", false, false);
 
     // ...and now we test it.
     assertTrue(someRideWasModified);
@@ -248,7 +247,7 @@ public class RideControllerSpec {
     String ride = rideController.getRide(ellisRideIdToString);
 
     // Since the ride is requested, the controller should changes seatsAvailable to 0.
-    assertTrue(ride.contains("\"seatsAvailable\": 0"));
+    assertTrue(ride.contains("\"seatsAvailable\": 1"));
 
     // Passing in an empty time should tell the ride controller to turn it to an 'impossible time'
     assertTrue(ride.contains("\"departureTime\": \"99:99\""));
@@ -258,12 +257,11 @@ public class RideControllerSpec {
 
     // The rest are self-explanatory and should be exactly what we passed into editRide() to be updated.
     assertTrue(ride.contains("\"origin\": \"Pizza Hut\""));   // Should contain the new origin
-    assertTrue(ride.contains("\"isDriving\": false"));   // Should contain the new isDriving
     assertTrue(ride.contains("\"nonSmoking\": false"));   // Should contain the new nonSmoking
     assertTrue(ride.contains("\"roundTrip\": false"));   // Should contain the new roundTrip
 
     // We should check the old values as well, since they should not be changed
-    assertTrue(ride.contains("\"notes\": \"\""));   // Should contain the old notes
+    assertTrue(ride.contains("\"notes\": \"Some Notes\""));   // Should contain the old notes
     assertTrue(ride.contains("\"destination\": \"Perkin's\""));   // Should contain old destination
     assertTrue(ride.contains("\"passengerIds\": [\"123\", \"abc\"]"));  // contains old passenger ids
     assertTrue(ride.contains("\"passengerNames\": [\"Bob Dylan\", \"Dave Mira\"]"));  // old names
