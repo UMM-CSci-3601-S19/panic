@@ -175,8 +175,7 @@ public class RideController {
   }
 
   boolean editRide(String id, String driver, String driverID, String notes, int seatsAvailable, String origin, String destination,
-                   String departureDate, String departureTime, Boolean roundTrip, Boolean nonSmoking)
-  {
+                   String departureDate, String departureTime, Boolean roundTrip, Boolean nonSmoking) {
 
     boolean hasDriver = (driver != null);
 
@@ -240,82 +239,123 @@ public class RideController {
     updateQuery.append("$set", new Document().append("driverID", driverId));
     tryUpdateOne(filter, updateQuery);
     Document updateQuerytwo = new Document();
-    updateQuerytwo.append("$set", new Document().append("driverName", driverName));
+    updateQuerytwo.append("$set", new Document().append("driver", driverName));
     return tryUpdateOne(filter, updateQuerytwo);
   }
 
   boolean leaveRide(String userID, String rideID) {
-    leaveRideDriver(userID,rideID);
-    leaveRidePassenger(userID,rideID);
-    leaveRideOwner(userID, rideID) ;
-    return true;
+    boolean driverLeave =
+      leaveRideDriver(userID,rideID);
+    boolean passengerLeave =
+      leaveRidePassenger(userID,rideID);
+    boolean ownerLeave =
+      leaveRideOwner(userID, rideID) ;
+    return driverLeave || passengerLeave || ownerLeave;
   }
 
-  boolean leaveRideDriver(String userID, String rideID){
-    ObjectId objId = new ObjectId(rideID); // _id must be formatted like this for the match to work
-    Document filter = new Document("_id", objId);
-    Document updateQuery = new Document();
-    Document ride = rideCollection.find(filter).first();
-    Boolean a = true;
-    System.out.println(ride.getString("driverId")+"abc");
-    if(ride.getString("driverId")!=null){
-      System.out.println(ride.getString("driverId")+"abcssss");
-      if(ride.getString("driverId").equals(userID)) {
+  private boolean leaveRideDriver(String userID, String rideID) {
+    System.out.println("\nChecking if user is the driver");
 
-        updateQuery.put("$unset", new Document("driverId", ""));
-        a= a & tryUpdateOne(filter, updateQuery);
-        updateQuery.put("$unset", new Document("driverName",""));
-        a= a & tryUpdateOne(filter, updateQuery);
+    ObjectId rideToLeaveId = new ObjectId(rideID);
+    Document targetRideId = new Document("_id", rideToLeaveId);
+
+    Document updateQuery = new Document();
+    Document ride = rideCollection.find(targetRideId).first();
+
+    boolean updateSuccess = false;
+
+    String rideDriverId = ride.getString("driverID");
+    System.out.println("Ride's driverId value: " + rideDriverId);
+
+    if(rideDriverId != null) {
+      System.out.println("driverId is not null");
+
+      if(rideDriverId.equals(userID)) {
+        System.out.println("User is the driver");
+        updateQuery.put("$unset", new Document("driverID", ""));
+        updateSuccess = tryUpdateOne(targetRideId, updateQuery);
+        updateQuery.put("$unset", new Document("driver", ""));
+        updateSuccess = updateSuccess && tryUpdateOne(targetRideId, updateQuery);
+        updateQuery.put("$set", new Document("seatsAvailable", 0));
+        updateSuccess = updateSuccess && tryUpdateOne(targetRideId, updateQuery);
       }
     }
-
-    return a;
-  }
-  boolean leaveRideOwner(String userID, String rideID) {
-    ObjectId objId = new ObjectId(rideID); // _id must be formatted like this for the match to work
-    Document filter = new Document("_id", objId);
-    Document updateQuery = new Document();
-    Document ride = rideCollection.find(filter).first();
-    Boolean a = true;
-    System.out.println(ride.getString("ownerId")+"adfkfj");
-    if(ride.getString("ownerId")!=null) {
-      System.out.println(ride.getString("ownerId")+"abcdddd");
-      if (ride.getString("ownerId").equals(userID)) {
-        updateQuery.put("$unset", new Document("ownerId", ""));
-        a = a & tryUpdateOne(filter, updateQuery);
-        updateQuery.put("$unset", new Document("ownerName", ""));
-        a = a & tryUpdateOne(filter, updateQuery);
-
-      }
-    }
-      return a;
+    return updateSuccess;
   }
 
-  boolean leaveRidePassenger(String userID, String rideID) {
+  private boolean leaveRidePassenger(String userID, String rideID) {
+    System.out.println("\nChecking if user is a passenger");
 
-    ObjectId objId = new ObjectId(rideID); // _id must be formatted like this for the match to work
-    Document filter = new Document("_id", objId); // Here is the actual document we match against
+    ObjectId rideToLeaveId = new ObjectId(rideID);
+    Document targetRideId = new Document("_id", rideToLeaveId);
 
-    // Create an empty document that will contain our full update
     Document fullUpdate = new Document();
+    Document ride = rideCollection.find(targetRideId).first();
 
-    // This line creates: {"seatsAvailable":+1}
-    Document incrementFields = new Document("seatsAvailable", +1);
+    List<String> passengerIds = ride.getList("passengerIds", String.class);
+    List<String> passengerNames = ride.getList("passengerNames", String.class);
+    boolean updateSuccess = false;
 
-    // These two lines create: {"passengerIds": passengerId, "passengerNames": passengerName}
-    Document pullFields = new Document("passengerIds", userID);
-    String fullName = userController.getStringField(userID, "fullName");
-    System.out.println(fullName);
-    pullFields.append("passengerNames", fullName);
-    // Appending the previous document gives us
-    // {$inc: {seatsAvailable=-1}, $push: {"passengerIds":passengerId, "passengerNames":passengerName}}}
-    fullUpdate.append("$inc", incrementFields);
-    fullUpdate.append("$pull", pullFields);
-    System.out.println(fullName);
+    if (passengerIds.size() > 0 && passengerNames.size() > 0) {
+      System.out.println("There are passengers on this ride");
 
-    // Now pass the full update in with the filter and update the record it matches.
-    return tryUpdateOne(filter, fullUpdate);
+      if (passengerIds.contains(userID)) {
+        System.out.println("Found user in passengerList");
+        int index = passengerIds.indexOf(userID);
+        passengerIds.remove(index);
+        passengerNames.remove(index);
 
+        fullUpdate.append("$set", new Document("passengerIds", passengerIds));
+        fullUpdate.append("$set", new Document("passengerNames", passengerNames));
+        fullUpdate.append("$inc", new Document("seatsAvailable", +1));
+
+        updateSuccess = tryUpdateOne(targetRideId, fullUpdate);
+      } else {
+        System.out.println("The user was not in the passengerList");
+      }
+    }
+    return updateSuccess;
+  }
+
+  private boolean leaveRideOwner(String userID, String rideID) {
+    System.out.println("\nChecking if user is the owner");
+
+    ObjectId rideToLeaveId = new ObjectId(rideID);
+    Document targetRideId = new Document("_id", rideToLeaveId);
+
+    Document updateQuery = new Document();
+    Document ride = rideCollection.find(targetRideId).first();
+
+    boolean updateSuccess = false;
+
+    String rideOwnerId = ride.getString("ownerID");
+    System.out.println("Ride's ownerId value: " + rideOwnerId);
+
+    if(rideOwnerId != null) {
+      System.out.println("ownerId is not null");
+
+      if (rideOwnerId.equals(userID)) {
+        System.out.println("User is the owner");
+        List<String> passengerIds = ride.getList("passengerIds", String.class);
+        List<String> passengerNames = ride.getList("passengerNames", String.class);
+
+        if (passengerIds.size() > 0 && passengerNames.size() > 0) {
+          System.out.println("There are more people on this ride");
+          String newOwnerId = passengerIds.get(0);
+          String newOwnerName = passengerNames.get(0);
+
+          updateQuery.put("$set", new Document("ownerID", newOwnerId));
+          updateSuccess = tryUpdateOne(targetRideId, updateQuery);
+          updateQuery.put("$set", new Document("owner", newOwnerName));
+          updateSuccess = updateSuccess & tryUpdateOne(targetRideId, updateQuery);
+        } else {
+          System.out.println("The ride will be deleted due to it being empty");
+          deleteRide(rideID);
+          updateSuccess = true;
+        }
+      }
+    }
+    return updateSuccess;
   }
 
   private boolean tryUpdateOne(Document filter, Document updateDoc) {

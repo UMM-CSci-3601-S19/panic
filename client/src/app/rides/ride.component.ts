@@ -86,17 +86,17 @@ export class RideComponent implements OnInit {
       });
   }
 
-  leaveRide(userID: string, rideID: string) {
+  leaveRide(rideID: string) {
 
     const leftRide: leaveRideObject = {
-      userID: userID,
+      userID: this.currUserId,
       rideID: rideID,
     };
 
     this.rideListService.leaveRide(leftRide).subscribe(
-
       result => {
         this.highlightedID = result;
+        console.log("Did leaving the ride succeed? " + result);
         this.changeDetector.detectChanges();
       },
       err => {
