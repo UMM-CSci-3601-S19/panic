@@ -338,6 +338,8 @@ public class RideController {
         passengerNames.remove(index);
 
         fullUpdate.append("$set", new Document("passengerIds", passengerIds));
+        tryUpdateOne(targetRideId, fullUpdate);
+        fullUpdate.clear();
         fullUpdate.append("$set", new Document("passengerNames", passengerNames));
         fullUpdate.append("$inc", new Document("seatsAvailable", +1));
 
