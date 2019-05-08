@@ -16,7 +16,9 @@
     "roundTrip": true,
     "nonSmoking": false,
     "passengerIds": [],
-    "passengerNames": []
+    "passengerNames": [],
+    "pendingPassengerIds": [],
+    "pendingPassengerNames": []
   },
 
   {
@@ -36,7 +38,9 @@
     "roundTrip": false,
     "nonSmoking": true,
     "passengerIds": [],
-    "passengerNames": []
+    "passengerNames": [],
+    "pendingPassengerIds": [],
+    "pendingPassengerNames": []
   },
 
   {
@@ -55,7 +59,9 @@
     "roundTrip": false,
     "nonSmoking": true,
     "passengerIds": ["832471086850197399999"],
-    "passengerNames": ["Harry Potter"]
+    "passengerNames": ["Harry Potter"],
+    "pendingPassengerIds": [],
+    "pendingPassengerNames": []
   },
 
   {
@@ -75,7 +81,9 @@
     "roundTrip": false,
     "nonSmoking": true,
     "passengerIds": [],
-    "passengerNames": []
+    "passengerNames": [],
+    "pendingPassengerIds": [],
+    "pendingPassengerNames": []
   },
 
   {
@@ -94,7 +102,9 @@
     "roundTrip": true,
     "nonSmoking": true,
     "passengerIds": ["655477182929676100000"],
-    "passengerNames": ["Imogene Swanson"]
+    "passengerNames": ["Imogene Swanson"],
+    "pendingPassengerIds": [],
+    "pendingPassengerNames": []
   },
 
   {
@@ -113,7 +123,9 @@
     "roundTrip": true,
     "nonSmoking": false,
     "passengerIds": ["245390728780678040000"],
-    "passengerNames": ["Herminia Ross"]
+    "passengerNames": ["Herminia Ross"],
+    "pendingPassengerIds": [],
+    "pendingPassengerNames": []
   },
 
   {
@@ -133,7 +145,9 @@
     "roundTrip": false,
     "nonSmoking": true,
     "passengerIds": [],
-    "passengerNames": []
+    "passengerNames": [],
+    "pendingPassengerIds": [],
+    "pendingPassengerNames": []
   },
 
   {
@@ -152,7 +166,9 @@
     "roundTrip": true,
     "nonSmoking": true,
     "passengerIds": ["537114095323778200000"],
-    "passengerNames": ["Duran Mcgowan"]
+    "passengerNames": ["Duran Mcgowan"],
+    "pendingPassengerIds": [],
+    "pendingPassengerNames": []
   }
 
 ]

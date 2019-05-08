@@ -19,7 +19,9 @@ import {UserService} from "../users/user.service";
 
 describe('Ride list', () => {
 
+  let rideComponent: RideComponent;
   let rideList: RideListComponent;
+  let componentFixture: ComponentFixture<RideComponent>;
   let fixture: ComponentFixture<RideListComponent>;
 
   let rideListServiceStub: {
@@ -48,6 +50,8 @@ describe('Ride list', () => {
           departureTime: '10:00:00',
           nonSmoking: true,
           roundTrip: true,
+          pendingPassengerIds: [],
+          pendingPassengerNames: [],
           passengerIds: [],
           passengerNames: []
         },
@@ -63,6 +67,8 @@ describe('Ride list', () => {
           departureTime: '11:30:00',
           nonSmoking: true,
           roundTrip: true,
+          pendingPassengerIds: [],
+          pendingPassengerNames: [],
           passengerIds: ["002"],
           passengerNames: ['Dennis']
         },
@@ -80,6 +86,8 @@ describe('Ride list', () => {
           departureTime: '16:30:00',
           nonSmoking: false,
           roundTrip: false,
+          pendingPassengerIds: [],
+          pendingPassengerNames: [],
           passengerIds: [],
           passengerNames: []
         }
@@ -101,8 +109,11 @@ describe('Ride list', () => {
   beforeEach(async(() => {
     TestBed.compileComponents().then(() => {
       fixture = TestBed.createComponent(RideListComponent);
+      componentFixture = TestBed.createComponent(RideComponent);
       rideList = fixture.componentInstance;
+      rideComponent = componentFixture.componentInstance;
       fixture.detectChanges();
+      componentFixture.detectChanges();
 
       // find DebugElements with an attached RouterLinkStubDirective
       linkDes = fixture.debugElement.queryAll(By.directive(RouterLinkDirectiveStub));
@@ -184,7 +195,7 @@ describe('Ride list', () => {
 
   ///////////////////////////////////////////
   ////  Does not contain certain fields   ///
-  //////////////////////////////////////////
+  ///////////////////////////////////////////
 
 
   it('doesn\'t contain a ride with owner \'Dilbert\'', () => {
@@ -343,7 +354,58 @@ describe('Ride list', () => {
       expect(rideList.filteredRides.length).toBe(1);
     });
   });
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  ////////////////////////////////////////////
+  /////  Testing Join Requests   /////////////
+  ////////////////////////////////////////////
+
+  it('contains all the rides', () => {
+    expect(rideList.rides.length).toBe(3);
+  });
+
+  it('request a ride', () => {
+    expect(rideList.rides.some((ride: Ride) => ride.pendingPassengerIds[0] === "002")).toBe(false);
+    expect(rideList.rides.some((ride: Ride) => ride.pendingPassengerNames[0] === 'Dennis')).toBe(false);
+    rideComponent.requestJoinRide('chris_id', "002", 'Dennis');
+    rideList.refreshRides().subscribe(() => {
+      expect(rideList.rides.some((ride: Ride) => ride.pendingPassengerIds[0] === "002")).toBe(true);
+      expect(rideList.rides.some((ride: Ride) => ride.pendingPassengerNames[0] === 'Dennis')).toBe(true);
+    });
+  });
+
+  /*it('accept a ride', () =>{
+    expect(rideList.rides.some((ride: Ride) => ride.pendingPassengerIds === "002")).toBe(false);
+    expect(rideList.rides.some((ride: Ride) => ride.pendingPassengerNames === 'Dennis')).toBe(false);
+    expect(rideList.rides.some((ride: Ride) => ride.passengerIds === "002")).toBe(false);
+    expect(rideList.rides.some((ride: Ride) => ride.passengerNames === 'Dennis')).toBe(false);
+    rideComponent.requestJoinRide('chris_id', "002", 'Dennis');
+    rideComponent.approveJoinRide('chris_id', "002", 'Dennis');
+    rideList.refreshRides().subscribe(() => {
+      expect(rideList.rides.some((ride: Ride) => ride.pendingPassengerIds === "002")).toBe(false);
+      expect(rideList.rides.some((ride: Ride) => ride.pendingPassengerIds === 'Dennis')).toBe(false);
+      expect(rideList.rides.some((ride: Ride) => ride.passengerIds === "002")).toBe(true);
+      expect(rideList.rides.some((ride: Ride) => ride.passengerNames === 'Dennis')).toBe(true);
+    });
+  });
+
+  it('decline a ride', () => {
+    expect(rideList.rides.some((ride: Ride) => ride.pendingPassengerIds === "002")).toBe(false);
+    expect(rideList.rides.some((ride: Ride) => ride.pendingPassengerNames === 'Dennis')).toBe(false);
+    expect(rideList.rides.some((ride: Ride) => ride.passengerIds === "002")).toBe(false);
+    expect(rideList.rides.some((ride: Ride) => ride.passengerNames.length === 'Dennis')).toBe(false);
+    rideComponent.requestJoinRide('chris_id', "002", 'Dennis');
+    rideComponent.declineJoinRide('chris_id', "002", 'Dennis');
+    rideList.refreshRides().subscribe(() => {
+      expect(rideList.rides.some((ride: Ride) => ride.pendingPassengerIds === "002")).toBe(false);
+      expect(rideList.rides.some((ride: Ride) => ride.pendingPassengerNames === 'Dennis')).toBe(false);
+      expect(rideList.rides.some((ride: Ride) => ride.passengerIds === "002")).toBe(false);
+      expect(rideList.rides.some((ride: Ride) => ride.passengerNames === 'Dennis')).toBe(false);
+    });
+  });*/
 });
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////

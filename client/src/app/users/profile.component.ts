@@ -8,6 +8,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {profileInfoObject} from "./profileInfoObject";
 import {ProfileService} from "./profile.service";
 import {ChatService} from "../chat/chat-service";
+import {RideListService} from "../rides/ride-list.service";
 
 @Component({
   selector: 'profile-component',
@@ -28,6 +29,8 @@ export class ProfileComponent implements OnInit{
               private profileService: ProfileService,
               private route: ActivatedRoute,
               private fb:FormBuilder,
+              private profileService: ProfileService,
+              private rideListService: RideListService
   ) {
     this.createForm();
     this.chatService.connectStream();

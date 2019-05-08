@@ -14,6 +14,8 @@ export interface Ride {
   departureTime: string;
   roundTrip?: boolean;
   nonSmoking: boolean;
+  pendingPassengerIds?: string[];
+  pendingPassengerNames?: string[];
   passengerIds?: string[];
   passengerNames?: string[];
 }

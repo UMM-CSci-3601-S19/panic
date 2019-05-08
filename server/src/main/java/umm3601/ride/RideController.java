@@ -123,6 +123,8 @@ public class RideController {
     // that way they can be filled later when if someone wants to join
     List<String> passengerIds = new ArrayList<>();
     List<String> passengerNames = new ArrayList<>();
+    List<String> pendingPassengerIds = new ArrayList<>();
+    List<String> pendingPassengerNames = new ArrayList<>();
 
     if (!hasDriver) {
       passengerIds.add(ownerID);
@@ -144,6 +146,8 @@ public class RideController {
     newRide.append("nonSmoking", nonSmoking);
     newRide.append("passengerIds", passengerIds);
     newRide.append("passengerNames", passengerNames);
+    newRide.append("pendingPassengerIds", pendingPassengerIds);
+    newRide.append("pendingPassengerNames", pendingPassengerNames);
 
     try {
       rideCollection.insertOne(newRide);
@@ -205,7 +209,14 @@ public class RideController {
     return tryUpdateOne(filter, updateDoc);
   }
 
-  boolean requestRide(String rideId, String passengerId, String passengerName) {
+  boolean approveJoinRide(String rideId, String passengerId, String passengerName) {
+
+    System.out.println("---------------------------");
+    System.out.println("RideController - Approve Join Ride");
+    System.out.println("Join Ride id is " + rideId);
+    System.out.println("Join Ride passenger id is " + passengerId);
+    System.out.println("Join Ride passenger name is " + passengerName);
+    System.out.println("---------------------------");
 
     ObjectId objId = new ObjectId(rideId); // _id must be formatted like this for the match to work
     Document filter = new Document("_id", objId); // Here is the actual document we match against
@@ -220,14 +231,85 @@ public class RideController {
     Document pushFields = new Document("passengerIds", passengerId);
     pushFields.append("passengerNames", passengerName);
 
+    System.out.println("Push Fields is " + pushFields);
+
+    //These two lines create {"pendingPassengerId": pendingPassengerId, "pendingPassengerName": pendingPassengerName}
+    //which will be removed from the ride
+
+    Document pullFields = new Document("pendingPassengerIds", passengerId);
+    pullFields.append("pendingPassengerNames", passengerName);
+
+    System.out.println("Remove Fields is " + pullFields);
+
     // Appending the previous document gives us
     // {$inc: {seatsAvailable=-1}, $push: {"passengerIds":passengerId, "passengerNames":passengerName}}}
+    // $pull {"pendingPassengerId": pendingPassengerId, "pendingPassengerName": pendingPassengerName}
     fullUpdate.append("$inc", incrementFields);
+    fullUpdate.append("$push", pushFields);
+    fullUpdate.append("$pull", pullFields);
+
+    // Now pass the full update in with the filter and update the record it matches.
+    return tryUpdateOne(filter, fullUpdate);
+  }
+
+  boolean declineJoinRide(String rideId, String passengerId, String passengerName) {
+
+    System.out.println("---------------------------");
+    System.out.println("RideController - Decline Join Ride");
+    System.out.println("Join Ride id is " + rideId);
+    System.out.println("Join Ride passenger id is " + passengerId);
+    System.out.println("Join Ride passenger name is " + passengerName);
+    System.out.println("---------------------------");
+
+    ObjectId objId = new ObjectId(rideId); // _id must be formatted like this for the match to work
+    Document filter = new Document("_id", objId); // Here is the actual document we match against
+
+    // Create an empty document that will contain our full update
+    Document fullUpdate = new Document();
+
+    //These two lines create {"pendingPassengerId": pendingPassengerId, "pendingPassengerName": pendingPassengerName}
+    //which will be removed from the ride
+
+    Document pullFields = new Document("pendingPassengerIds", passengerId);
+    pullFields.append("pendingPassengerNames", passengerName);
+
+    System.out.println("Remove Fields is " + pullFields);
+
+    // Appending the previous document gives us
+    // $pull {"pendingPassengerId": pendingPassengerId, "pendingPassengerName": pendingPassengerName}
+    fullUpdate.append("$pull", pullFields);
+
+    // Now pass the full update in with the filter and update the record it matches.
+    return tryUpdateOne(filter, fullUpdate);
+  }
+
+  boolean requestJoinRide(String rideId, String pendingPassengerId, String pendingPassengerName){
+
+    System.out.println("---------------------------");
+    System.out.println("RideController - Request Join Ride");
+    System.out.println("Join Ride id is " + rideId);
+    System.out.println("Join Ride passenger id is " + pendingPassengerId);
+    System.out.println("Join Ride passenger name is " + pendingPassengerName);
+    System.out.println("---------------------------");
+
+    ObjectId objId = new ObjectId(rideId); // _id must be formatted like this for the match to work
+    Document filter = new Document("_id", objId); // Here is the actual document we match against
+
+    // Create an empty document that will contain our full update
+    Document fullUpdate = new Document();
+
+    // These two lines create: {"pendingPassengerId": pendingPassengerId, "pendingPassengerName": pendingPassengerName}
+    Document pushFields = new Document("pendingPassengerIds", pendingPassengerId);
+    pushFields.append("pendingPassengerNames", pendingPassengerName);
+
+    System.out.println("Push Fields is " + pushFields);
+
+    // Appending the previous document gives us
+    // {$push: {"passengerIds":passengerId, "passengerNames":passengerName}}
     fullUpdate.append("$push", pushFields);
 
     // Now pass the full update in with the filter and update the record it matches.
     return tryUpdateOne(filter, fullUpdate);
-
   }
 
   boolean driveRide(String rideID, String driverId, String driverName) {
@@ -393,6 +475,8 @@ public class RideController {
   }
 
   private boolean tryUpdateOne(Document filter, Document updateDoc) {
+
+    System.out.println("We have reached tryUpdateOne in Ride Controller!!!!");
     try {
       // Call updateOne(the document to match against, and the $set + updated fields document
       UpdateResult output = rideCollection.updateOne(filter, updateDoc);
