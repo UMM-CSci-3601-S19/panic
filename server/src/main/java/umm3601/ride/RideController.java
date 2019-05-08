@@ -230,30 +230,62 @@ public class RideController {
 
   }
 
-  boolean driveRide(String rideId, String driverId, String driverName) {
+  boolean driveRide(String rideID, String driverId, String driverName) {
 
-    ObjectId objId = new ObjectId(rideId);
-    Document filter = new Document("_id", objId);
+    ObjectId rideToLeaveId = new ObjectId(rideID);
+    Document targetRideId = new Document("_id", rideToLeaveId);
 
-    Document updateQuery = new Document();
-    updateQuery.append("$set", new Document().append("driverID", driverId));
-    tryUpdateOne(filter, updateQuery);
-    Document updateQuerytwo = new Document();
-    updateQuerytwo.append("$set", new Document().append("driver", driverName));
-    return tryUpdateOne(filter, updateQuerytwo);
+    Document updateDoc = new Document();
+    Document ride = rideCollection.find(targetRideId).first();
+
+    updateDoc.append("$set", new Document().append("driverID", driverId));
+    tryUpdateOne(targetRideId, updateDoc);
+    updateDoc.clear();
+    updateDoc.append("$set", new Document().append("driver", driverName));
+    tryUpdateOne(targetRideId, updateDoc);
+    updateDoc.clear();
+
+    updateDoc.append("$set", new Document().append("ownerID", driverId));
+    tryUpdateOne(targetRideId, updateDoc);
+    updateDoc.clear();
+    updateDoc.append("$set", new Document().append("owner", driverName));
+    tryUpdateOne(targetRideId, updateDoc);
+    updateDoc.clear();
+
+    List<String> passengerIds = ride.getList("passengerIds", String.class);
+    List<String> passengerNames = ride.getList("passengerNames", String.class);
+
+    if (passengerIds.size() > 0 && passengerNames.size() > 0) {
+      System.out.println("There are passengers on this ride");
+
+      if (passengerIds.contains(driverId)) {
+        System.out.println("Found user in passengerList");
+        int index = passengerIds.indexOf(driverId);
+        passengerIds.remove(index);
+        passengerNames.remove(index);
+
+        updateDoc.append("$set", new Document("passengerIds", passengerIds));
+        tryUpdateOne(targetRideId, updateDoc);
+        updateDoc.clear();
+        updateDoc.append("$set", new Document("passengerNames", passengerNames));
+        tryUpdateOne(targetRideId, updateDoc);
+        updateDoc.clear();
+      }
+    }
+    return true;
   }
 
-  boolean leaveRide(String userID, String rideID) {
+  boolean leaveRide(String driverId, String rideID) {
     boolean driverLeave =
-      leaveRideDriver(userID,rideID);
+      leaveRideDriver(driverId,rideID);
     boolean passengerLeave =
-      leaveRidePassenger(userID,rideID);
+      leaveRidePassenger(driverId,rideID);
     boolean ownerLeave =
-      leaveRideOwner(userID, rideID) ;
+      leaveRideOwner(driverId, rideID) ;
     return driverLeave || passengerLeave || ownerLeave;
   }
 
-  private boolean leaveRideDriver(String userID, String rideID) {
+  private boolean leaveRideDriver(String driverId, String rideID) {
     System.out.println("\nChecking if user is the driver");
 
     ObjectId rideToLeaveId = new ObjectId(rideID);
@@ -270,7 +302,7 @@ public class RideController {
     if(rideDriverId != null) {
       System.out.println("driverId is not null");
 
-      if(rideDriverId.equals(userID)) {
+      if(rideDriverId.equals(driverId)) {
         System.out.println("User is the driver");
         updateQuery.put("$unset", new Document("driverID", ""));
         updateSuccess = tryUpdateOne(targetRideId, updateQuery);
@@ -283,7 +315,7 @@ public class RideController {
     return updateSuccess;
   }
 
-  private boolean leaveRidePassenger(String userID, String rideID) {
+  private boolean leaveRidePassenger(String driverId, String rideID) {
     System.out.println("\nChecking if user is a passenger");
 
     ObjectId rideToLeaveId = new ObjectId(rideID);
@@ -299,9 +331,9 @@ public class RideController {
     if (passengerIds.size() > 0 && passengerNames.size() > 0) {
       System.out.println("There are passengers on this ride");
 
-      if (passengerIds.contains(userID)) {
+      if (passengerIds.contains(driverId)) {
         System.out.println("Found user in passengerList");
-        int index = passengerIds.indexOf(userID);
+        int index = passengerIds.indexOf(driverId);
         passengerIds.remove(index);
         passengerNames.remove(index);
 
@@ -317,7 +349,7 @@ public class RideController {
     return updateSuccess;
   }
 
-  private boolean leaveRideOwner(String userID, String rideID) {
+  private boolean leaveRideOwner(String driverId, String rideID) {
     System.out.println("\nChecking if user is the owner");
 
     ObjectId rideToLeaveId = new ObjectId(rideID);
@@ -334,7 +366,7 @@ public class RideController {
     if(rideOwnerId != null) {
       System.out.println("ownerId is not null");
 
-      if (rideOwnerId.equals(userID)) {
+      if (rideOwnerId.equals(driverId)) {
         System.out.println("User is the owner");
         List<String> passengerIds = ride.getList("passengerIds", String.class);
         List<String> passengerNames = ride.getList("passengerNames", String.class);
