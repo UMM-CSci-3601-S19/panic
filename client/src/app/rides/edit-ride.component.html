@@ -12,38 +12,18 @@
           <!--==========================================================================================-->
 
           <div id="rideUserTitle">
-            {{rideUser}} is
+            {{rideUser}}
           </div>
-            <div *ngIf="rideIsDriving; then driving_message else riding_message"> </div>
-            <ng-template #driving_message > offering this ride </ng-template>
-            <ng-template #riding_message> requesting this ride </ng-template>
-
-          <br>
-
-          <!--<mat-radio-group flex [(ngModel)]="rideIsDriving" formControlName="driving" required>-->
-            <!--<br>-->
-            <!--<br>-->
-            <!--<br>-->
-            <!--<mat-radio-button id="isDrivingButton" [value] = true > driving</mat-radio-button>-->
-            <!--<mat-radio-button id="isNotDrivingButton" [value] = false (click)="setRideSeats()"> looking for a ride </mat-radio-button>-->
-            <!--<mat-error *ngFor="let validation of this.validatorService.ride_validation_messages.driving">-->
-              <!--<mat-error class="error-message" id="driving-error"-->
-                         <!--*ngIf="validatorService.rideForm.get('driving').hasError(validation.type) &&-->
-                         <!--(validatorService.rideForm.get('driving').dirty || validatorService.rideForm.get('driving').touched)">-->
-                <!--{{validation.message}}-->
-              <!--</mat-error>-->
-            <!--</mat-error>-->
-          <!--</mat-radio-group>-->
 
           <br>
 
           <!--==============================================================================================-->
 
-          <mat-form-field *ngIf="rideIsDriving">
+          <mat-form-field *ngIf="check()">
             <input type="number" class="inputRideInfo" matInput #input id="seatsAvailableField"
                    placeholder="Seats Available"
                    [(ngModel)]="rideSeatsAvailable" formControlName="seatsAvailable">
-            <mat-error *ngIf="rideIsDriving">
+            <mat-error *ngIf="rideDriver">
               <mat-error *ngFor="let validation of this.validatorService.ride_validation_messages.seatsAvailable">
                 <mat-error class="error-message"
                            *ngIf="validatorService.rideForm.get('seatsAvailable').hasError(validation.type) &&
@@ -52,7 +32,6 @@
                 </mat-error>
               </mat-error>
             </mat-error>
-
           </mat-form-field>
 
           <br/>

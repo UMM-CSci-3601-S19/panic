@@ -1,44 +1,107 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {Ride} from "./ride";
 import {RideListService} from "./ride-list.service";
 import {joinRideObject} from "./joinRideObject";
+import {driveRideObject} from "./driveRideObject";
 import {DeleteRideComponent} from "./delete-ride.component";
-import {MatDialog} from "@angular/material";
+import {MatDialog, MatDialogConfig} from "@angular/material";
 import {leaveRideObject} from "./leaveRideObject";
+import {ChatComponent} from "../chat/chat.component";
+import {User} from "../users/user";
+import {UserService} from "../users/user.service";
 
 @Component({
   selector: 'app-ride',
   templateUrl: './ride.component.html',
-  styleUrls: ['./ride.component.css']
+  styleUrls: ['./ride.component.scss']
 })
 export class RideComponent implements OnInit {
 
-  @Input() ride: Ride;
+  @Input() ride: Ride = {
+    _id: {$oid: ''},
+    owner: '',
+    ownerID: '',
+    driver: '',
+    driverID: '',
+    notes: '',
+    seatsAvailable: null,
+    origin: '',
+    destination: '',
+    departureDate: '',
+    departureTime: '',
+    nonSmoking: null,
+    roundTrip: null,
+    pendingPassengerIds: [],
+    pendingPassengerNames: [],
+    passengerIds: [],
+    passengerNames: []
+  };
 
   public currUserId = localStorage.getItem("userId");
   public currUserFullName = localStorage.getItem("userFullName");
+  public passengerRequests: joinRideObject[] = [];
 
   private highlightedID: string = '';
   private highlightedDestination: string = '';
 
+  public fullCard: boolean = false;
+  public people: User[];
+
   constructor(private rideListService: RideListService,
-              public dialog: MatDialog) { }
+              public userService: UserService,
+              private changeDetector: ChangeDetectorRef,
+              public dialog: MatDialog) {
+  }
 
-  ngOnInit() {}
+  openRide() {
+    const dialogRef = this.dialog.open(RideComponent, <MatDialogConfig>{
+      maxWidth: '100vw',
+      maxHeight: '100vh'
+    });
+    dialogRef.componentInstance.fullCard = true;
+    dialogRef.componentInstance.ride = this.ride;
+  }
 
-  joinRide(rideId: string, passengerId: string, passengerName: string): void {
+  makePassengerRequestObjects() {
+    let numIds = this.ride.pendingPassengerIds.length;
+    for(let i=0; i<numIds; i++){
+      let newJoinRequest: joinRideObject = {
+        rideId: this.ride._id.$oid,
+        pendingPassengerId: this.ride.pendingPassengerIds[i],
+        pendingPassengerName: this.ride.pendingPassengerNames[i]
+      };
+      this.passengerRequests.push(newJoinRequest);
+    }
+  }
 
+  checkPassengerRequests() {
+    if (this.ride.pendingPassengerIds.length != 0) {
+      console.log(this.ride.pendingPassengerIds.length);
+      this.makePassengerRequestObjects();
+    }
+  }
+
+  approveJoinRide(rideId: string, passengerId: string, passengerName: string): void {
     const joinedRide: joinRideObject = {
       rideId: rideId,
-      passengerId: passengerId,
-      passengerName: passengerName,
+      pendingPassengerId: passengerId,
+      pendingPassengerName: passengerName,
     };
 
-    this.rideListService.joinRide(joinedRide).subscribe(
+    console.log("---------------------------");
+    console.log("Ride Component - Approve Join Ride");
+    console.log("Join Ride id is" + rideId);
+    console.log("Join Ride passenger id is " + passengerId);
+    console.log("Join Ride passenger name is " + passengerName);
+    console.log("---------------------------");
+
+    this.rideListService.approveJoinRide(joinedRide).subscribe(
 
       result => {
-        console.log("here it is:" + result);
+        console.log("Successfully approve ride:" + result);
         this.highlightedID = result;
+        console.log('detecting changes after requesting ride');
+        this.changeDetector.detectChanges();
       },
       err => {
         // This should probably be turned into some sort of meaningful response.
@@ -48,9 +111,115 @@ export class RideComponent implements OnInit {
       });
   };
 
+  driveRide(rideId: string): void {
+
+    const drivenRide: driveRideObject = {
+      rideId: rideId,
+      driverId: this.currUserId,
+      driverName: this.currUserFullName,
+    };
+
+    this.rideListService.driveRide(drivenRide).subscribe(
+      result => {
+        this.highlightedID = result;
+        this.changeDetector.detectChanges();
+      },
+      err => {
+        // This should probably be turned into some sort of meaningful response.
+        console.log('There was an error adding the ride.');
+        console.log('The newRide or dialogResult was ' );
+        console.log('The error was ' + JSON.stringify(err));
+      });
+  }
+
+  leaveRide(rideID: string) {
+
+    const leftRide: leaveRideObject = {
+      userID: this.currUserId,
+      rideID: rideID,
+    };
+
+    this.rideListService.leaveRide(leftRide).subscribe(
+      result => {
+        this.highlightedID = result;
+        console.log("Did leaving the ride succeed? " + result);
+        this.changeDetector.detectChanges();
+      },
+      err => {
+        // This should probably be turned into some sort of meaningful response.
+        console.log('There was an error approving the ride.');
+        console.log('The newRide or dialogResult was ' );
+        console.log('The error was ' + JSON.stringify(err));
+      });
+  };
+
+  declineJoinRide(rideId: string, passengerId: string, passengerName: string): void {
+    const joinedRide: joinRideObject = {
+      rideId: rideId,
+      pendingPassengerId: passengerId,
+      pendingPassengerName: passengerName,
+    };
+
+    console.log("---------------------------");
+    console.log("Ride Component - Decline Join Ride");
+    console.log("Join Ride id is" + rideId);
+    console.log("Join Ride passenger id is " + passengerId);
+    console.log("Join Ride passenger name is " + passengerName);
+    console.log("---------------------------");
+
+    this.rideListService.declineJoinRide(joinedRide).subscribe(
+
+      result => {
+        console.log("Successfully decline ride:" + result);
+        this.highlightedID = result;
+      },
+      err => {
+        // This should probably be turned into some sort of meaningful response.
+        console.log('There was an error declining the ride.');
+        console.log('The newRide or dialogResult was ' );
+        console.log('The error was ' + JSON.stringify(err));
+      });
+  };
+
+  requestJoinRide(rideId: string, passengerId: string, passengerName: string): void {
+
+    const joinedRide: joinRideObject = {
+      rideId: rideId,
+      pendingPassengerId: passengerId,
+      pendingPassengerName: passengerName,
+    };
+
+    console.log("---------------------------");
+    console.log("Ride Component - Request Join Ride");
+    console.log("Join Ride id is" + rideId);
+    console.log("Join Ride passenger id is " + passengerId);
+    console.log("Join Ride passenger name is " + passengerName);
+    console.log("---------------------------");
+
+    this.rideListService.requestJoinRide(joinedRide).subscribe(
+      result => {
+        console.log("Successfully requested ride:" + result);
+        this.highlightedID = result;
+      },
+      err => {
+        // This should probably be turned into some sort of meaningful response.
+        console.log('There was an error requesting the ride.');
+        console.log('The newRide or dialogResult was ' );
+        console.log('The error was ' + JSON.stringify(err));
+      });
+  };
+
+  //These methods are made to retrieve a specific id or name of a pending passenger
+  //so they can be used to identify someone who's requesting a ride
+  public retrievePendingPassengerId(idIndex: number): string{
+    return this.ride.pendingPassengerIds[idIndex];
+  }
+  public retrievePendingPassengerName(nameIndex: number): string{
+    return this.ride.pendingPassengerNames[nameIndex];
+  }
+
   openDeleteDialog(currentId: object): void {
-    console.log("openDeleteDialog");
-    const dialogRef = this.dialog.open(DeleteRideComponent, {
+    const dialogRef = this.dialog.open(DeleteRideComponent, <MatDialogConfig>{
       width: '500px',
       data: {id: currentId}
     });
@@ -63,6 +232,7 @@ export class RideComponent implements OnInit {
             console.log('openDeleteDialog has gotten a result!');
             this.highlightedDestination = result;
             console.log('The result is ' + result);
+            window.location.reload();
           },
 
           err => {
@@ -74,76 +244,89 @@ export class RideComponent implements OnInit {
     });
   }
 
-  // These three methods are mainly used for checking if a user is allowed to join a ride, but some are also used in
-  // ngIf statements for displaying certain elements on the ride cards.
-  public userCanJoinRide(ride: Ride): boolean {
-    return (
-      (ride.seatsAvailable > 0)
-      && !this.userOwnsThisRide(ride)
-      && !this.userIsAPassenger(ride)
-    )
+  checkIfInRide() {
+    for (let i = 0; i < this.people.length; i++) {
+      if (this.currUserId == this.people[i].userId) {
+        return true;
+      }
+    }
+    return false;
   }
 
   public userOwnsThisRide(ride: Ride): boolean {
     return (ride.ownerID === this.currUserId);
   }
 
+  public userCanJoinRide(ride: Ride): boolean {
+    return (
+      (ride.seatsAvailable > 0)
+      && !this.userOwnsThisRide(ride)
+      && !this.userIsAPassenger(ride)
+      && !this.userIsAPendingPassenger(ride)
+    )
+  }
+
+  public rideHasPassengerRequests(ride: Ride): boolean{
+    return (ride.pendingPassengerIds.length > 0);
+  }
+
   public userIsAPassenger(ride: Ride): boolean {
     return (ride.passengerIds.indexOf(this.currUserId) !== -1);
   }
 
-  // public userIsADriver(ride: Ride): boolean {
-  //   return (ride.
+  public userIsAPendingPassenger(ride: Ride): boolean {
+    return (ride.pendingPassengerIds.indexOf(this.currUserId) !== -1);
+  }
+
+  // public userCanRequestRide(): boolean {
+  //   return !(this.ride.driverID === this.currUserId) &&
+  //          !(this.ride.passengerIds.indexOf(this.currUserId) !== -1) &&
+  //           (this.ride.seatsAvailable > 0);
   // }
+
+  public userCanLeaveRide(): boolean {
+    return (this.ride.passengerIds.indexOf(this.currUserId) !== -1) ||
+          ((this.ride.driverID) == this.currUserId);
+  }
+
+  ngOnInit() {
+    this.checkPassengerRequests();
+    this.people = [];
+
+    if (this.ride.driverID) {
+      this.userService.getUserById(this.ride.driverID).subscribe( driver => {
+        this.people.push(driver);
+      });
+    }
+
+    for (let id of this.ride.passengerIds) {
+      this.userService.getUserById(id).subscribe(user => {
+        this.people.push(user);
+      });
+    }
+  }
 
   giveRideToService(ride: Ride){
 
-    // Since unspecified times are still being given an 'impossible' date, we need to change that back
-    // before we send the ride to edit-ride component. NOTE: This is not necessary with impossible times,
-    // since the form handles those appropriately by leaving the time field empty.
-    if (ride.departureDate === "3000-01-01T05:00:00.000Z") {
-      ride.departureDate = null;
+    localStorage.setItem("rideId", ride._id.$oid);
+    localStorage.setItem("rideUser", ride.owner);
+    localStorage.setItem("rideUserId", ride.ownerID);
+    localStorage.setItem("rideDriver", ride.driver);
+    localStorage.setItem("rideDriverID", ride.driverID);
+    if (!ride.notes) {
+      localStorage.setItem("rideNotes", "");
+    } else {
+      localStorage.setItem("rideNotes", ride.notes);
     }
+    localStorage.setItem("rideSeatsAvailable", ride.seatsAvailable.toString());
+    localStorage.setItem("rideOrigin", ride.origin);
+    localStorage.setItem("rideDestination", ride.destination);
+    localStorage.setItem("rideDepartureDate", ride.departureDate);
+    localStorage.setItem("rideDepartureTime", ride.departureTime);
+    localStorage.setItem("rideRoundTrip", ride.roundTrip.toString());
+    localStorage.setItem("rideNonSmoking", ride.nonSmoking.toString());
 
     this.rideListService.grabRide(ride);
-  }
-
-  // These methods are used in ngIf statements that deal with displaying dates and times. The thing is that
-  // rides with unspecified dates and times are stored with values that are unlikely to be real, since the sorting
-  // mechanism has trouble dealing with null values for time and date. By add year 3000 to unsepcified dates, and 99:99
-  // to 24-hour time, those entries effectively get sorted to the bottom of list (which is exactly how we want to
-  // sort unspecified dates and times.
-
-  public checkImpossibleDate(ride: Ride) {
-    return (ride.departureDate.includes("3000"))
-  }
-
-  public checkImpossibleTime(ride: Ride) {
-    return (ride.departureTime.includes("99") || ride.departureTime === "")
-  }
-
-  /**
-   * Parses ISO dates for human readable month/day, adds ordinal suffixes
-   * @param {string} selectedDate The date to be parsed, an ISO string like "2019-04-10T05:00:00.000Z"
-   * @returns {string} Returns human readable date like "April 12th"
-   */
-  public dateParse(selectedDate: string) {
-    const months = ["January", "February", "March", "April", "May", "June", "July", "August",
-      "September", "October", "November", "December"];
-    const dateDateFormat = new Date(selectedDate);
-    const dateFullMonth = months[dateDateFormat.getMonth()];
-    let date = dateDateFormat.getDate().toString();
-    if (date === '1' || date === '21' || date === '31') {
-      date += 'st';
-    } else if (date === '2' || date === '22') {
-      date += 'nd';
-    } else if (date === '3' || date === '23') {
-      date += 'rd';
-    } else {
-      date += 'th';
-    }
-
-    return dateFullMonth + " " + date;
   }
 
   /**
@@ -152,6 +335,9 @@ export class RideComponent implements OnInit {
    * @returns {string} formats time like "12:00 AM" or "11:59 PM"
    */
   public hourParse(time) {
+    if (time == null || !time) {
+      return null;
+    }
     let hours = time.substring(0,2);
     let min = time.substring(3,5);
     if(hours == 0) {
@@ -167,39 +353,4 @@ export class RideComponent implements OnInit {
       return hours + ':' + min + ' PM';
     }
   }
-
-  listRidePassengers(passengerNames: string[]): string {
-    if (passengerNames.length <= 0) {
-      return ("There are currently no passengers on this ride.");
-    }
-    else if (passengerNames.length > 0) {
-      var passenger = passengerNames[0];
-      return "Passengers: " + passengerNames;
-    }
-  }
-
-  leaveRide(userID: string, rideID: string) {
-
-
-    const leftRide: leaveRideObject = {
-      userID: userID,
-      rideID: rideID,
-    };
-
-    console.log(leftRide);
-
-    this.rideListService.leaveRide(leftRide).subscribe(
-
-      result => {
-        console.log("here it is:" + result);
-        this.highlightedID = result;
-      },
-      err => {
-        // This should probably be turned into some sort of meaningful response.
-        console.log('There was an error adding the ride.');
-        console.log('The newRide or dialogResult was ' );
-        console.log('The error was ' + JSON.stringify(err));
-      });
-  };
-
 }

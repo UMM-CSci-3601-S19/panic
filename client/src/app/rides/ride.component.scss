@@ -1,0 +1,153 @@
+/* Ride card title */
+
+.menu_spacer {
+  flex-grow: 1;
+}
+
+.ride-title-isDriving {
+  background: #ffcc33;
+  color: #fff;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+}
+
+.ride-title-isNotDriving {
+  background: #ffcc33;
+  color: #fff;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+}
+
+/* Ride card contents */
+.ride-info {
+  color: #222;
+  font-size: 0.8rem;
+}
+
+/* Displays the origin/destination in a compact, visual way */
+.route {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  justify-content: flex-start;
+  margin: 10px 0 15px 0;
+}
+
+.route mat-icon {
+  align-self: center;
+  margin: 0 4px;
+}
+
+.origin, .destination {
+  background: #efefef;
+  border-radius: 5px;
+  padding: 6px;
+}
+
+/* Driver and notes */
+.driver {
+  margin: 12px 0 8px 0;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.passengers {
+  font-weight: bold;
+  margin-top: 7px;
+  margin-bottom: 7px;
+}
+
+.notes {
+  max-width: 500px;
+  padding-top: 8px;
+}
+
+.notes small {
+  font-weight: bold;
+  color: #000;
+}
+
+.departure-and-seats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .departure-time {
+    font-weight: bolder;
+  }
+
+  .seats-left {
+    padding: 4px 6px;
+    border-radius: 2px;
+    background-color: #7a0019;
+    color: #fff;
+    font-weight: bold;
+  }
+}
+
+.person {
+  font-size: 0.8rem;
+  h4 {
+    font-weight: bold;
+    font-size: 0.9rem;
+  }
+}
+
+h3 {
+  margin-top: 25px;
+  margin-bottom: 10px;
+}
+
+.slim-ride-card {
+  font-size: 0.8rem;
+
+  .ride-card-content {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+
+    .start-location, .end-location {
+      flex: 2;
+      padding: 3px;
+      background: #efefef;
+      border-radius: 3px;
+
+      span {
+        display: block;
+        font-weight: bold;
+        font-size: 0.6rem;
+      }
+    }
+
+    .start-location {
+      margin: 4px 2px 4px 4px;
+    }
+
+    .end-location {
+      margin: 4px 4px 4px 2px;
+    }
+
+    .departing {
+      flex: 1;
+      text-align: center;
+      background-color: #ffcc33;
+      color: #000;
+      font-weight: bold;
+      padding: 4px;
+    }
+  }
+
+  .needs-driver {
+    padding: 2px 2px 2px 4px;
+    background-color: #f44336;
+    color: white;
+    font-weight: bold;
+  }
+}
+
+::ng-deep mat-dialog-container {
+  padding: 0 !important;
+  background: transparent !important;
+  max-height: 100vh !important;
+}

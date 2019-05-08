@@ -10,6 +10,7 @@ import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
+import umm3601.DatabaseHelper;
 import umm3601.user.UserController;
 
 import java.text.DateFormat;
@@ -19,13 +20,10 @@ import java.util.*;
 import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Sorts.ascending;
 import static com.mongodb.client.model.Sorts.orderBy;
-import static umm3601.DatabaseHelper.serializeIterable;
 
 public class RideController {
 
   private final MongoCollection<Document> rideCollection;
-  private final MongoCollection<Document> userCollection;
-  private final UserController userController;
 
   /**
    * Construct a controller for rides.
@@ -35,8 +33,6 @@ public class RideController {
   public RideController(MongoDatabase database) {
 
     rideCollection = database.getCollection("rides");
-    userCollection = database.getCollection("users");
-    userController = new UserController(database);
   }
 
   String getRide(String id) {
@@ -68,7 +64,7 @@ public class RideController {
 
     FindIterable<Document> matchingRides = rideCollection.find(orQuery);
 
-    return serializeIterable(matchingRides);
+    return DatabaseHelper.serializeIterable(matchingRides);
   }
 
   /**
@@ -109,36 +105,45 @@ public class RideController {
 
     FindIterable<Document> matchingRides = rideCollection.find(oldRides).filter(oldRides).sort(order);
 
-    return serializeIterable(matchingRides);
+    return DatabaseHelper.serializeIterable(matchingRides);
   }
 
-  String addNewRide(String owner, String ownerID, String notes, int seatsAvailable, String origin, String destination,
-                           String departureDate, String departureTime, boolean isDriving, boolean roundTrip, boolean nonSmoking) {
+  String addNewRide(String owner, String ownerID, String driver, String driverID, String notes, int seatsAvailable, String origin, String destination,
+                           String departureDate, String departureTime, boolean roundTrip, boolean nonSmoking) {
 
+    boolean hasDriver = (driver != null);
     // See methods at bottom of RideController
-    seatsAvailable = setSeatsForRequestedRide(isDriving, seatsAvailable);
-    departureDate = checkUnspecifiedDate(departureDate);
-    departureTime = checkUnspecifiedTime(departureTime);
+    seatsAvailable = setSeatsForRequestedRide(hasDriver, seatsAvailable);
 
     // Since adding a new ride comes with no passengers, we'll create some empty arrays to add to the ride,
     // that way they can be filled later when if someone wants to join
-    List<BasicDBObject> passengerIds = new ArrayList<>();
-    List<BasicDBObject> passengerNames = new ArrayList<>();
+    List<String> passengerIds = new ArrayList<>();
+    List<String> passengerNames = new ArrayList<>();
+    List<String> pendingPassengerIds = new ArrayList<>();
+    List<String> pendingPassengerNames = new ArrayList<>();
+
+    if (!hasDriver) {
+      passengerIds.add(ownerID);
+      passengerNames.add(owner);
+    }
 
     Document newRide = new Document();
     newRide.append("owner", owner);
     newRide.append("ownerID", ownerID);
+    newRide.append("driver", driver);
+    newRide.append("driverID", driverID);
     newRide.append("notes", notes);
     newRide.append("seatsAvailable", seatsAvailable);
     newRide.append("origin", origin);
     newRide.append("destination", destination);
     newRide.append("departureDate", departureDate);
     newRide.append("departureTime", departureTime);
-    newRide.append("isDriving", isDriving);
     newRide.append("roundTrip", roundTrip);
     newRide.append("nonSmoking", nonSmoking);
     newRide.append("passengerIds", passengerIds);
     newRide.append("passengerNames", passengerNames);
+    newRide.append("pendingPassengerIds", pendingPassengerIds);
+    newRide.append("pendingPassengerNames", pendingPassengerNames);
 
     try {
       rideCollection.insertOne(newRide);
@@ -169,14 +174,13 @@ public class RideController {
     }
   }
 
-  boolean editRide(String id, String notes, int seatsAvailable, String origin, String destination,
-                   String departureDate, String departureTime, Boolean isDriving, Boolean roundTrip, Boolean nonSmoking)
-  {
+  boolean editRide(String id, String driver, String driverID, String notes, int seatsAvailable, String origin, String destination,
+                   String departureDate, String departureTime, Boolean roundTrip, Boolean nonSmoking) {
+
+    boolean hasDriver = (driver != null);
 
     // See methods at bottom of RideController
-    seatsAvailable = setSeatsForRequestedRide(isDriving, seatsAvailable);
-    departureDate = checkUnspecifiedDate(departureDate);
-    departureTime = checkUnspecifiedTime(departureTime);
+    seatsAvailable = setSeatsForRequestedRide(hasDriver, seatsAvailable);
 
     // First we create a document for which we can match the document we would like to update
     ObjectId objId = new ObjectId(id); // _id must be formatted like this for the match to work
@@ -190,7 +194,6 @@ public class RideController {
     updateFields.append("destination", destination);
     updateFields.append("departureDate", departureDate);
     updateFields.append("departureTime", departureTime);
-    updateFields.append("isDriving", isDriving);
     updateFields.append("roundTrip", roundTrip);
     updateFields.append("nonSmoking", nonSmoking);
 
@@ -202,7 +205,14 @@ public class RideController {
     return tryUpdateOne(filter, updateDoc);
   }
 
-  boolean joinRide(String rideId, String passengerId, String passengerName) {
+  boolean approveJoinRide(String rideId, String passengerId, String passengerName) {
+
+    System.out.println("---------------------------");
+    System.out.println("RideController - Approve Join Ride");
+    System.out.println("Join Ride id is " + rideId);
+    System.out.println("Join Ride passenger id is " + passengerId);
+    System.out.println("Join Ride passenger name is " + passengerName);
+    System.out.println("---------------------------");
 
     ObjectId objId = new ObjectId(rideId); // _id must be formatted like this for the match to work
     Document filter = new Document("_id", objId); // Here is the actual document we match against
@@ -217,44 +227,252 @@ public class RideController {
     Document pushFields = new Document("passengerIds", passengerId);
     pushFields.append("passengerNames", passengerName);
 
+    System.out.println("Push Fields is " + pushFields);
+
+    //These two lines create {"pendingPassengerId": pendingPassengerId, "pendingPassengerName": pendingPassengerName}
+    //which will be removed from the ride
+
+    Document pullFields = new Document("pendingPassengerIds", passengerId);
+    pullFields.append("pendingPassengerNames", passengerName);
+
+    System.out.println("Remove Fields is " + pullFields);
+
     // Appending the previous document gives us
     // {$inc: {seatsAvailable=-1}, $push: {"passengerIds":passengerId, "passengerNames":passengerName}}}
+    // $pull {"pendingPassengerId": pendingPassengerId, "pendingPassengerName": pendingPassengerName}
     fullUpdate.append("$inc", incrementFields);
     fullUpdate.append("$push", pushFields);
+    fullUpdate.append("$pull", pullFields);
 
     // Now pass the full update in with the filter and update the record it matches.
     return tryUpdateOne(filter, fullUpdate);
-
   }
 
-  boolean leaveRide(String userID, String rideID) {
+  boolean declineJoinRide(String rideId, String passengerId, String passengerName) {
 
-    ObjectId objId = new ObjectId(rideID); // _id must be formatted like this for the match to work
+    System.out.println("---------------------------");
+    System.out.println("RideController - Decline Join Ride");
+    System.out.println("Join Ride id is " + rideId);
+    System.out.println("Join Ride passenger id is " + passengerId);
+    System.out.println("Join Ride passenger name is " + passengerName);
+    System.out.println("---------------------------");
+
+    ObjectId objId = new ObjectId(rideId); // _id must be formatted like this for the match to work
     Document filter = new Document("_id", objId); // Here is the actual document we match against
 
     // Create an empty document that will contain our full update
     Document fullUpdate = new Document();
 
-    // This line creates: {"seatsAvailable":+1}
-    Document incrementFields = new Document("seatsAvailable", +1);
+    //These two lines create {"pendingPassengerId": pendingPassengerId, "pendingPassengerName": pendingPassengerName}
+    //which will be removed from the ride
 
-    // These two lines create: {"passengerIds": passengerId, "passengerNames": passengerName}
-    Document pullFields = new Document("passengerIds", userID);
-    String fullName = userController.getStringField(userID, "fullName");
-    System.out.println(fullName);
-    pullFields.append("passengerNames", fullName);
+    Document pullFields = new Document("pendingPassengerIds", passengerId);
+    pullFields.append("pendingPassengerNames", passengerName);
+
+    System.out.println("Remove Fields is " + pullFields);
+
     // Appending the previous document gives us
-    // {$inc: {seatsAvailable=-1}, $push: {"passengerIds":passengerId, "passengerNames":passengerName}}}
-    fullUpdate.append("$inc", incrementFields);
+    // $pull {"pendingPassengerId": pendingPassengerId, "pendingPassengerName": pendingPassengerName}
     fullUpdate.append("$pull", pullFields);
-    System.out.println(fullName);
 
     // Now pass the full update in with the filter and update the record it matches.
     return tryUpdateOne(filter, fullUpdate);
+  }
 
+  boolean requestJoinRide(String rideId, String pendingPassengerId, String pendingPassengerName){
+
+    System.out.println("---------------------------");
+    System.out.println("RideController - Request Join Ride");
+    System.out.println("Join Ride id is " + rideId);
+    System.out.println("Join Ride passenger id is " + pendingPassengerId);
+    System.out.println("Join Ride passenger name is " + pendingPassengerName);
+    System.out.println("---------------------------");
+
+    ObjectId objId = new ObjectId(rideId); // _id must be formatted like this for the match to work
+    Document filter = new Document("_id", objId); // Here is the actual document we match against
+
+    // Create an empty document that will contain our full update
+    Document fullUpdate = new Document();
+
+    // These two lines create: {"pendingPassengerId": pendingPassengerId, "pendingPassengerName": pendingPassengerName}
+    Document pushFields = new Document("pendingPassengerIds", pendingPassengerId);
+    pushFields.append("pendingPassengerNames", pendingPassengerName);
+
+    System.out.println("Push Fields is " + pushFields);
+
+    // Appending the previous document gives us
+    // {$push: {"passengerIds":passengerId, "passengerNames":passengerName}}
+    fullUpdate.append("$push", pushFields);
+
+    // Now pass the full update in with the filter and update the record it matches.
+    return tryUpdateOne(filter, fullUpdate);
+  }
+
+  boolean driveRide(String rideID, String driverId, String driverName) {
+
+    ObjectId rideToLeaveId = new ObjectId(rideID);
+    Document targetRideId = new Document("_id", rideToLeaveId);
+
+    Document updateDoc = new Document();
+    Document ride = rideCollection.find(targetRideId).first();
+
+    updateDoc.append("$set", new Document().append("driverID", driverId));
+    tryUpdateOne(targetRideId, updateDoc);
+    updateDoc.clear();
+    updateDoc.append("$set", new Document().append("driver", driverName));
+    tryUpdateOne(targetRideId, updateDoc);
+    updateDoc.clear();
+
+    updateDoc.append("$set", new Document().append("ownerID", driverId));
+    tryUpdateOne(targetRideId, updateDoc);
+    updateDoc.clear();
+    updateDoc.append("$set", new Document().append("owner", driverName));
+    tryUpdateOne(targetRideId, updateDoc);
+    updateDoc.clear();
+
+    List<String> passengerIds = ride.getList("passengerIds", String.class);
+    List<String> passengerNames = ride.getList("passengerNames", String.class);
+
+    if (passengerIds.size() > 0 && passengerNames.size() > 0) {
+      System.out.println("There are passengers on this ride");
+
+      if (passengerIds.contains(driverId)) {
+        System.out.println("Found user in passengerList");
+        int index = passengerIds.indexOf(driverId);
+        passengerIds.remove(index);
+        passengerNames.remove(index);
+
+        updateDoc.append("$set", new Document("passengerIds", passengerIds));
+        tryUpdateOne(targetRideId, updateDoc);
+        updateDoc.clear();
+        updateDoc.append("$set", new Document("passengerNames", passengerNames));
+        tryUpdateOne(targetRideId, updateDoc);
+        updateDoc.clear();
+      }
+    }
+    return true;
+  }
+
+  boolean leaveRide(String driverId, String rideID) {
+    boolean driverLeave =
+      leaveRideDriver(driverId,rideID);
+    boolean passengerLeave =
+      leaveRidePassenger(driverId,rideID);
+    boolean ownerLeave =
+      leaveRideOwner(driverId, rideID) ;
+    return driverLeave || passengerLeave || ownerLeave;
+  }
+
+  private boolean leaveRideDriver(String driverId, String rideID) {
+    System.out.println("\nChecking if user is the driver");
+
+    ObjectId rideToLeaveId = new ObjectId(rideID);
+    Document targetRideId = new Document("_id", rideToLeaveId);
+
+    Document updateQuery = new Document();
+    Document ride = rideCollection.find(targetRideId).first();
+
+    boolean updateSuccess = false;
+
+    String rideDriverId = ride.getString("driverID");
+    System.out.println("Ride's driverId value: " + rideDriverId);
+
+    if(rideDriverId != null) {
+      System.out.println("driverId is not null");
+
+      if(rideDriverId.equals(driverId)) {
+        System.out.println("User is the driver");
+        updateQuery.put("$unset", new Document("driverID", ""));
+        updateSuccess = tryUpdateOne(targetRideId, updateQuery);
+        updateQuery.put("$unset", new Document("driver", ""));
+        updateSuccess = updateSuccess && tryUpdateOne(targetRideId, updateQuery);
+        updateQuery.put("$set", new Document("seatsAvailable", 0));
+        updateSuccess = updateSuccess && tryUpdateOne(targetRideId, updateQuery);
+      }
+    }
+    return updateSuccess;
+  }
+
+  private boolean leaveRidePassenger(String driverId, String rideID) {
+    System.out.println("\nChecking if user is a passenger");
+
+    ObjectId rideToLeaveId = new ObjectId(rideID);
+    Document targetRideId = new Document("_id", rideToLeaveId);
+
+    Document fullUpdate = new Document();
+    Document ride = rideCollection.find(targetRideId).first();
+
+    List<String> passengerIds = ride.getList("passengerIds", String.class);
+    List<String> passengerNames = ride.getList("passengerNames", String.class);
+    boolean updateSuccess = false;
+
+    if (passengerIds.size() > 0 && passengerNames.size() > 0) {
+      System.out.println("There are passengers on this ride");
+
+      if (passengerIds.contains(driverId)) {
+        System.out.println("Found user in passengerList");
+        int index = passengerIds.indexOf(driverId);
+        passengerIds.remove(index);
+        passengerNames.remove(index);
+
+        fullUpdate.append("$set", new Document("passengerIds", passengerIds));
+        tryUpdateOne(targetRideId, fullUpdate);
+        fullUpdate.clear();
+        fullUpdate.append("$set", new Document("passengerNames", passengerNames));
+        fullUpdate.append("$inc", new Document("seatsAvailable", +1));
+
+        updateSuccess = tryUpdateOne(targetRideId, fullUpdate);
+      } else {
+        System.out.println("The user was not in the passengerList");
+      }
+    }
+    return updateSuccess;
+  }
+
+  private boolean leaveRideOwner(String driverId, String rideID) {
+    System.out.println("\nChecking if user is the owner");
+
+    ObjectId rideToLeaveId = new ObjectId(rideID);
+    Document targetRideId = new Document("_id", rideToLeaveId);
+
+    Document updateQuery = new Document();
+    Document ride = rideCollection.find(targetRideId).first();
+
+    boolean updateSuccess = false;
+
+    String rideOwnerId = ride.getString("ownerID");
+    System.out.println("Ride's ownerId value: " + rideOwnerId);
+
+    if(rideOwnerId != null) {
+      System.out.println("ownerId is not null");
+
+      if (rideOwnerId.equals(driverId)) {
+        System.out.println("User is the owner");
+        List<String> passengerIds = ride.getList("passengerIds", String.class);
+        List<String> passengerNames = ride.getList("passengerNames", String.class);
+
+        if (passengerIds.size() > 0 && passengerNames.size() > 0) {
+          System.out.println("There are more people on this ride");
+          String newOwnerId = passengerIds.get(0);
+          String newOwnerName = passengerNames.get(0);
+
+          updateQuery.put("$set", new Document("ownerID", newOwnerId));
+          updateSuccess = tryUpdateOne(targetRideId, updateQuery);
+          updateQuery.put("$set", new Document("owner", newOwnerName));
+          updateSuccess = updateSuccess & tryUpdateOne(targetRideId, updateQuery);
+        } else {
+          System.out.println("The ride will be deleted due to it being empty");
+          deleteRide(rideID);
+          updateSuccess = true;
+        }
+      }
+    }
+    return updateSuccess;
   }
 
   private boolean tryUpdateOne(Document filter, Document updateDoc) {
+
+    System.out.println("We have reached tryUpdateOne in Ride Controller!!!!");
     try {
       // Call updateOne(the document to match against, and the $set + updated fields document
       UpdateResult output = rideCollection.updateOne(filter, updateDoc);
@@ -265,25 +483,6 @@ public class RideController {
       e.printStackTrace();
       return false;
     }
-  }
-
-  // We check for unspecified times, and set them way ahead into the future. This is necessary for how the date
-  // sorting works. Null dates get excluded from sorting, so we can't have that. Choosing a date far in the future
-  // puts this ride entry at the bottom of the sorted ride list.
-  private String checkUnspecifiedDate(String departureDate) {
-    if (departureDate == null || departureDate.equals("")) {
-      departureDate = "3000-01-01T05:00:00.000Z";
-    }
-    return departureDate;
-  }
-
-  // Same idea for time. Unspecified times get excluded from sorting, and a time like "99:99" puts it at the bottom of
-  // the ride list (after sorting for date).
-  private String checkUnspecifiedTime(String departureTime) {
-    if (departureTime == null || departureTime.equals("")) {
-      departureTime = "99:99";
-    }
-    return departureTime;
   }
 
   // We should set seatsAvailable to 0 for rides requested (this is to make it less confusing for people

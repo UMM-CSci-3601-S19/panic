@@ -8,9 +8,11 @@ import {AppService} from "../app.service";
 })
 
 export class HomeComponent {
-  public text: string;
 
   constructor(public appService: AppService) {
-    this.text = 'Mongo lab';
+  }
+
+  ngOnInit(): void {
+    this.appService.loadClient();
   }
 }

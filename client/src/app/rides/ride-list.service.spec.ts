@@ -9,7 +9,7 @@ describe('Ride list service: ', () => {
   // A small collection of test rides
   const testRides: Ride[] = [
     {
-      _id: 'chris_id',
+      _id: {$oid: 'chris_id'},
       owner: 'Chris',
       ownerID: "001",
       notes: 'These are Chris\'s ride notes',
@@ -18,11 +18,15 @@ describe('Ride list service: ', () => {
       destination: 'Willie\'s',
       departureDate: '3/6/2019',
       departureTime: '10:00:00',
-      isDriving: true,
       nonSmoking: true,
+      roundTrip: true,
+      pendingPassengerIds: [],
+      pendingPassengerNames: [],
+      passengerIds: [],
+      passengerNames: []
     },
     {
-      _id: 'dennis_id',
+      _id: {$oid: 'dennis_id'},
       owner: 'Dennis',
       ownerID: "002",
       notes: 'These are Dennis\'s ride notes',
@@ -31,11 +35,15 @@ describe('Ride list service: ', () => {
       destination: 'Minneapolis, MN',
       departureDate: '8/15/2018',
       departureTime: '11:30:00',
-      isDriving: true,
       nonSmoking: true,
+      roundTrip: true,
+      pendingPassengerIds: [],
+      pendingPassengerNames: [],
+      passengerIds: [],
+      passengerNames: []
     },
     {
-      _id: 'agatha_id',
+      _id: {$oid: 'agatha_id'},
       owner: 'Agatha',
       ownerID: "003",
       notes: 'These are Agatha\'s ride notes',
@@ -44,8 +52,12 @@ describe('Ride list service: ', () => {
       destination: 'Fergus Falls, MN',
       departureDate: '3/30/2019',
       departureTime: '16:30:00',
-      isDriving: true,
       nonSmoking: false,
+      roundTrip: false,
+      pendingPassengerIds: [],
+      pendingPassengerNames: [],
+      passengerIds: [],
+      passengerNames: []
     }
   ];
 
@@ -97,9 +109,9 @@ describe('Ride list service: ', () => {
   });
 
   it('successfully adds a ride while leaving optional fields empty', () => {
-    const ride_id = 'ride_id';
+    const ride_id = '{\"$oid\":\"ride_id\"}';
     const newRide: Ride = {
-      _id: 'ride_id',
+      _id: {$oid: 'ride_id'},
       owner: 'Jesse',
       ownerID: "004",
       seatsAvailable: 10,
@@ -108,7 +120,6 @@ describe('Ride list service: ', () => {
       departureDate: '',
       departureTime: '',
       notes: 'I hope you brought warm clothes',
-      isDriving: true,
       nonSmoking: true,
     };
 
@@ -133,7 +144,7 @@ describe('Ride list service: ', () => {
 
   it("should successfully edit an existing ride", () => {
     const editedRide: Ride = {
-      _id: 'ride_id',
+      _id: {$oid: 'ride_id'},
       owner: 'Jesse',
       ownerID: "004",
       seatsAvailable: 10,
@@ -142,7 +153,6 @@ describe('Ride list service: ', () => {
       departureDate: '',
       departureTime: '',
       notes: 'I hope you brought warm clothes',
-      isDriving: true,
       nonSmoking: true,
     };
 

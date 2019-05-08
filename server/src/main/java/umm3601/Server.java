@@ -6,6 +6,7 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 import spark.utils.IOUtils;
+import umm3601.chat.ChatRequestHandler;
 import umm3601.user.UserController;
 import umm3601.user.UserRequestHandler;
 import umm3601.ride.RideController;
@@ -17,13 +18,14 @@ import static spark.debug.DebugScreen.enableDebugScreen;
 import java.io.File;
 import java.io.FileReader;
 import java.io.InputStream;
+import java.util.Collections;
 
 import com.google.api.client.googleapis.auth.oauth2.*;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import org.json.*;
 
-public class Server {
+public class  Server {
   private static final String databaseName = "dev";
   private static final int serverPort = 4567;
 
@@ -38,6 +40,7 @@ public class Server {
 
     UserRequestHandler userRequestHandler = new UserRequestHandler(userController);
     RideRequestHandler rideRequestHandler = new RideRequestHandler(rideController);
+    ChatRequestHandler chatRequestHandler = new ChatRequestHandler();
 
     //Configure Spark
     port(serverPort);
@@ -79,12 +82,18 @@ public class Server {
     post("api/rides/new", rideRequestHandler::addNewRide);
     post("api/rides/remove", rideRequestHandler::deleteRide);
     post("api/rides/update", rideRequestHandler::editRide);
-    post("api/rides/join", rideRequestHandler::joinRide);
     post("api/rides/leave", rideRequestHandler::leaveRide);
+    post("api/rides/drive", rideRequestHandler::driveRide);
+    post("api/rides/approve-join", rideRequestHandler::approveJoinRide);
+    post("api/rides/decline-join", rideRequestHandler::declineJoinRide);
+    post("api/rides/request-join", rideRequestHandler::requestJoinRide);
 
     // USER ENDPOINTS
     get("api/user/:id",userRequestHandler::getUserJSON);
     post("api/user/saveProfile", userRequestHandler:: saveProfile);
+
+    // CHAT ENDPOINTS
+    post("api/chat/authenticate", chatRequestHandler::authenticateDevUser);
 
     // An example of throwing an unhandled exception so you can see how the
     // Java Spark debugger displays errors like this.
@@ -92,79 +101,7 @@ public class Server {
       throw new RuntimeException("A demonstration error");
     });
 
-    post("api/login", (req, res) -> {
-
-      JSONObject obj = new JSONObject(req.body());
-      String authCode = obj.getString("code");
-
-      try {
-
-        File file = new File("src/main/java/umm3601/server_files/credentials.json");
-        String path = file.getAbsolutePath();
-
-        String CLIENT_SECRET_FILE = path;   //"../credentials.json";
-
- //https://github.com/UMM-CSci-3601-S19/iteration-3-toon-squad/blob/droplet-state/server/src/main/java/umm3601/server_files/Google_Oauth_Documention.md
-
-
-        GoogleClientSecrets clientSecrets =
-          GoogleClientSecrets.load(
-            JacksonFactory.getDefaultInstance(), new FileReader(CLIENT_SECRET_FILE));
-
-
-        GoogleTokenResponse tokenResponse =
-          new GoogleAuthorizationCodeTokenRequest(
-            new NetHttpTransport(),
-            JacksonFactory.getDefaultInstance(),
-            "https://oauth2.googleapis.com/token",
-            clientSecrets.getDetails().getClientId(),
-
-            // Replace clientSecret with the localhost one if testing
-            clientSecrets.getDetails().getClientSecret(),
-            authCode,
-            "http://localhost:9000")
-            //Not sure if we have a redirectUri
-
-            // Specify the same redirect URI that you use with your web
-            // app. If you don't have a web version of your app, you can
-            // specify an empty string.
-            .execute();
-
-
-        // Get profile info from ID token
-        GoogleIdToken idToken = tokenResponse.parseIdToken();
-        GoogleIdToken.Payload payload = idToken.getPayload();
-        String userId = payload.getSubject();     // Use this value as a key to identify a user.
-        String email = payload.getEmail();
-        boolean emailVerified = Boolean.valueOf(payload.getEmailVerified());
-        String name = (String) payload.get("name");
-        String pictureUrl = (String) payload.get("picture");
-        String locale = (String) payload.get("locale");
-        String familyName = (String) payload.get("family_name");
-        String givenName = (String) payload.get("given_name");
-
-        // Debugging Code
-        System.out.println("---------------------------");
-        System.out.println("UserID is " + userId);
-        System.out.println("Email is " + email);
-        System.out.println("Is Email verified? " + emailVerified);
-        System.out.println("Name is " + name);
-        System.out.println("Picture Url is " + pictureUrl);
-        System.out.println("Locale is " + locale);
-        System.out.println("familyName is " + familyName);
-        System.out.println("givenName is " + givenName);
-        System.out.println("---------------------------");
-
-        return userController.addNewUser(userId, email, name, pictureUrl, familyName, givenName);
-
-      } catch (Exception e) {
-        System.out.println(e);
-      }
-
-      return "";
-    });
-
-
+    post("api/login", userRequestHandler::login);
 
     // Called after each request to insert the GZIP header into the response.
     // This causes the response to be compressed _if_ the client specified

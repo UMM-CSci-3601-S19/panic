@@ -65,18 +65,19 @@ public class RideRequestHandler {
 
     String owner = newRide.getString("owner");
     String ownerID = newRide.getString("ownerID");
+    String driver = newRide.getString("driver");
+    String driverID = newRide.getString("driverID");
     String notes = newRide.getString("notes");
     int seatsAvailable = newRide.getInteger("seatsAvailable");
     String origin = newRide.getString("origin");
     String destination = newRide.getString("destination");
     String departureDate = newRide.getString("departureDate");
     String departureTime = newRide.getString("departureTime");
-    boolean isDriving = newRide.getBoolean("isDriving");
     boolean roundTrip = newRide.getBoolean("roundTrip");
     boolean nonSmoking = newRide.getBoolean("nonSmoking");
 
-    return rideController.addNewRide(owner, ownerID, notes, seatsAvailable, origin, destination,
-      departureDate, departureTime, isDriving, roundTrip, nonSmoking);
+    return rideController.addNewRide(owner, ownerID, driver, driverID, notes, seatsAvailable, origin, destination,
+      departureDate, departureTime, roundTrip, nonSmoking);
 
   }
 
@@ -103,37 +104,102 @@ public class RideRequestHandler {
 //    We don't include the following fields, because they shouldn't be edited.
 //    String user = editRide.getString("user");
 //    String userId = editRide.getString("userId");
+    String driver = editRide.getString("driver");
+    String driverID = editRide.getString("driverID");
     String notes = editRide.getString("notes");
     int seatsAvailable = editRide.getInteger("seatsAvailable");
     String origin = editRide.getString("origin");
     String destination = editRide.getString("destination");
     String departureDate = editRide.getString("departureDate");
     String departureTime = editRide.getString("departureTime");
-    Boolean isDriving = editRide.getBoolean("isDriving");
     Boolean roundTrip = editRide.getBoolean("roundTrip");
     Boolean nonSmoking = editRide.getBoolean("nonSmoking");
 
-    return rideController.editRide(id, notes, seatsAvailable, origin, destination,
-      departureDate, departureTime, isDriving, roundTrip, nonSmoking);
+    return rideController.editRide(id, driver, driverID, notes, seatsAvailable, origin, destination,
+      departureDate, departureTime, roundTrip, nonSmoking);
   }
 
-  public boolean joinRide(Request req, Response res) {
+  public boolean approveJoinRide(Request req, Response res) {
+
+    System.out.println("---------------------------");
+    System.out.println("We have reached approveJoinRide in Ride Request Handler!!!!!");
+    System.out.println("The request to be parsed is " + req);
 
     res.type("application/json");
 
     // Turn the request into a Document
     Document joinRide = Document.parse(req.body());
 
-    System.out.println(joinRide);
+    System.out.println("The Join Ride Document is " + joinRide);
 
     String rideId = joinRide.getObjectId("rideId").toHexString();
-    System.out.println(rideId);
-    String passengerId = joinRide.getString("passengerId");
-    System.out.println(passengerId);
-    String passengerName = joinRide.getString("passengerName");
-    System.out.println(passengerName);
+    System.out.println("The rideId for joinRide is " + rideId);
+    String passengerId = joinRide.getString("pendingPassengerId");
+    System.out.println("The passengerId for joinRide is " + passengerId);
+    String passengerName = joinRide.getString("pendingPassengerName");
+    System.out.println("The passengerName for joinRide is " + passengerName);
 
-    return rideController.joinRide(rideId, passengerId, passengerName);
+    return rideController.approveJoinRide(rideId, passengerId, passengerName);
+  }
+
+  public boolean declineJoinRide(Request req, Response res) {
+
+    System.out.println("---------------------------");
+    System.out.println("We have reached declineJoinRide in Ride Request Handler!!!!!");
+    System.out.println("The request to be parsed is " + req);
+
+    res.type("application/json");
+
+    // Turn the request into a Document
+    Document joinRide = Document.parse(req.body());
+
+    System.out.println("The Join Ride Document is " + joinRide);
+
+    String rideId = joinRide.getObjectId("rideId").toHexString();
+    System.out.println("The rideId for joinRide is " + rideId);
+    String passengerId = joinRide.getString("pendingPassengerId");
+    System.out.println("The passengerId for joinRide is " + passengerId);
+    String passengerName = joinRide.getString("pendingPassengerName");
+    System.out.println("The passengerName for joinRide is " + passengerName);
+
+    return rideController.declineJoinRide(rideId, passengerId, passengerName);
+  }
+
+  public boolean requestJoinRide(Request req, Response res) {
+
+    System.out.println("---------------------------");
+    System.out.println("We have reached requestJoinRide in Ride Request Handler!!!!!");
+    System.out.println("The request to be parsed is " + req);
+
+    res.type("application/json");
+
+    // Turn the request into a Document
+    Document joinRide = Document.parse(req.body());
+
+    System.out.println("The Join Ride Document is " + joinRide);
+
+    String rideId = joinRide.getObjectId("rideId").toHexString();
+    System.out.println("The rideId for joinRide is " + rideId);
+    String passengerId = joinRide.getString("pendingPassengerId");
+    System.out.println("The passengerId for joinRide is " + passengerId);
+    String passengerName = joinRide.getString("pendingPassengerName");
+    System.out.println("The passengerName for joinRide is " + passengerName);
+    System.out.println("---------------------------");
+
+    return rideController.requestJoinRide(rideId, passengerId, passengerName);
+  }
+
+  public boolean driveRide(Request req, Response res) {
+    res.type("application/json");
+
+    // Turn the request into a Document
+    Document driveRide = Document.parse(req.body());
+
+    String rideId = driveRide.getObjectId("rideId").toHexString();
+    String driverId = driveRide.getString("driverId");
+    String driverName = driveRide.getString("driverName");
+
+    return rideController.driveRide(rideId, driverId, driverName);
   }
 
   public boolean leaveRide(Request req, Response res) {
@@ -152,6 +218,4 @@ public class RideRequestHandler {
 
     return rideController.leaveRide(userID, rideID);
   }
-
-
 }
