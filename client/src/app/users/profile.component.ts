@@ -29,7 +29,6 @@ export class ProfileComponent implements OnInit{
               private profileService: ProfileService,
               private route: ActivatedRoute,
               private fb:FormBuilder,
-              private profileService: ProfileService,
               private rideListService: RideListService
   ) {
     this.createForm();

@@ -128,7 +128,7 @@ public class RideRequestHandler {
     res.type("application/json");
 
     // Turn the request into a Document
-    Document requestRide = Document.parse(req.body());
+    Document joinRide = Document.parse(req.body());
 
     System.out.println("The Join Ride Document is " + joinRide);
 

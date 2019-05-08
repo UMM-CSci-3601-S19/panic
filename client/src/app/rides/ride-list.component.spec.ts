@@ -26,7 +26,7 @@ describe('Ride list', () => {
 
   let rideListServiceStub: {
     getRides: () => Observable<Ride[]>,
-    refreshNeeded$: Subject<void>
+    refreshNeeded$: Subject<void>,
   };
 
   let linkDes;
@@ -92,7 +92,7 @@ describe('Ride list', () => {
           passengerNames: []
         }
       ]),
-      refreshNeeded$: new Subject<void>()
+      refreshNeeded$: new Subject<void>(),
     };
 
     TestBed.configureTestingModule({
@@ -101,7 +101,8 @@ describe('Ride list', () => {
       providers: [
         {provide: RideListService, useValue: rideListServiceStub},
         ChatService,
-        UserService
+        UserService,
+        RideComponent
       ]
     });
   });
@@ -365,17 +366,18 @@ describe('Ride list', () => {
     expect(rideList.rides.length).toBe(3);
   });
 
-  it('request a ride', () => {
+  /*it('request a ride', () => {
     expect(rideList.rides.some((ride: Ride) => ride.pendingPassengerIds[0] === "002")).toBe(false);
     expect(rideList.rides.some((ride: Ride) => ride.pendingPassengerNames[0] === 'Dennis')).toBe(false);
     rideComponent.requestJoinRide('chris_id', "002", 'Dennis');
+    rideList
     rideList.refreshRides().subscribe(() => {
       expect(rideList.rides.some((ride: Ride) => ride.pendingPassengerIds[0] === "002")).toBe(true);
       expect(rideList.rides.some((ride: Ride) => ride.pendingPassengerNames[0] === 'Dennis')).toBe(true);
     });
   });
 
-  /*it('accept a ride', () =>{
+  it('accept a ride', () =>{
     expect(rideList.rides.some((ride: Ride) => ride.pendingPassengerIds === "002")).toBe(false);
     expect(rideList.rides.some((ride: Ride) => ride.pendingPassengerNames === 'Dennis')).toBe(false);
     expect(rideList.rides.some((ride: Ride) => ride.passengerIds === "002")).toBe(false);

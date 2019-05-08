@@ -10,6 +10,7 @@ import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
+import umm3601.DatabaseHelper;
 import umm3601.user.UserController;
 
 import java.text.DateFormat;
@@ -19,13 +20,10 @@ import java.util.*;
 import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Sorts.ascending;
 import static com.mongodb.client.model.Sorts.orderBy;
-import static umm3601.DatabaseHelper.serializeIterable;
 
 public class RideController {
 
   private final MongoCollection<Document> rideCollection;
-  private final MongoCollection<Document> userCollection;
-  private final UserController userController;
 
   /**
    * Construct a controller for rides.
@@ -35,8 +33,6 @@ public class RideController {
   public RideController(MongoDatabase database) {
 
     rideCollection = database.getCollection("rides");
-    userCollection = database.getCollection("users");
-    userController = new UserController(database);
   }
 
   String getRide(String id) {
@@ -68,7 +64,7 @@ public class RideController {
 
     FindIterable<Document> matchingRides = rideCollection.find(orQuery);
 
-    return serializeIterable(matchingRides);
+    return DatabaseHelper.serializeIterable(matchingRides);
   }
 
   /**
@@ -109,7 +105,7 @@ public class RideController {
 
     FindIterable<Document> matchingRides = rideCollection.find(oldRides).filter(oldRides).sort(order);
 
-    return serializeIterable(matchingRides);
+    return DatabaseHelper.serializeIterable(matchingRides);
   }
 
   String addNewRide(String owner, String ownerID, String driver, String driverID, String notes, int seatsAvailable, String origin, String destination,

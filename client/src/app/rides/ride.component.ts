@@ -1,7 +1,7 @@
 import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {Ride} from "./ride";
 import {RideListService} from "./ride-list.service";
-import {requestRideObject} from "./requestRideObject";
+import {joinRideObject} from "./joinRideObject";
 import {driveRideObject} from "./driveRideObject";
 import {DeleteRideComponent} from "./delete-ride.component";
 import {MatDialog, MatDialogConfig} from "@angular/material";
@@ -17,7 +17,25 @@ import {UserService} from "../users/user.service";
 })
 export class RideComponent implements OnInit {
 
-  @Input() ride: Ride;
+  @Input() ride: Ride = {
+    _id: {$oid: ''},
+    owner: '',
+    ownerID: '',
+    driver: '',
+    driverID: '',
+    notes: '',
+    seatsAvailable: null,
+    origin: '',
+    destination: '',
+    departureDate: '',
+    departureTime: '',
+    nonSmoking: null,
+    roundTrip: null,
+    pendingPassengerIds: [],
+    pendingPassengerNames: [],
+    passengerIds: [],
+    passengerNames: []
+  };
 
   public currUserId = localStorage.getItem("userId");
   public currUserFullName = localStorage.getItem("userFullName");
@@ -44,16 +62,11 @@ export class RideComponent implements OnInit {
     dialogRef.componentInstance.ride = this.ride;
   }
 
-
-  public getLocalUserId() {
-    return localStorage.getItem("userId");
-  }
-
   makePassengerRequestObjects() {
     let numIds = this.ride.pendingPassengerIds.length;
     for(let i=0; i<numIds; i++){
       let newJoinRequest: joinRideObject = {
-        rideId: this.ride._id,
+        rideId: this.ride._id.$oid,
         pendingPassengerId: this.ride.pendingPassengerIds[i],
         pendingPassengerName: this.ride.pendingPassengerNames[i]
       };
@@ -184,7 +197,6 @@ export class RideComponent implements OnInit {
     console.log("---------------------------");
 
     this.rideListService.requestJoinRide(joinedRide).subscribe(
-
       result => {
         console.log("Successfully requested ride:" + result);
         this.highlightedID = result;
@@ -266,11 +278,11 @@ export class RideComponent implements OnInit {
     return (ride.pendingPassengerIds.indexOf(this.currUserId) !== -1);
   }
 
-  public userCanRequestRide(): boolean {
-    return !(this.ride.driverID === this.currUserId) &&
-           !(this.ride.passengerIds.indexOf(this.currUserId) !== -1) &&
-            (this.ride.seatsAvailable > 0);
-  }
+  // public userCanRequestRide(): boolean {
+  //   return !(this.ride.driverID === this.currUserId) &&
+  //          !(this.ride.passengerIds.indexOf(this.currUserId) !== -1) &&
+  //           (this.ride.seatsAvailable > 0);
+  // }
 
   public userCanLeaveRide(): boolean {
     return (this.ride.passengerIds.indexOf(this.currUserId) !== -1) ||
@@ -341,38 +353,4 @@ export class RideComponent implements OnInit {
       return hours + ':' + min + ' PM';
     }
   }
-
-  listRidePassengers(passengerNames: string[]): string {
-    if (passengerNames.length <= 0) {
-      return ("There are currently no passengers on this ride.");
-    }
-    else if (passengerNames.length > 0) {
-      var passenger = passengerNames[0];
-      return "Passengers: " + passengerNames;
-    }
-  }
-
-  leaveRide(userID: string, rideID: string) {
-
-
-    const leftRide: leaveRideObject = {
-      userID: userID,
-      rideID: rideID,
-    };
-
-    console.log(leftRide);
-
-    this.rideListService.leaveRide(leftRide).subscribe(
-
-      result => {
-        console.log("here it is:" + result);
-        this.highlightedID = result;
-      },
-      err => {
-        // This should probably be turned into some sort of meaningful response.
-        console.log('There was an error adding the ride.');
-        console.log('The newRide or dialogResult was ' );
-        console.log('The error was ' + JSON.stringify(err));
-      });
-  };
 }

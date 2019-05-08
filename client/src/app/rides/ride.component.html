@@ -105,9 +105,6 @@
     </div>
 
     <!--===========================================-->
-<!--
-    && ride.ownerID === getLocalUserId()
--->
 
     <div *ngIf="this.userOwnsThisRide(ride) && this.rideHasPassengerRequests(ride)" id="passenger-requests" class="ride-info">
       Passenger Requests
@@ -144,27 +141,6 @@
 
 
   <mat-card-actions>
-    <!--Join as Passenger Button-->
-    <button
-      mat-raised-button
-      *ngIf="userCanRequestRide()"
-      id="join-ride-button"
-      color="primary"
-      type="button"
-      (click)="requestRide(ride._id)">
-      Join Ride
-    </button>
-    <!--Join as Driver Button-->
-    <button
-      mat-raised-button
-      *ngIf="!this.ride.driverID"
-      id="drive-ride-button"
-      color="primary"
-      type="button"
-      (click)="driveRide(ride._id)">
-      Drive Ride
-    </button>
-    <!--Leave Ride Button-->
     <button
       mat-raised-button
       *ngIf="userCanLeaveRide()"
@@ -196,12 +172,14 @@
       <mat-icon>access_time</mat-icon>
       Request Pending
     </button>
-    <button *ngIf="userIsAPassenger(ride)" mat-raised-button
-            id="leave-ride-button"
-            color="accent"
-            type="button"
-            style="width: 100%"
-            (click)="leaveRide(this.currUserId, ride._id.$oid)">Leave Ride
+    <button
+      mat-raised-button
+      *ngIf="!this.ride.driverID"
+      id="drive-ride-button"
+      color="primary"
+      type="button"
+      (click)="driveRide(ride._id)">
+      Drive Ride
     </button>
     <br>
   </div>
