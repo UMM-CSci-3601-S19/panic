@@ -81,9 +81,11 @@ public class  Server {
     post("api/rides/new", rideRequestHandler::addNewRide);
     post("api/rides/remove", rideRequestHandler::deleteRide);
     post("api/rides/update", rideRequestHandler::editRide);
-    post("api/rides/request", rideRequestHandler::requestRide);
     post("api/rides/leave", rideRequestHandler::leaveRide);
     post("api/rides/drive", rideRequestHandler::driveRide);
+    post("api/rides/approve-join", rideRequestHandler::approveJoinRide);
+    post("api/rides/decline-join", rideRequestHandler::declineJoinRide);
+    post("api/rides/request-join", rideRequestHandler::requestJoinRide);
 
     // USER ENDPOINTS
     get("api/user/:id",userRequestHandler::getUserJSON);

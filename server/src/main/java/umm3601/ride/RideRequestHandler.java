@@ -119,18 +119,74 @@ public class RideRequestHandler {
       departureDate, departureTime, roundTrip, nonSmoking);
   }
 
-  public boolean requestRide(Request req, Response res) {
+  public boolean approveJoinRide(Request req, Response res) {
+
+    System.out.println("---------------------------");
+    System.out.println("We have reached approveJoinRide in Ride Request Handler!!!!!");
+    System.out.println("The request to be parsed is " + req);
 
     res.type("application/json");
 
     // Turn the request into a Document
-    Document requestRide = Document.parse(req.body());
+    Document joinRide = Document.parse(req.body());
 
-    String rideId = requestRide.getObjectId("rideId").toHexString();
-    String passengerId = requestRide.getString("passengerId");
-    String passengerName = requestRide.getString("passengerName");
+    System.out.println("The Join Ride Document is " + joinRide);
 
-    return rideController.requestRide(rideId, passengerId, passengerName);
+    String rideId = joinRide.getObjectId("rideId").toHexString();
+    System.out.println("The rideId for joinRide is " + rideId);
+    String passengerId = joinRide.getString("pendingPassengerId");
+    System.out.println("The passengerId for joinRide is " + passengerId);
+    String passengerName = joinRide.getString("pendingPassengerName");
+    System.out.println("The passengerName for joinRide is " + passengerName);
+
+    return rideController.approveJoinRide(rideId, passengerId, passengerName);
+  }
+
+  public boolean declineJoinRide(Request req, Response res) {
+
+    System.out.println("---------------------------");
+    System.out.println("We have reached declineJoinRide in Ride Request Handler!!!!!");
+    System.out.println("The request to be parsed is " + req);
+
+    res.type("application/json");
+
+    // Turn the request into a Document
+    Document joinRide = Document.parse(req.body());
+
+    System.out.println("The Join Ride Document is " + joinRide);
+
+    String rideId = joinRide.getObjectId("rideId").toHexString();
+    System.out.println("The rideId for joinRide is " + rideId);
+    String passengerId = joinRide.getString("pendingPassengerId");
+    System.out.println("The passengerId for joinRide is " + passengerId);
+    String passengerName = joinRide.getString("pendingPassengerName");
+    System.out.println("The passengerName for joinRide is " + passengerName);
+
+    return rideController.declineJoinRide(rideId, passengerId, passengerName);
+  }
+
+  public boolean requestJoinRide(Request req, Response res) {
+
+    System.out.println("---------------------------");
+    System.out.println("We have reached requestJoinRide in Ride Request Handler!!!!!");
+    System.out.println("The request to be parsed is " + req);
+
+    res.type("application/json");
+
+    // Turn the request into a Document
+    Document joinRide = Document.parse(req.body());
+
+    System.out.println("The Join Ride Document is " + joinRide);
+
+    String rideId = joinRide.getObjectId("rideId").toHexString();
+    System.out.println("The rideId for joinRide is " + rideId);
+    String passengerId = joinRide.getString("pendingPassengerId");
+    System.out.println("The passengerId for joinRide is " + passengerId);
+    String passengerName = joinRide.getString("pendingPassengerName");
+    System.out.println("The passengerName for joinRide is " + passengerName);
+    System.out.println("---------------------------");
+
+    return rideController.requestJoinRide(rideId, passengerId, passengerName);
   }
 
   public boolean driveRide(Request req, Response res) {

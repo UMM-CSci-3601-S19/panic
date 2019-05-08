@@ -40,25 +40,6 @@ public class UserController {
     }
   }
 
-  public String getStringField(String userID, String field) {
-    FindIterable<Document> jsonRides = userCollection.find(eq("userId", userID));
-
-    Iterator<Document> iterator = jsonRides.iterator();
-    if (iterator.hasNext()) {
-      String fieldInfo;
-      Document ride = iterator.next();
-      if (field.equals("_id")) {
-        fieldInfo = ride.getObjectId(field).toHexString();
-      } else {
-        fieldInfo = ride.getString(field);
-      }
-      System.out.println("Got user: " + userID + " " + field + " = " + fieldInfo);
-
-      return fieldInfo;
-    }
-    return "User Not Found";
-  }
-
   public String addNewUser(String userId, String email, String fullName, String pictureUrl, String lastName, String firstName) {
 
     Document filterDoc = new Document();

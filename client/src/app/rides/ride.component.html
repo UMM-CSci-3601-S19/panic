@@ -31,24 +31,29 @@
 
     <div *ngIf="(this.ride.ownerID === this.currUserId)">
       <button mat-icon-button [matMenuTriggerFor]="menu" id="settingsDriving" class="card-top-right-button">
-        <mat-icon class="dots">more_vert</mat-icon>
-      </button>
-      <mat-menu #menu="matMenu">
-        <div>
-          <button mat-menu-item
-                  (click)="giveRideToService(ride)"
-                  id="editDialogOpen"
-                  routerLink="/editride">
-            <span>Edit Ride</span>
-          </button>
-          <button mat-menu-item
-                  (click)="openDeleteDialog(ride._id)"
-                  id="deleteDialogOpen" >
-            <span>Delete Ride</span>
-          </button>
-        </div>
-      </mat-menu>
-    </div>
+      <mat-icon class="dots">more_vert</mat-icon>
+    </button>
+
+
+
+    <mat-menu #menu="matMenu">
+      <div >
+
+        <button mat-menu-item (click) = "giveRideToService(ride)"
+                id="editDialogOpen"routerLink="/editride">
+          <span>Edit Ride</span>
+        </button>
+
+
+        <button mat-menu-item (click)="openDeleteDialog(ride._id)" class="deleteDialogOpen">
+          <span>Delete Ride</span>
+        </button>
+
+      </div>
+    </mat-menu>
+
+
+      </div >
   </mat-card-header>
 
   <mat-card-content>
@@ -99,6 +104,33 @@
       <div>{{ride.notes}}</div>
     </div>
 
+    <!--===========================================-->
+
+    <div *ngIf="this.userOwnsThisRide(ride) && this.rideHasPassengerRequests(ride)" id="passenger-requests" class="ride-info">
+      Passenger Requests
+
+      <div *ngFor="let pendingPassengerId of passengerRequests; let i = index"
+           [id] = "pendingPassengerId" class="ride-passenger requests">
+        <a routerLink="/profile/{{retrievePendingPassengerId(i)}}">{{retrievePendingPassengerName(i)}}</a> wants to join:
+        <button mat-raised-button
+                class="passenger-button"
+                id="accept-passenger-button"
+                color="primary"
+                type="button"
+                style="width: 30%"
+                (click) = "approveJoinRide(ride._id, ride.pendingPassengerIds[i], ride.pendingPassengerNames[i])">
+          Accept</button>
+        <button mat-raised-button
+                class="passenger-button"
+                id="decline-passenger-button"
+                color="accent"
+                type="button"
+                style="width: 30%"
+                (click) = "declineJoinRide(ride._id, ride.pendingPassengerIds[i], ride.pendingPassengerNames[i])">
+          Decline</button>
+     </div>
+    </div>
+
     <div *ngIf="checkIfInRide()">
       <h3>Chat</h3>
       <mat-divider></mat-divider>
@@ -109,27 +141,6 @@
 
 
   <mat-card-actions>
-    <!--Join as Passenger Button-->
-    <button
-      mat-raised-button
-      *ngIf="userCanRequestRide()"
-      id="join-ride-button"
-      color="primary"
-      type="button"
-      (click)="requestRide(ride._id)">
-      Join Ride
-    </button>
-    <!--Join as Driver Button-->
-    <button
-      mat-raised-button
-      *ngIf="!this.ride.driverID"
-      id="drive-ride-button"
-      color="primary"
-      type="button"
-      (click)="driveRide(ride._id)">
-      Drive Ride
-    </button>
-    <!--Leave Ride Button-->
     <button
       mat-raised-button
       *ngIf="userCanLeaveRide()"
@@ -140,5 +151,37 @@
       Leave Ride
     </button>
   </mat-card-actions>
+
+  <div *ngIf="!this.userOwnsThisRide(ride)">
+    <button *ngIf="!this.userIsAPassenger(ride) && !this.userIsAPendingPassenger(ride)" mat-raised-button
+            class="join-ride-button"
+            color="primary"
+            type="button"
+            style="width: 100%"
+            [disabled]="!this.userCanJoinRide(ride)"
+            (click) = "requestJoinRide(ride._id, this.currUserId, this.currUserFullName)">
+      <mat-icon>add_circle_outline</mat-icon>
+      Join This Ride
+    </button>
+    <button *ngIf="this.userIsAPendingPassenger(ride)" mat-raised-button
+            class="join-ride-button"
+            color="primary"
+            type="button"
+            style="width: 100%"
+            [disabled]=true>
+      <mat-icon>access_time</mat-icon>
+      Request Pending
+    </button>
+    <button
+      mat-raised-button
+      *ngIf="!this.ride.driverID"
+      id="drive-ride-button"
+      color="primary"
+      type="button"
+      (click)="driveRide(ride._id)">
+      Drive Ride
+    </button>
+    <br>
+  </div>
 
 </mat-card>

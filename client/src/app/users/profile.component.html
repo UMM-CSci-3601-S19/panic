@@ -52,7 +52,7 @@
 
         <mat-card-title id="upcomingRidesTitle">Your Rides</mat-card-title>
         <mat-divider></mat-divider>
-        <mat-card-content id="upcomingRides">
+        <mat-card-content *ngIf="userRides; else userError" id="upcomingRides">
           <app-ride *ngFor="let ride of this.userRides" [ride]="ride"></app-ride>
         </mat-card-content>
       </mat-card>

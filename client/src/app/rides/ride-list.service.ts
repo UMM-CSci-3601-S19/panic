@@ -5,7 +5,7 @@ import {Observable} from 'rxjs/Observable';
 
 import {Ride} from './ride';
 import {environment} from '../../environments/environment';
-import {requestRideObject} from "./requestRideObject";
+import {joinRideObject} from "./joinRideObject";
 import {driveRideObject} from "./driveRideObject";
 import {leaveRideObject} from "./leaveRideObject";
 import {Subject} from "rxjs/Subject";
@@ -54,27 +54,6 @@ export class RideListService {
       );
   }
 
-  requestRide(editedRide: requestRideObject) {
-
-    const httpOptions = {
-      headers: new HttpHeaders({
-        // We're sending JSON
-        'Content-Type': 'application/json'
-      }),
-      // But we're getting a simple (text) string in response
-      // The server sends the hex version of the new ride back
-      // so we know how to find/access that user again later.
-      responseType: 'text' as 'json'
-    };
-
-    return this.http.post<string>(this.rideUrl + '/request', editedRide, httpOptions)
-      .pipe(
-        tap(() => {
-          this._refreshNeeded$.next();
-        })
-      );
-  }
-
   driveRide(editedRide: driveRideObject) {
 
     const httpOptions = {
@@ -89,6 +68,75 @@ export class RideListService {
     };
 
     return this.http.post<string>(this.rideUrl + '/drive', editedRide, httpOptions)
+      .pipe(
+        tap(() => {
+          this._refreshNeeded$.next();
+        })
+      );
+  }
+
+  approveJoinRide(editedRide: joinRideObject) {
+
+    console.log("We have reached approveJoinRide in Ride List Service!!!!");
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        // We're sending JSON
+        'Content-Type': 'application/json'
+      }),
+      // But we're getting a simple (text) string in response
+      // The server sends the hex version of the new ride back
+      // so we know how to find/access that user again later.
+      responseType: 'text' as 'json'
+    };
+
+    return this.http.post<string>(this.rideUrl + '/approve-join', editedRide, httpOptions)
+      .pipe(
+        tap(() => {
+          this._refreshNeeded$.next();
+        })
+      );
+  }
+
+  declineJoinRide(editedRide: joinRideObject) {
+
+    console.log("We have reached declineJoinRide in Ride List Service!!!!");
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        // We're sending JSON
+        'Content-Type': 'application/json'
+      }),
+      // But we're getting a simple (text) string in response
+      // The server sends the hex version of the new ride back
+      // so we know how to find/access that user again later.
+      responseType: 'text' as 'json'
+    };
+
+    return this.http.post<string>(this.rideUrl + '/decline-join', editedRide, httpOptions)
+      .pipe(
+        tap(() => {
+          this._refreshNeeded$.next();
+        })
+      );
+  }
+
+  requestJoinRide(editedRide: joinRideObject) {
+
+    console.log("We have reached requestJoinRide in Ride List Service!!!!");
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        // We're sending JSON
+        'Content-Type': 'application/json'
+      }),
+      // But we're getting a simple (text) string in response
+      // The server sends the hex version of the new ride back
+      // so we know how to find/access that user again later.
+      responseType: 'text' as 'json'
+    };
+
+    return this.http.post<string>(this.rideUrl + '/request-join', editedRide, httpOptions)
       .pipe(
         tap(() => {
           this._refreshNeeded$.next();

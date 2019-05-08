@@ -19,6 +19,11 @@ describe('Ride list service: ', () => {
       departureDate: '3/6/2019',
       departureTime: '10:00:00',
       nonSmoking: true,
+      roundTrip: true,
+      pendingPassengerIds: [],
+      pendingPassengerNames: [],
+      passengerIds: [],
+      passengerNames: []
     },
     {
       _id: {$oid: 'dennis_id'},
@@ -31,6 +36,11 @@ describe('Ride list service: ', () => {
       departureDate: '8/15/2018',
       departureTime: '11:30:00',
       nonSmoking: true,
+      roundTrip: true,
+      pendingPassengerIds: [],
+      pendingPassengerNames: [],
+      passengerIds: [],
+      passengerNames: []
     },
     {
       _id: {$oid: 'agatha_id'},
@@ -43,6 +53,11 @@ describe('Ride list service: ', () => {
       departureDate: '3/30/2019',
       departureTime: '16:30:00',
       nonSmoking: false,
+      roundTrip: false,
+      pendingPassengerIds: [],
+      pendingPassengerNames: [],
+      passengerIds: [],
+      passengerNames: []
     }
   ];
 
