@@ -12,6 +12,10 @@ import 'rxjs/add/operator/do';
 import {By} from "@angular/platform-browser";
 import {Subject} from "rxjs/Subject";
 import {RideComponent} from "./ride.component";
+import {ChatService} from "../chat/chat-service";
+import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {ChatComponent} from "../chat/chat.component";
+import {UserService} from "../users/user.service";
 
 describe('Ride list', () => {
 
@@ -31,23 +35,24 @@ describe('Ride list', () => {
     rideListServiceStub = {
       getRides: () => Observable.of([
         {
-          _id: 'chris_id',
+          _id: {$oid: 'chris_id'},
           owner: 'Chris',
           ownerID: "001",
+          driver: 'Chris',
+          driverID: 'chris_id',
           notes: 'These are Chris\'s ride notes',
           seatsAvailable: 3,
           origin: 'UMM',
           destination: 'Willie\'s',
           departureDate: '3/6/2019',
           departureTime: '10:00:00',
-          isDriving: true,
           nonSmoking: true,
           roundTrip: true,
           passengerIds: [],
           passengerNames: []
         },
         {
-          _id: 'dennis_id',
+          _id: {$oid: 'dennis_id'},
           owner: 'Dennis',
           ownerID: "002",
           notes: 'These are Dennis\'s ride notes',
@@ -56,23 +61,23 @@ describe('Ride list', () => {
           destination: 'Minneapolis, MN',
           departureDate: '8/15/2018',
           departureTime: '11:30:00',
-          isDriving: false,
           nonSmoking: true,
           roundTrip: true,
-          passengerIds: [],
-          passengerNames: []
+          passengerIds: ["002"],
+          passengerNames: ['Dennis']
         },
         {
-          _id: 'agatha_id',
+          _id: {$oid: 'agatha_id'},
           owner: 'Agatha',
           ownerID: "003",
+          driver: 'Agatha',
+          driverID: 'agatha_id',
           notes: 'These are Agatha\'s ride notes',
           seatsAvailable: 3,
           origin: 'UMM',
           destination: 'Fergus Falls, MN',
           departureDate: '3/30/2019',
           departureTime: '16:30:00',
-          isDriving: true,
           nonSmoking: false,
           roundTrip: false,
           passengerIds: [],
@@ -83,9 +88,13 @@ describe('Ride list', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [CustomModule],
-      declarations: [RideListComponent,RouterLinkDirectiveStub,RideComponent],
-      providers: [{provide: RideListService, useValue: rideListServiceStub}]
+      imports: [CustomModule, HttpClientTestingModule],
+      declarations: [RideListComponent,RouterLinkDirectiveStub,RideComponent, ChatComponent],
+      providers: [
+        {provide: RideListService, useValue: rideListServiceStub},
+        ChatService,
+        UserService
+      ]
     });
   });
 
@@ -104,83 +113,6 @@ describe('Ride list', () => {
 
     });
   }));
-
-  //TIME AND DATE PARSING
-  //Time parsing from 24 hour format to 12 hour AM/PM
-  it('the client parses 13:01 time to 1:01 PM', () => {
-    expect(rideList.hourParse("13:01")).toBe("1:01 PM");
-  });
-
-  it('the client parses 23:59 time to 11:59 PM', () => {
-    expect(rideList.hourParse("23:59")).toBe("11:59 PM");
-  });
-
-  it('the client parses 00:00 time to 12:00 AM', () => {
-    expect(rideList.hourParse("00:00")).toBe("12:00 AM");
-  });
-
-  it('the client parses 00:59 time to 12:59 AM', () => {
-    expect(rideList.hourParse("00:59")).toBe("12:59 AM");
-  });
-
-  it('the client parses 12:00 time to 12:00 PM', () => {
-    expect(rideList.hourParse("12:00")).toBe("12:00 PM");
-  });
-
-  it('the client parses 12:30 time to 12:30 PM', () => {
-    expect(rideList.hourParse("12:30")).toBe("12:30 PM");
-  });
-
-  it('the client parses 15:30 time to 3:30 PM', () => {
-    expect(rideList.hourParse("15:30")).toBe("3:30 PM");
-  });
-
-  it('the client parses 09:44 time to 9:44 AM', () => {
-    expect(rideList.hourParse("09:44")).toBe("9:44 AM");
-  });
-
-  it('the client parses 11:03 time to 11:03 AM', () => {
-    expect(rideList.hourParse("11:03")).toBe("11:03 AM");
-  });
-
-  it('the client parses 10:00 time to 10:00 AM', () => {
-    expect(rideList.hourParse("10:00")).toBe("10:00 AM");
-  });
-
-  it('the client parses 09:59 time to 9:59 AM', () => {
-    expect(rideList.hourParse("09:59")).toBe("9:59 AM");
-  });
-
-  //Date parsing from ISO format to human readable times
-  it('the client parses ISO date 2019-03-01T06:00:00.000Z to March 1st', () => {
-    expect(rideList.dateParse("2019-03-01T06:00:00.000Z")).toBe("March 1st");
-  });
-
-  it('the client parses ISO date 2019-03-02T06:00:00.000Z to March 2nd', () => {
-    expect(rideList.dateParse("2019-03-02T06:00:00.000Z")).toBe("March 2nd");
-  });
-
-  it('the client parses ISO date 2019-03-03T06:00:00.000Z to March 3rd', () => {
-    expect(rideList.dateParse("2019-03-03T06:00:00.000Z")).toBe("March 3rd");
-  });
-
-  it('the client parses ISO date 2019-03-04T06:00:00.000Z to March 4th', () => {
-    expect(rideList.dateParse("2019-03-04T06:00:00.000Z")).toBe("March 4th");
-  });
-
-  it('the client parses ISO date 2019-03-14T06:00:00.000Z to March 14th', () => {
-    expect(rideList.dateParse("2019-03-14T06:00:00.000Z")).toBe("March 14th");
-  });
-
-  it('the client parses ISO date 2019-03-22T06:00:00.000Z to March 22nd', () => {
-    expect(rideList.dateParse("2019-03-22T06:00:00.000Z")).toBe("March 22nd");
-  });
-
-  it('the client parses ISO date 2019-03-31T06:00:00.000Z to March 31st', () => {
-    expect(rideList.dateParse("2019-03-31T06:00:00.000Z")).toBe("March 31st");
-  });
-
-
 
   //Affirmative containings: has the following items
   it('contains all the rides', () => {
@@ -202,11 +134,11 @@ describe('Ride list', () => {
   });
 
   it('has two rides that where a ride is being offered', () => {
-    expect(rideList.rides.filter((ride: Ride) => ride.isDriving).length).toBe(2);
+    expect(rideList.rides.filter((ride: Ride) => ride.driver).length).toBe(2);
   });
 
   it('has one ride that where a ride is being requested', () => {
-    expect(rideList.rides.filter((ride: Ride) => !ride.isDriving).length).toBe(1);
+    expect(rideList.rides.filter((ride: Ride) => !ride.driver).length).toBe(1);
   });
 
   it('has two rides with origin \'UMM\'', () => {
@@ -226,7 +158,7 @@ describe('Ride list', () => {
   });
 
   it('has one ride with _id \'dennis_id\'', () => {
-    expect(rideList.rides.filter((ride: Ride) => ride._id === 'dennis_id').length).toBe(1);
+    expect(rideList.rides.filter((ride: Ride) => ride._id.$oid === 'dennis_id').length).toBe(1);
   });
 
   it('has three rides with notes containing \'These are\'', () => {
@@ -276,7 +208,7 @@ describe('Ride list', () => {
   });
 
   it('doesn\'t have a ride with _id \'bob_id\'', () => {
-    expect(rideList.rides.some((ride: Ride) => ride._id === 'bob_id')).toBe(false);
+    expect(rideList.rides.some((ride: Ride) => ride._id.$oid === 'bob_id')).toBe(false);
   });
 
   it('doesn\'t have a ride with notes \'Smoker\'', () => {
@@ -284,7 +216,7 @@ describe('Ride list', () => {
   });
 
   it('doesn\'t have a requested ride with zero or more seats available', () => {
-    expect(rideList.rides.some((ride: Ride) => !ride.isDriving && ride.seatsAvailable > 0)).toBe(false);
+    expect(rideList.rides.some((ride: Ride) => !ride.driver && ride.seatsAvailable > 0)).toBe(false);
   });
   /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -438,9 +370,12 @@ describe('Misbehaving Ride List', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [FormsModule, CustomModule],
-      declarations: [RideListComponent,RouterLinkDirectiveStub, RideComponent],
-      providers: [{provide: RideListService, useValue: rideListServiceStub}]
+      imports: [FormsModule, CustomModule, HttpClientTestingModule],
+      declarations: [RideListComponent,RouterLinkDirectiveStub, RideComponent,ChatComponent],
+      providers: [{provide: RideListService, useValue: rideListServiceStub},
+        ChatService,
+        UserService
+      ]
     });
   });
 

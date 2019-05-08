@@ -19,6 +19,9 @@ dependencies {
   compile 'com.google.apis:google-api-services-oauth2:v1-rev139-1.23.0'
   compile 'org.json:json:20180130'
 
+  compile 'io.getstream.client:stream-java:3.1.6'
+  implementation 'com.auth0:java-jwt:3.8.0'
+
   testCompile 'junit:junit:4.12'
 }
 

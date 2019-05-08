@@ -1,0 +1,29 @@
+<h2 mat-dialog-title="">
+  <button mat-icon-button="" (click)="getMessages()">
+    <mat-icon>refresh</mat-icon>
+  </button>
+  <button mat-icon-button="" (click)="deleteChat()">
+    <mat-icon>delete</mat-icon>
+  </button>
+</h2>
+<mat-dialog-content class="chat-container">
+  <mat-list>
+    <mat-list-item *ngFor="let m of messages" class="message">
+      <img matListAvatar [src]="m.from_avatar" alt="avatar">
+      <h3 matLine>{{m.from_name}}</h3>
+      <span matLine class="sent">{{m.sent | date: 'MMM d, h:mm a' }}</span>
+      <span matLine class="body">{{m.body}}</span>
+    </mat-list-item>
+  </mat-list>
+</mat-dialog-content>
+<mat-dialog-actions id="chat-footer">
+  <form id="new-message-form" [formGroup]="sendMessageForm">
+    <mat-form-field id="new-message-box">
+      <textarea matInput formControlName="messageToSend" placeholder="New message" matTextareaAutosize matAutosizeMinRows="1"
+                matAutosizeMaxRows="5" [(ngModel)]="messageToSend.body" (keyup.enter)="sendMessage()"></textarea>
+    </mat-form-field>
+  </form>
+  <div>
+    <button id="send-message-btn" mat-icon-button="" (click)="sendMessage()"><mat-icon>send</mat-icon></button>
+  </div>
+</mat-dialog-actions>

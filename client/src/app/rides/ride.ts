@@ -1,14 +1,17 @@
 export interface Ride {
-  _id: string;
+  _id?: {
+    $oid: string
+  };
   owner: string;
   ownerID: string;
+  driver?: string;
+  driverID?: string;
   notes: string;
-  seatsAvailable: number;
+  seatsAvailable?: number;
   origin: string;
   destination: string;
   departureDate: string;
   departureTime: string;
-  isDriving: boolean;
   roundTrip?: boolean;
   nonSmoking: boolean;
   passengerIds?: string[];

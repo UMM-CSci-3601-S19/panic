@@ -69,7 +69,6 @@ public class UserController {
     filterDoc = filterDoc.append("userId", contentRegQuery);
 
     FindIterable<Document> matchingUsers = userCollection.find(filterDoc);
-    System.out.println("HERRREEEEEE~~~!!" + matchingUsers);
 
     if(JSON.serialize(matchingUsers).equals("[ ]")){
       ObjectId id = new ObjectId();

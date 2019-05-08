@@ -9,6 +9,7 @@ import {AppComponent} from './app.component';
 import {HomeComponent} from './home/home.component';
 
 import {RideListComponent} from "./rides/ride-list.component";
+import { RideComponent } from "./rides/ride.component";
 
 import {RideListService} from './rides/ride-list.service';
 import {UserService} from "./users/user.service";
@@ -24,18 +25,17 @@ import {CustomModule} from './custom.module';
 import {AddRideComponent} from './rides/add-ride.component';
 import {EditRideComponent} from './rides/edit-ride.component';
 import {DeleteRideComponent} from "./rides/delete-ride.component";
+import {ProfileComponent} from "./users/profile.component";
+import {ChatComponent} from "./chat/chat.component";
+import {ChatService} from "./chat/chat-service";
 
 import {MatCardModule} from '@angular/material/card';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatCheckboxModule}  from "@angular/material/checkbox";
-import {ProfileComponent} from "./users/profile.component";
 
 import {RouterLinkDirectiveStub} from "./rides/router-link-directive-stub";
 import {PhoneMaskDirective} from "./users/phone-mask.directive";
 import {ProfileService} from "./users/profile.service";
-
-import { RideComponent } from "./rides/ride.component";
-
 
 @NgModule({
   imports: [
@@ -57,16 +57,27 @@ import { RideComponent } from "./rides/ride.component";
     EditRideComponent,
     DeleteRideComponent,
     ProfileComponent,
+    ChatComponent,
     RouterLinkDirectiveStub,
     PhoneMaskDirective,
     RideComponent
   ],
   providers: [
-    RideListService, AppService, AppAuthGuard, UserService, ValidatorService, ProfileService,
+    RideListService,
+    AppService,
+    AppAuthGuard,
+    UserService,
+    ValidatorService,
+    ChatService,
+    ProfileService,
     {provide: APP_BASE_HREF, useValue: '/'},
   ],
   entryComponents: [
-    AddRideComponent, EditRideComponent, DeleteRideComponent
+    AddRideComponent,
+    EditRideComponent,
+    DeleteRideComponent,
+    ChatComponent,
+    RideComponent
   ],
   bootstrap: [AppComponent]
 })
