@@ -118,23 +118,6 @@ public class RideRequestHandler {
     return rideController.editRide(id, driver, driverID, notes, seatsAvailable, origin, destination,
       departureDate, departureTime, roundTrip, nonSmoking);
   }
-  public boolean driveRide(Request req, Response res) {
-    res.type("application/json");
-
-    // Turn the request into a Document
-    Document driveRide = Document.parse(req.body());
-
-    System.out.println(driveRide);
-
-    String rideId = driveRide.getObjectId("rideId").toHexString();
-    System.out.println(rideId);
-    String driverId = driveRide.getString("driverId");
-    System.out.println(driverId);
-    String driverName = driveRide.getString("driverName");
-    System.out.println(driverName);
-
-    return rideController.driveRide(rideId, driverId, driverName);
-  }
 
   public boolean requestRide(Request req, Response res) {
 
@@ -148,6 +131,19 @@ public class RideRequestHandler {
     String passengerName = requestRide.getString("passengerName");
 
     return rideController.requestRide(rideId, passengerId, passengerName);
+  }
+
+  public boolean driveRide(Request req, Response res) {
+    res.type("application/json");
+
+    // Turn the request into a Document
+    Document driveRide = Document.parse(req.body());
+
+    String rideId = driveRide.getObjectId("rideId").toHexString();
+    String driverId = driveRide.getString("driverId");
+    String driverName = driveRide.getString("driverName");
+
+    return rideController.driveRide(rideId, driverId, driverName);
   }
 
   public boolean leaveRide(Request req, Response res) {
@@ -166,6 +162,4 @@ public class RideRequestHandler {
 
     return rideController.leaveRide(userID, rideID);
   }
-
-
 }

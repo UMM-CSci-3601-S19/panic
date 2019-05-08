@@ -65,14 +65,15 @@ export class RideComponent implements OnInit {
       });
   };
 
-  driveRide(rideId: string, driverId: string, driverName: string): void {
+  driveRide(rideId: string): void {
+
     const drivenRide: driveRideObject = {
       rideId: rideId,
-      driverId: driverId,
-      driverName: driverName,
+      driverId: this.currUserId,
+      driverName: this.currUserFullName,
     };
-    this.rideListService.driveRide(drivenRide).subscribe(
 
+    this.rideListService.driveRide(drivenRide).subscribe(
       result => {
         this.highlightedID = result;
         this.changeDetector.detectChanges();

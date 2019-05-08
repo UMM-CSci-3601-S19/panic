@@ -206,23 +206,6 @@ public class RideController {
     return tryUpdateOne(filter, updateDoc);
   }
 
-  boolean driveRide(String rideId, String driverId, String driverName) {
-
-    ObjectId objId = new ObjectId(rideId);
-    Document filter = new Document("_id", objId);
-
-    System.out.println(driverId);
-    Document updateQuery = new Document();
-    updateQuery.append("$set", new Document().append("driverId", driverId));
-    tryUpdateOne(filter, updateQuery);
-    Document updateQuerytwo = new Document();
-    updateQuerytwo.append("$set", new Document().append("driverName", driverName));
-    return tryUpdateOne(filter, updateQuerytwo);
-
-  }
-
-
-
   boolean requestRide(String rideId, String passengerId, String passengerName) {
 
     ObjectId objId = new ObjectId(rideId); // _id must be formatted like this for the match to work
@@ -246,6 +229,19 @@ public class RideController {
     // Now pass the full update in with the filter and update the record it matches.
     return tryUpdateOne(filter, fullUpdate);
 
+  }
+
+  boolean driveRide(String rideId, String driverId, String driverName) {
+
+    ObjectId objId = new ObjectId(rideId);
+    Document filter = new Document("_id", objId);
+
+    Document updateQuery = new Document();
+    updateQuery.append("$set", new Document().append("driverID", driverId));
+    tryUpdateOne(filter, updateQuery);
+    Document updateQuerytwo = new Document();
+    updateQuerytwo.append("$set", new Document().append("driverName", driverName));
+    return tryUpdateOne(filter, updateQuerytwo);
   }
 
   boolean leaveRide(String userID, String rideID) {
