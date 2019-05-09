@@ -49,14 +49,13 @@ export class RideComponent implements OnInit {
 
   constructor(private rideListService: RideListService,
               public userService: UserService,
-              private changeDetector: ChangeDetectorRef,
               public dialog: MatDialog) {
   }
 
   openRide() {
     const dialogRef = this.dialog.open(RideComponent, <MatDialogConfig>{
-      maxWidth: '100vw',
-      maxHeight: '100vh'
+      maxWidth: '85vw',
+      maxHeight: '85vh'
     });
     dialogRef.componentInstance.fullCard = true;
     dialogRef.componentInstance.ride = this.ride;
@@ -76,7 +75,6 @@ export class RideComponent implements OnInit {
 
   checkPassengerRequests() {
     if (this.ride.pendingPassengerIds.length != 0) {
-      console.log(this.ride.pendingPassengerIds.length);
       this.makePassengerRequestObjects();
     }
   }
@@ -101,7 +99,7 @@ export class RideComponent implements OnInit {
         console.log("Successfully approve ride:" + result);
         this.highlightedID = result;
         console.log('detecting changes after requesting ride');
-        this.changeDetector.detectChanges();
+        this.refreshRide();
       },
       err => {
         // This should probably be turned into some sort of meaningful response.
@@ -122,7 +120,7 @@ export class RideComponent implements OnInit {
     this.rideListService.driveRide(drivenRide).subscribe(
       result => {
         this.highlightedID = result;
-        this.changeDetector.detectChanges();
+        this.refreshRide();
       },
       err => {
         // This should probably be turned into some sort of meaningful response.
@@ -143,7 +141,7 @@ export class RideComponent implements OnInit {
       result => {
         this.highlightedID = result;
         console.log("Did leaving the ride succeed? " + result);
-        this.changeDetector.detectChanges();
+        this.refreshRide();
       },
       err => {
         // This should probably be turned into some sort of meaningful response.
@@ -172,6 +170,7 @@ export class RideComponent implements OnInit {
       result => {
         console.log("Successfully decline ride:" + result);
         this.highlightedID = result;
+        this.refreshRide();
       },
       err => {
         // This should probably be turned into some sort of meaningful response.
@@ -200,6 +199,7 @@ export class RideComponent implements OnInit {
       result => {
         console.log("Successfully requested ride:" + result);
         this.highlightedID = result;
+        this.refreshRide();
       },
       err => {
         // This should probably be turned into some sort of meaningful response.
@@ -289,8 +289,15 @@ export class RideComponent implements OnInit {
           ((this.ride.driverID) == this.currUserId);
   }
 
-  ngOnInit() {
-    this.checkPassengerRequests();
+  refreshRide() {
+    this.rideListService.getRide(this.ride._id.$oid).subscribe(ride => {
+      this.ride = ride;
+      this.checkPassengerRequests();
+      this.refreshRiders();
+    });
+  }
+
+  refreshRiders() {
     this.people = [];
 
     if (this.ride.driverID) {
@@ -304,6 +311,24 @@ export class RideComponent implements OnInit {
         this.people.push(user);
       });
     }
+  }
+
+  ngOnInit() {
+    this.checkPassengerRequests();
+    this.refreshRiders();
+    // this.people = [];
+    //
+    // if (this.ride.driverID) {
+    //   this.userService.getUserById(this.ride.driverID).subscribe( driver => {
+    //     this.people.push(driver);
+    //   });
+    // }
+    //
+    // for (let id of this.ride.passengerIds) {
+    //   this.userService.getUserById(id).subscribe(user => {
+    //     this.people.push(user);
+    //   });
+    // }
   }
 
   giveRideToService(ride: Ride){

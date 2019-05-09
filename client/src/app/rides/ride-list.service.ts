@@ -33,6 +33,10 @@ export class RideListService {
     return this.http.get<Ride[]>(this.rideUrl);
   }
 
+  getRide(rideId: string): Observable<Ride> {
+    return this.http.get<Ride>(this.rideUrl + '/' + rideId)
+  }
+
   addNewRide(newRide: Ride): Observable<string> {
     const httpOptions = {
       headers: new HttpHeaders({
@@ -164,7 +168,6 @@ export class RideListService {
         })
       );
   }
-
 
   grabRide(ride: Ride){
     this.singleRide = ride;

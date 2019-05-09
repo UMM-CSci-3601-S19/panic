@@ -1,12 +1,14 @@
 <mat-card *ngIf="!fullCard" class="slim-ride-card" (click)="openRide()">
   <div class="ride-card-content">
-    <div class="departing" *ngIf="ride.driverID" style="background: #7a0019; color: white">
+    <div class="departing" *ngIf="ride.driverID">
       <div>{{ride.departureDate | date: 'MMM d'}}</div>
       <div>{{this.hourParse(ride.departureTime)}}</div>
+      <mat-icon style="color: #43b6f6"> drive_eta</mat-icon>
     </div>
-    <div class="departing" *ngIf="!ride.driverID" style="background: #2ecc71">
+    <div class="departing" id="requestCard" *ngIf="!ride.driverID" >
       <div>{{ride.departureDate | date: 'MMM d'}}</div>
       <div>{{this.hourParse(ride.departureTime)}}</div>
+      <mat-icon style="color: #b71c1c"> directions_walk </mat-icon>
     </div>
     <div class="start-location">
       {{ride.origin}}
@@ -40,7 +42,7 @@
       <div >
 
         <button mat-menu-item (click) = "giveRideToService(ride)"
-                id="editDialogOpen"routerLink="/editride">
+                id="editDialogOpen" routerLink="/editride">
           <span>Edit Ride</span>
         </button>
 
@@ -145,6 +147,7 @@
       mat-raised-button
       *ngIf="userCanLeaveRide()"
       id="leave-ride-button"
+      class="join-ride-button"
       color="warn"
       type="button"
       (click)="leaveRide(ride._id.$oid)">
@@ -157,29 +160,28 @@
             class="join-ride-button"
             color="primary"
             type="button"
-            style="width: 100%"
             [disabled]="!this.userCanJoinRide(ride)"
             (click) = "requestJoinRide(ride._id, this.currUserId, this.currUserFullName)">
       <mat-icon>add_circle_outline</mat-icon>
-      Join This Ride
+      Join Ride
     </button>
     <button *ngIf="this.userIsAPendingPassenger(ride)" mat-raised-button
             class="join-ride-button"
             color="primary"
             type="button"
-            style="width: 100%"
             [disabled]=true>
       <mat-icon>access_time</mat-icon>
-      Request Pending
+      Pending
     </button>
     <button
       mat-raised-button
       *ngIf="!this.ride.driverID"
       id="drive-ride-button"
+      class="join-ride-button"
       color="primary"
       type="button"
       (click)="driveRide(ride._id)">
-      Drive Ride
+      <mat-icon>directions_car</mat-icon>Drive Ride
     </button>
     <br>
   </div>

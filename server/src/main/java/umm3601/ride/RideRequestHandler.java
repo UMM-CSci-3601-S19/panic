@@ -27,7 +27,12 @@ public class RideRequestHandler {
     return rideController.getRides(req.queryMap().toMap());
   }
 
+  public String getRide(Request req, Response res) {
+    res.type("application/json");
+    String rideId = req.params("rideId");
 
+    return rideController.getRide(rideId);
+  }
 
   public String getMyRides(Request req, Response res) {
     res.type("application/json");
