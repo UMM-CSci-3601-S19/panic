@@ -31,6 +31,8 @@ export class EditRideComponent implements OnInit {
   public rideDepartureDate: string;
   public rideDepartureTime: string;
 
+  public endpoint: string;
+
   public tempBool: boolean = false;
 
   // Please leave as true for now, it's important.
@@ -111,6 +113,8 @@ export class EditRideComponent implements OnInit {
     this.rideDepartureTime = localStorage.getItem("rideDepartureTime");
     this.rideRoundTrip = ("true" == localStorage.getItem("rideRoundTrip"));
     this.rideNonSmoking = ("true" == localStorage.getItem("rideNonSmoking"));
+    this.endpoint = localStorage.getItem("currEndpoint");
+    localStorage.removeItem("currEndpoint")
   }
 
   // IMPORTANT! This function gets called whenever the user selects 'looking for a ride'.

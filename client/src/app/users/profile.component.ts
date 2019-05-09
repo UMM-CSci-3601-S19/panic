@@ -94,6 +94,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getProfile();
+    localStorage.setItem("currEndpoint", "profile/" + this.profileId);
   }
 
   ngOnDestroy(): void {

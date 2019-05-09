@@ -44,6 +44,8 @@ export class RideListComponent implements OnInit, OnDestroy {
     localStorage.removeItem("rideRoundTrip");
     localStorage.removeItem("rideNonSmoking");
 
+    localStorage.setItem("currEndpoint", "rides");
+
     this.rideListService.refreshNeeded$
       .subscribe(() => {
         this.refreshRides();

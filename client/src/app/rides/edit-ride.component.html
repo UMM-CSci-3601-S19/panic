@@ -112,7 +112,7 @@
         <mat-card-actions layout="row">
 
           <button class="editRideButton" mat-raised-button id="confirmEditRideButton"  type="button" color="primary"
-                  (click)="editRide()" routerLink="/rides" [disabled]="!this.validatorService.rideForm.valid">
+                  (click)="editRide()" routerLink="/{{this.endpoint}}" [disabled]="!this.validatorService.rideForm.valid">
             Update Ride
           </button>
           <button class="cancelRideButton" mat-button id="exitWithoutEditingButton" routerLink="/rides"  type="button">Cancel</button>
