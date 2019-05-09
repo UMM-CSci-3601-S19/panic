@@ -49,14 +49,13 @@ export class RideComponent implements OnInit {
 
   constructor(private rideListService: RideListService,
               public userService: UserService,
-              private changeDetector: ChangeDetectorRef,
               public dialog: MatDialog) {
   }
 
   openRide() {
     const dialogRef = this.dialog.open(RideComponent, <MatDialogConfig>{
       maxWidth: '85vw',
-      maxHeight: '100vh'
+      maxHeight: '85vh'
     });
     dialogRef.componentInstance.fullCard = true;
     dialogRef.componentInstance.ride = this.ride;
