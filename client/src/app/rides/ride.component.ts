@@ -55,7 +55,8 @@ export class RideComponent implements OnInit {
   openRide() {
     const dialogRef = this.dialog.open(RideComponent, <MatDialogConfig>{
       maxWidth: '85vw',
-      maxHeight: '85vh'
+      maxHeight: '90vh',
+      height: '85vh'
     });
     dialogRef.componentInstance.fullCard = true;
     dialogRef.componentInstance.ride = this.ride;
@@ -142,6 +143,7 @@ export class RideComponent implements OnInit {
         this.highlightedID = result;
         console.log("Did leaving the ride succeed? " + result);
         this.refreshRide();
+        this.dialog.closeAll();
       },
       err => {
         // This should probably be turned into some sort of meaningful response.
