@@ -8,13 +8,27 @@ import {Ride} from "./ride";
 import {UserService} from "../users/user.service";
 import {ChatComponent} from "../chat/chat.component";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {Observable} from "rxjs/Observable";
+import {joinRideObject} from "./joinRideObject";
+import {Subject} from "rxjs/Subject";
+import {RideListComponent} from "./ride-list.component";
+import {ChatService} from "../chat/chat-service";
+import {RouterLinkDirectiveStub} from "./router-link-directive-stub";
 
 describe('RideComponent', () => {
   let component: RideComponent;
+  let rideList: RideListComponent;
+  let componentFixture: ComponentFixture<RideComponent>;
   let fixture: ComponentFixture<RideComponent>;
 
-  let componentServiceStub: {
+  let rideListServiceStub: {
+    getRides: () => Observable<Ride[]>,
+    refreshNeeded$: Subject<void>,
+    requestJoinRide: () => Observable<joinRideObject>
   };
+
+  let linkDes;
+  let routerLinks;
   let rideStub: Ride = {
     owner: '',
     ownerID: '',
@@ -30,6 +44,91 @@ describe('RideComponent', () => {
     pendingPassengerIds: [],
     pendingPassengerNames: []
   };
+
+
+  let componentServiceStub: {
+  };
+  beforeEach(() => {
+    // stub RideService for test purposes
+    rideListServiceStub = {
+      getRides: () => Observable.of([
+        {
+          _id: {$oid: 'chris_id'},
+          owner: 'Chris',
+          ownerID: "001",
+          driver: 'Chris',
+          driverID: 'chris_id',
+          notes: 'These are Chris\'s ride notes',
+          seatsAvailable: 3,
+          origin: 'UMM',
+          destination: 'Willie\'s',
+          departureDate: '3/6/2019',
+          departureTime: '10:00:00',
+          nonSmoking: true,
+          roundTrip: true,
+          pendingPassengerIds: [],
+          pendingPassengerNames: [],
+          passengerIds: [],
+          passengerNames: []
+        },
+        {
+          _id: {$oid: 'dennis_id'},
+          owner: 'Dennis',
+          ownerID: "002",
+          notes: 'These are Dennis\'s ride notes',
+          seatsAvailable: -1,
+          origin: 'Caribou Coffee',
+          destination: 'Minneapolis, MN',
+          departureDate: '8/15/2018',
+          departureTime: '11:30:00',
+          nonSmoking: true,
+          roundTrip: true,
+          pendingPassengerIds: [],
+          pendingPassengerNames: [],
+          passengerIds: ["002"],
+          passengerNames: ['Dennis']
+        },
+        {
+          _id: {$oid: 'agatha_id'},
+          owner: 'Agatha',
+          ownerID: "003",
+          driver: 'Agatha',
+          driverID: 'agatha_id',
+          notes: 'These are Agatha\'s ride notes',
+          seatsAvailable: 3,
+          origin: 'UMM',
+          destination: 'Fergus Falls, MN',
+          departureDate: '3/30/2019',
+          departureTime: '16:30:00',
+          nonSmoking: false,
+          roundTrip: false,
+          pendingPassengerIds: [],
+          pendingPassengerNames: [],
+          passengerIds: [],
+          passengerNames: []
+        }
+      ]),
+      requestJoinRide: () => Observable.of({
+        rideId: 'chris_id',
+        pendingPassengerId: "002",
+        pendingPassengerName: 'Dennis'
+      }),
+      refreshNeeded$: new Subject<void>()
+    };
+
+    TestBed.configureTestingModule({
+      imports: [CustomModule, HttpClientTestingModule],
+      declarations: [RideListComponent,RouterLinkDirectiveStub,RideComponent, ChatComponent],
+      providers: [
+        {provide: RideListService, useValue: rideListServiceStub},
+        ChatService,
+        UserService,
+        RideComponent
+      ]
+    });
+  });
+
+
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
