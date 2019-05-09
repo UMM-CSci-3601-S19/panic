@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {User} from "./user";
 import {UserService} from "./user.service";
@@ -9,6 +9,7 @@ import {profileInfoObject} from "./profileInfoObject";
 import {ProfileService} from "./profile.service";
 import {ChatService} from "../chat/chat-service";
 import {RideListService} from "../rides/ride-list.service";
+import {MatDialog} from "@angular/material";
 
 @Component({
   selector: 'profile-component',
@@ -16,7 +17,7 @@ import {RideListService} from "../rides/ride-list.service";
   styleUrls: ['./profile.component.scss'],
 })
 
-export class ProfileComponent implements OnInit{
+export class ProfileComponent implements OnInit, OnDestroy {
 
   public profile: User;
   public profileId: string;
@@ -29,7 +30,8 @@ export class ProfileComponent implements OnInit{
               private profileService: ProfileService,
               private route: ActivatedRoute,
               private fb:FormBuilder,
-              private rideListService: RideListService
+              private rideListService: RideListService,
+              public dialog: MatDialog
   ) {
     this.createForm();
     this.chatService.connectStream();
@@ -96,5 +98,6 @@ export class ProfileComponent implements OnInit{
 
   ngOnDestroy(): void {
     this.profileService.removeListener();
+    this.dialog.closeAll();
   }
 }
