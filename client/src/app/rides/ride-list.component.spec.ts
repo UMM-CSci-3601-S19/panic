@@ -16,6 +16,7 @@ import {ChatService} from "../chat/chat-service";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {ChatComponent} from "../chat/chat.component";
 import {UserService} from "../users/user.service";
+import {ProfileService} from "../users/profile.service";
 
 describe('Ride list', () => {
 
@@ -101,6 +102,7 @@ describe('Ride list', () => {
       providers: [
         {provide: RideListService, useValue: rideListServiceStub},
         ChatService,
+        ProfileService,
         UserService,
         RideComponent
       ]
