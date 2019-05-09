@@ -80,7 +80,8 @@
     <mat-divider></mat-divider>
     <mat-nav-list>
       <mat-list-item *ngFor="let person of people" class="person"
-                     routerLink="/profile/{{person.userId}}" (click)="route(person.userId);">
+                     routerLink="/profile/{{person.userId}}"
+                     (click)="routeProfile(person.userId);">
         <img matListAvatar [src]="person.pictureUrl" alt="avatar">
         <h4 matLine>{{person.fullName}}</h4>
         <mat-chip-list matLine>
