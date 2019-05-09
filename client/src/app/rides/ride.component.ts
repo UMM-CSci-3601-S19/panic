@@ -16,6 +16,7 @@ import {UserService} from "../users/user.service";
   styleUrls: ['./ride.component.scss']
 })
 export class RideComponent implements OnInit {
+  public rides: Ride[];
 
   @Input() ride: Ride = {
     _id: {$oid: ''},

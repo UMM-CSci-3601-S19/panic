@@ -198,4 +198,51 @@ describe('RideComponent', () => {
   it('the client parses 09:59 time to 9:59 AM', () => {
     expect(component.hourParse("09:59")).toBe("9:59 AM");
   });
+
+
+
+  /*it('contains all the rides', () => {
+    expect(component.rides.length).toBe(3);
+  });
+
+  it('request a ride', () => {
+    expect(component.rides.some((ride: Ride) => ride.pendingPassengerIds[0] === "002")).toBe(false);
+    expect(component.rides.some((ride: Ride) => ride.pendingPassengerNames[0] === 'Dennis')).toBe(false);
+    component.requestJoinRide('chris_id', "002", 'Dennis');
+    rideList.refreshRides().subscribe(() => {
+
+      expect(component.rides.some((ride: Ride) => ride.pendingPassengerIds[0] === "002")).toBe(true);
+      expect(component.rides.some((ride: Ride) => ride.pendingPassengerNames[0] === 'Dennis')).toBe(true);
+    });
+  });
+
+  it('accept a ride', () =>{
+    expect(component.rides.some((ride: Ride) => ride.pendingPassengerIds[0] === "002")).toBe(false);
+    expect(component.rides.some((ride: Ride) => ride.pendingPassengerNames[0] === 'Dennis')).toBe(false);
+    expect(component.rides.some((ride: Ride) => ride.passengerIds[0] === "002")).toBe(false);
+    expect(component.rides.some((ride: Ride) => ride.passengerNames[0] === 'Dennis')).toBe(false);
+    component.requestJoinRide('chris_id', "002", 'Dennis');
+    component.approveJoinRide('chris_id', "002", 'Dennis');
+    rideList.refreshRides().subscribe(() => {
+      expect(component.rides.some((ride: Ride) => ride.pendingPassengerIds[0] === "002")).toBe(false);
+      expect(component.rides.some((ride: Ride) => ride.pendingPassengerIds[0] === 'Dennis')).toBe(false);
+      expect(component.rides.some((ride: Ride) => ride.passengerIds[0] === "002")).toBe(true);
+      expect(component.rides.some((ride: Ride) => ride.passengerNames[0] === 'Dennis')).toBe(true);
+    });
+  });
+
+  it('decline a ride', () => {
+    expect(component.rides.some((ride: Ride) => ride.pendingPassengerIds[0] === "002")).toBe(false);
+    expect(component.rides.some((ride: Ride) => ride.pendingPassengerNames[0] === 'Dennis')).toBe(false);
+    expect(component.rides.some((ride: Ride) => ride.passengerIds[0] === "002")).toBe(false);
+    expect(component.rides.some((ride: Ride) => ride.passengerNames.length[0] === 'Dennis')).toBe(false);
+    component.requestJoinRide('chris_id', "002", 'Dennis');
+    component.declineJoinRide('chris_id', "002", 'Dennis');
+    rideList.refreshRides().subscribe(() => {
+      expect(component.rides.some((ride: Ride) => ride.pendingPassengerIds[0] === "002")).toBe(false);
+      expect(component.rides.some((ride: Ride) => ride.pendingPassengerNames[0] === 'Dennis')).toBe(false);
+      expect(component.rides.some((ride: Ride) => ride.passengerIds[0] === "002")).toBe(false);
+      expect(component.rides.some((ride: Ride) => ride.passengerNames[0] === 'Dennis')).toBe(false);
+    });
+  });*/
 });
