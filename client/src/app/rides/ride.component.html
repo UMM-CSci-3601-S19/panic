@@ -3,12 +3,12 @@
     <div class="departing" *ngIf="ride.driverID">
       <div>{{ride.departureDate | date: 'MMM d'}}</div>
       <div>{{this.hourParse(ride.departureTime)}}</div>
-      <mat-icon style="color:#000000"> drive_eta</mat-icon>
+      <mat-icon style="color: #43b6f6"> drive_eta</mat-icon>
     </div>
     <div class="departing" id="requestCard" *ngIf="!ride.driverID" >
       <div>{{ride.departureDate | date: 'MMM d'}}</div>
       <div>{{this.hourParse(ride.departureTime)}}</div>
-      <mat-icon style="color: #000000"> transfer_within_a_station </mat-icon>
+      <mat-icon style="color: #b71c1c"> directions_walk </mat-icon>
     </div>
     <div class="start-location">
       {{ride.origin}}

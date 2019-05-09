@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {RideListService} from './ride-list.service';
 import {Ride} from './ride';
 import {Observable} from 'rxjs/Observable';
@@ -12,7 +12,7 @@ import {ChatService} from "../chat/chat-service";
   providers: []
 })
 
-export class RideListComponent implements OnInit {
+export class RideListComponent implements OnInit, OnDestroy {
   // public so that tests can reference them (.spec.ts)
   public rides: Ride[];
   public filteredRides: Ride[];
@@ -43,6 +43,8 @@ export class RideListComponent implements OnInit {
     localStorage.removeItem("rideDepartureTime");
     localStorage.removeItem("rideRoundTrip");
     localStorage.removeItem("rideNonSmoking");
+
+    localStorage.setItem("currEndpoint", "rides");
 
     this.rideListService.refreshNeeded$
       .subscribe(() => {
@@ -124,6 +126,10 @@ export class RideListComponent implements OnInit {
         console.log(err);
       }
     );
+  }
+
+  ngOnDestroy(): void {
+    this.dialog.closeAll();
   }
 
   // These two methods are used in the HTML instead of ngModel, since it solves a problem where
