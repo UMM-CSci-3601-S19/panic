@@ -8,6 +8,7 @@ import {Ride} from "./ride";
 import {UserService} from "../users/user.service";
 import {ChatComponent} from "../chat/chat.component";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {ProfileService} from "../users/profile.service";
 
 describe('RideComponent', () => {
   let component: RideComponent;
@@ -37,6 +38,7 @@ describe('RideComponent', () => {
       declarations: [ RideComponent, ChatComponent ],
       providers: [
         { provide: RideListService, useValue: componentServiceStub },
+        ProfileService,
         UserService
       ]
     })

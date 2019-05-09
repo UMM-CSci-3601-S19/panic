@@ -9,6 +9,7 @@ import {leaveRideObject} from "./leaveRideObject";
 import {ChatComponent} from "../chat/chat.component";
 import {User} from "../users/user";
 import {UserService} from "../users/user.service";
+import {ProfileService} from "../users/profile.service";
 
 @Component({
   selector: 'app-ride',
@@ -49,7 +50,15 @@ export class RideComponent implements OnInit {
 
   constructor(private rideListService: RideListService,
               public userService: UserService,
+              public profileService: ProfileService,
               public dialog: MatDialog) {
+  }
+
+  routeProfile(profileId) {
+    if(this.profileService.hasListener()){
+      this.profileService.updateProfile(profileId);
+    }
+    this.dialog.closeAll();
   }
 
   openRide() {
