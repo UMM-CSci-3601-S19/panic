@@ -79,7 +79,8 @@
     <h3>Passengers</h3>
     <mat-divider></mat-divider>
     <mat-nav-list>
-      <mat-list-item *ngFor="let person of people" class="person" routerLink="/profile/{{person.userId}}">
+      <mat-list-item *ngFor="let person of people" class="person"
+                     routerLink="/profile/{{person.userId}}" (click)="route(person.userId);">
         <img matListAvatar [src]="person.pictureUrl" alt="avatar">
         <h4 matLine>{{person.fullName}}</h4>
         <mat-chip-list matLine>
@@ -113,7 +114,9 @@
 
       <div *ngFor="let pendingPassengerId of passengerRequests; let i = index"
            [id] = "pendingPassengerId" class="ride-passenger requests">
-        <a routerLink="/profile/{{retrievePendingPassengerId(i)}}">{{retrievePendingPassengerName(i)}}</a> wants to join:
+        <a routerLink="/profile/{{retrievePendingPassengerId(i)}}"
+           (click)="routeProfile(retrievePendingPassengerId(i))">
+          {{retrievePendingPassengerName(i)}}</a> wants to join:
         <button mat-raised-button
                 class="passenger-button"
                 id="accept-passenger-button"
