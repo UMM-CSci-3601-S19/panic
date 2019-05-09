@@ -1,12 +1,14 @@
 <mat-card *ngIf="!fullCard" class="slim-ride-card" (click)="openRide()">
   <div class="ride-card-content">
-    <div class="departing" *ngIf="ride.driverID" style="background: #7a0019; color: white">
+    <div class="departing" *ngIf="ride.driverID">
       <div>{{ride.departureDate | date: 'MMM d'}}</div>
       <div>{{this.hourParse(ride.departureTime)}}</div>
+      <mat-icon style="color:#000000"> drive_eta</mat-icon>
     </div>
-    <div class="departing" *ngIf="!ride.driverID" style="background: #2ecc71">
+    <div class="departing" id="requestCard" *ngIf="!ride.driverID" >
       <div>{{ride.departureDate | date: 'MMM d'}}</div>
       <div>{{this.hourParse(ride.departureTime)}}</div>
+      <mat-icon style="color: #000000"> transfer_within_a_station </mat-icon>
     </div>
     <div class="start-location">
       {{ride.origin}}
