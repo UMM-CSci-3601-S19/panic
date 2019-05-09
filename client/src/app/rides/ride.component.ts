@@ -58,6 +58,7 @@ export class RideComponent implements OnInit {
     if(this.profileService.hasListener()){
       this.profileService.updateProfile(profileId);
     }
+    this.dialog.closeAll();
   }
 
   openRide() {
