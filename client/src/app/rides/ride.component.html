@@ -147,6 +147,7 @@
       mat-raised-button
       *ngIf="userCanLeaveRide()"
       id="leave-ride-button"
+      class="join-ride-button"
       color="warn"
       type="button"
       (click)="leaveRide(ride._id.$oid)">
@@ -159,29 +160,28 @@
             class="join-ride-button"
             color="primary"
             type="button"
-            style="width: 100%"
             [disabled]="!this.userCanJoinRide(ride)"
             (click) = "requestJoinRide(ride._id, this.currUserId, this.currUserFullName)">
       <mat-icon>add_circle_outline</mat-icon>
-      Join This Ride
+      Join Ride
     </button>
     <button *ngIf="this.userIsAPendingPassenger(ride)" mat-raised-button
             class="join-ride-button"
             color="primary"
             type="button"
-            style="width: 100%"
             [disabled]=true>
       <mat-icon>access_time</mat-icon>
-      Request Pending
+      Pending
     </button>
     <button
       mat-raised-button
       *ngIf="!this.ride.driverID"
       id="drive-ride-button"
+      class="join-ride-button"
       color="primary"
       type="button"
       (click)="driveRide(ride._id)">
-      Drive Ride
+      <mat-icon>directions_car</mat-icon>Drive Ride
     </button>
     <br>
   </div>
