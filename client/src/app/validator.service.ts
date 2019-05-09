@@ -46,13 +46,13 @@ export class ValidatorService {
 
       origin: new FormControl('origin', Validators.compose([
         Validators.required,
-        Validators.maxLength(30),
+        Validators.maxLength(50),
         Validators.pattern('^[ a-zA-Z0-9.,\']+$')
       ])),
 
       destination: new FormControl('destination', Validators.compose([
         Validators.required,
-        Validators.maxLength(30),
+        Validators.maxLength(50),
         Validators.pattern('^[ a-zA-Z0-9.,\']+$')
       ])),
 
