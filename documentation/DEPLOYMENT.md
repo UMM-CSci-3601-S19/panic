@@ -41,7 +41,7 @@ credentials.json
 When loading the chat, the client makes a call to the server to obtain an authorization token. To generate a token, the server needs the API secret.
 
 In `server/ChatRequestHandler.java`, the method `authenticateDevUser()` generates a JWT starting with the API secret. An example value (deactivated) is committed in the file.
-When deploying, the currently hardcoded value should be updated so that the secret is added to `credentials.json` and the server reads the value from there (see issue #96).
+When deploying, the currently hardcoded value should be updated so that the secret is added to `credentials.json` and the server reads the value from there (see issue [#96](https://github.com/UMM-CSci-3601-S19/panic/issues/96)).
 
 # Google OAuth
 
