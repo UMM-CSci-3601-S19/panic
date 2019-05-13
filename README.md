@@ -1,74 +1,68 @@
-# ATTENTION!!!
-
-## to anyone who is using this as a code-base, or borrowing code...
-
-### please read the PROBLEMS.md before anything. This document explains potential problems you may run into using Toon-Squad's code.
-
-### Thanks,
-### *~The Management*
-
-
+# Readme
 [![Build Status](https://travis-ci.org/UMM-CSci-3601-S19/panic.svg?branch=master)](https://travis-ci.org/UMM-CSci-3601-S19/panic)
-## Setup
 
-As in the previous labs, you'll be using IntelliJ. Once you've all joined your
-group using GitHub classroom, you can clone your repository using IntelliJ:
+## Team
+* Kaelan Leahy
+* Adam Schug
+* Roen Aronson
+* Nicolas Robertson
+* Joe Deglman
+* Jon Reuvers
+* Leah Judd
+* Avery Koranda
+* Ananya Teklu
 
-- When prompted to create a new IntelliJ project, select **yes**.
-- Select **import project from existing model** and select **Gradle.**
-  - Make sure **Use default Gradle wrapper** is selected.
-- Click **Finish.**
-- If IDEA asks you if you want to compile TypeScript to JavaScript :fire: DO NOT :fire:
-it will break your project.
+## Overview
+This app was developed by the spring 2019 Software Design class at the University of Minnesota Morris. 
 
-:warning: IDEA will sometimes decide to "help" you by offering
-"Compile TypeScript to JavaScript?" :bangbang: *Never* say "OK" to this
-offer -- if you do it will make a complete mess of your project. We're
-using other tools (`gradle`, `ng`, and a thing called `webpack` which you
-never explicitly see) to do that compilation. If you let IDEA do it, you'll
-have a ton of JavaScript files cluttering up your project and confusing other
-tools.
+For Morris community members who want to carpool, MoRide is a ridesharing web app that efficiently connects riders and drivers.
+Unlike the University of Minnesota Morris' Facebook forum, our product encourages sustainable transportation by providing
+streamlined searching, sorting, and filtering.
 
-## Running your project
+## Deployment
+See [DEPLOYMENT.md](deployment.md) for step-by-step instructions on deploying MoRide.
 
-- The familiar **run** Gradle task will still run your SparkJava server.
-(which is available at ``localhost:4567``)
-- The **build** (or its' alias **buildExecutable**) task will still _build_ the entire project (but not run it)
-- The **runClient** task will build and run the client side of your project (available at ``localhost:9000``)
+## Key Features
+* Log in using Google authentication
+* Create a ride posting
+  * Request or offer a ride
+  * User can edit rides they own
+* Search and filter a list of upcoming rides
+  * Filter by ride origin, destination, and various tags
+  * See requests only or offers only
+* Click a ride to view more information
+* Request to join a ride as a passenger
+  * Ride posters can accept/deny requests to join 
+* Join a requested ride as a driver
+* User can leave any ride they have joined
+  * If user is the last person on the ride, ride posting is removed
+* Carpoolers have access to a private chat for each ride they've joined
+* User can view their profile page
+  * View all rides they've joined and posted
+  * Manage contact info
+  
+## Languages
+* Typescript
+* Javascript
+* Java
 
-The major difference between this lab and lab #3 is that, here, your data
-(users and todos) will be stored in a database rather than as "flat" JSON files
-within the server source code.
+## Libraries
 
-For the most part, you will be using a local installation of Mongo as a
-`dev` (development) database. You don't *really* need to worry about how this is set up,
-but you *do* need to know a couple of tricks to help you use it:
+### Client-side
+* Angular Material 5
+* Jasmine and Karma
+* Google OAuth
+* [GetStream.io](https://getstream.io)
 
-- To load new seed data into your local dev database, use the gradle task:
-**seedMongoDB**.
-- *Seed* data is stored in the correspondingly named JSON files at the top
-level (e.g., `users.seed.json`).
+### Server-side
+* Java Spark
+* JUnit
+* MongoDB
+* [Auth0 Java JWT](https://github.com/auth0/java-jwt)
 
-:exclamation: Pro-tip: IntelliJ comes with a nice view to see the mongo databases setup.
-To access this click on File -> Settings -> Plugins, type Mongo and make sure the Mongo Plugin is installed.
-Now head to View -> Tool Windows -> Mongo Explorer. Then use the tool icon to add configuration.
-Once prompted type for Path to Mongo Shell: _"/usr/bin/mongo"_
-and hit the <span style="color:green">green :heavy_plus_sign:</span>, to add your label and, huzzah!, Mongo Explorer is on your side bar.
-
-## Testing and Continuous Integration
-
-Testing options are still integrated in this lab so you can test the client, or the server or both.
-Testing client:
-* runAllTests runs both the server tests and the clients tests once.
-* runClientTests runs the client tests once.
-* runClientTestsAndWatch runs the client tests every time that the code changes after a save.
-* runClientTestsWithCoverage runs the client tests (once?) and deposits code coverage statistics into a new directory within `client` called `coverage`. In there you will find an `index.html`. Right click on `index.html` and select `Open in Browser` with your browser of choice. For Chrome users, you can drag and drop index.html onto chrome and it will open it.  
-* runE2ETest runs end to end test for the client side. What are e2e tests? They are tests that run the real application and simulate user behavior. They assert that the app is running as expected. NOTE: Two Gradle tasks _must_ be run before you can run the e2e tests.
-The server (`run`) needs to be on for this test to work, and you have to
-run the `seedMongoDB` task before running the e2e tests!
-* runServerTests runs the server tests.
-
-Turn on your repo in [Travis CI][travis], replace the build status image in this README, and push your changes. That will trigger a build with Travis.
+## Tools
+* Gradle
+* Yarn
 
 ## Resources
 ### Angular 5
@@ -101,5 +95,4 @@ Turn on your repo in [Travis CI][travis], replace the build status image in this
 [status-codes]: https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
 [lab2]: https://github.com/UMM-CSci-3601/3601-lab2_client-server/blob/master/README.md#resources
 [mongo-jdbc]: https://docs.mongodb.com/ecosystem/drivers/java/
-[labtasks]: LABTASKS.md
 [travis]: https://travis-ci.org/
