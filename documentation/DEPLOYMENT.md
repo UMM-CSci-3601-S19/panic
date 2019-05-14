@@ -1,7 +1,11 @@
 # Deployment
+Refer to [this](https://github.com/UMM-CSci-3601/droplet-setup-and-build) source for instructions on deploying.
+
 We used a separate branch to run the droplet off of. In this branch we needed to update the port in server.java to 80 instead of 4567.
-We pulled master into this branch when we wanted to update the droplet. We also needed to update the production environment in environment.prod.ts this could be done on the droplet branch or on master.
+We pulled master into this branch when we wanted to update the droplet. We also needed to update the production environment in [environment.prod.ts](https://github.com/UMM-CSci-3601-S19/panic/blob/master/client/src/environments/environment.prod.ts) this could be done on the droplet branch or on master.
 Doing it on a droplet branch would allow you to easily have multiple droplets running with different domain names and would let you compare the functionality of two versions of the code.
+
+Make sure to get a domain name for your website so google will allow you to use its api. One good place to get a domain name is [namecheap](https://www.namecheap.com/).
 
 Next, a [Cloudflare](https://www.cloudflare.com/) account is required to have a secure site (https). 
 With the Cloudflare account, we added our droplet’s IP address to the DNS page for “www” and our website domain name under: Type A and TTL Automatic. 
