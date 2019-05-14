@@ -20,7 +20,7 @@ Unlike the University of Minnesota Morris' Facebook forum, our product encourage
 streamlined searching, sorting, and filtering.
 
 ## Deployment
-See [DEPLOYMENT.md](deployment.md) for step-by-step instructions on deploying MoRide.
+See [DEPLOYMENT.md](documentation/DEPLOYMENT.md) for step-by-step instructions on deploying MoRide.
 
 ## Key Features
 * Log in using Google authentication
