@@ -18,7 +18,6 @@ import {ChatComponent} from "../chat/chat.component";
 import {UserService} from "../users/user.service";
 import {ProfileService} from "../users/profile.service";
 
-
 describe('Ride list', () => {
 
   let rideComponent: RideComponent;
@@ -29,7 +28,6 @@ describe('Ride list', () => {
   let rideListServiceStub: {
     getRides: () => Observable<Ride[]>,
     refreshNeeded$: Subject<void>,
-    requestJoinRide: () => Observable<joinRideObject>
   };
 
   let linkDes;
@@ -95,12 +93,7 @@ describe('Ride list', () => {
           passengerNames: []
         }
       ]),
-      requestJoinRide: () => Observable.of({
-        rideId: 'chris_id',
-        pendingPassengerId: "002",
-        pendingPassengerName: 'Dennis'
-      }),
-      refreshNeeded$: new Subject<void>()
+      refreshNeeded$: new Subject<void>(),
     };
 
     TestBed.configureTestingModule({
@@ -371,19 +364,19 @@ describe('Ride list', () => {
   /////  Testing Join Requests   /////////////
   ////////////////////////////////////////////
 
-  /*it('contains all the rides', () => {
+  it('contains all the rides', () => {
     expect(rideList.rides.length).toBe(3);
   });
 
-  it('request a ride', () => {
+  /*it('request a ride', () => {
     expect(rideList.rides.some((ride: Ride) => ride.pendingPassengerIds[0] === "002")).toBe(false);
     expect(rideList.rides.some((ride: Ride) => ride.pendingPassengerNames[0] === 'Dennis')).toBe(false);
     rideComponent.requestJoinRide('chris_id', "002", 'Dennis');
-     rideList.refreshRides().subscribe(() => {
-
-       expect(rideList.rides.some((ride: Ride) => ride.pendingPassengerIds[0] === "002")).toBe(true);
-       expect(rideList.rides.some((ride: Ride) => ride.pendingPassengerNames[0] === 'Dennis')).toBe(true);
-     });
+    rideList
+    rideList.refreshRides().subscribe(() => {
+      expect(rideList.rides.some((ride: Ride) => ride.pendingPassengerIds[0] === "002")).toBe(true);
+      expect(rideList.rides.some((ride: Ride) => ride.pendingPassengerNames[0] === 'Dennis')).toBe(true);
+    });
   });
 
   it('accept a ride', () =>{
