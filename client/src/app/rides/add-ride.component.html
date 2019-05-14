@@ -81,7 +81,7 @@
 
           <mat-form-field>
             <input matInput class="inputRideInfo" id="departureDateField" [min]="minDate" [matDatepicker]="picker"
-                   placeholder="Choose Departure Date" [(ngModel)]="rideDepartureDate" formControlName="departureDate">
+                   placeholder="Choose Departure Date" [(ngModel)]="rideDepartureDate" formControlName="departureDate" required>
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>

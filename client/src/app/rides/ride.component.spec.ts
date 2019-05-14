@@ -8,12 +8,7 @@ import {Ride} from "./ride";
 import {UserService} from "../users/user.service";
 import {ChatComponent} from "../chat/chat.component";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
-import {Observable} from "rxjs/Observable";
-import {joinRideObject} from "./joinRideObject";
-import {Subject} from "rxjs/Subject";
-import {RideListComponent} from "./ride-list.component";
-import {ChatService} from "../chat/chat-service";
-import {RouterLinkDirectiveStub} from "./router-link-directive-stub";
+import {ProfileService} from "../users/profile.service";
 
 describe('RideComponent', () => {
   let component: RideComponent;
@@ -136,6 +131,7 @@ describe('RideComponent', () => {
       declarations: [ RideComponent, ChatComponent ],
       providers: [
         { provide: RideListService, useValue: componentServiceStub },
+        ProfileService,
         UserService
       ]
     })

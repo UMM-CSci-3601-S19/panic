@@ -51,7 +51,6 @@ export class ChatComponent implements OnInit {
   }
 
   public getMessages() {
-    console.log("Getting messages for chat: " + this.feedId);
 
     this.chatService.getMessages(this.feedId).then(feedData => {
       this.messages = [];
