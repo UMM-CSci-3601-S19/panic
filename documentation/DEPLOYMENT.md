@@ -3,7 +3,7 @@ We used a separate branch to run the droplet off of. In this branch we needed to
 We pulled master into this branch when we wanted to update the droplet. We also needed to update the production environment in environment.prod.ts this could be done on the droplet branch or on master.
 Doing it on a droplet branch would allow you to easily have multiple droplets running with different domain names and would let you compare the functionality of two versions of the code.
 
-Next, a Cloudflare account is required to have a secure site (https). 
+Next, a [Cloudflare](https://www.cloudflare.com/) account is required to have a secure site (https). 
 With the Cloudflare account, we added our droplet’s IP address to the DNS page for “www” and our website domain name under: Type A and TTL Automatic. 
 With whatever service we bought a domain from, we would then send the Cloudflare nameservers to; “ara.ns.cloudflare.com” and “kai.ns.cloudflare.com” both under type NS.
   
@@ -40,7 +40,7 @@ credentials.json
 
 When loading the chat, the client makes a call to the server to obtain an authorization token. To generate a token, the server needs the API secret.
 
-In `server/ChatRequestHandler.java`, the method `authenticateDevUser()` generates a JWT starting with the API secret. An example value (deactivated) is committed in the file.
+In [server/ChatRequestHandler.java](https://github.com/UMM-CSci-3601-S19/panic/blob/master/server/src/main/java/umm3601/chat/ChatRequestHandler.java), the method `authenticateDevUser()` generates a JWT starting with the API secret. An example value (deactivated) is committed in the file.
 When deploying, the currently hardcoded value should be updated so that the secret is added to `credentials.json` and the server reads the value from there (see issue [#96](https://github.com/UMM-CSci-3601-S19/panic/issues/96)).
 
 # Google OAuth
