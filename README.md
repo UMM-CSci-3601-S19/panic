@@ -2,15 +2,15 @@
 [![Build Status](https://travis-ci.org/UMM-CSci-3601-S19/panic.svg?branch=master)](https://travis-ci.org/UMM-CSci-3601-S19/panic)
 
 ## Team
-* Kaelan Leahy
-* Adam Schug
-* Roen Aronson
-* Nicolas Robertson
-* Joe Deglman
-* Jon Reuvers
-* Leah Judd
-* Avery Koranda
-* Ananya Teklu
+* [Kaelan Leahy](https://github.com/leahy089)
+* [Adam Schug](https://github.com/AdamSchug)
+* [Roen Aronson](https://github.com/RoenAronson)
+* [Nicolas Robertson](https://github.com/NicolasRobertson)
+* [Joe Deglman](https://github.com/deglm006)
+* [Jon Reuvers](https://github.com/JReuvers)
+* [Leah Judd](https://github.com/LeahLuLu)
+* [Avery Koranda](https://github.com/koran023)
+* [Ananya Teklu](https://github.com/ananyateklu)
 
 ## Overview
 This app was developed by the spring 2019 Software Design class at the University of Minnesota Morris. 
